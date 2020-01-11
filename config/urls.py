@@ -12,6 +12,8 @@ urlpatterns = [
     ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
+    # RestAPI
+    path("api/", include("clotudy_backend.api.urls", namespace="api")),
     # User management
     path("users/", include("clotudy_backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
