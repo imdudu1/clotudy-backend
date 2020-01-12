@@ -4,9 +4,11 @@ from django.utils import timezone
 
 class ClassInformation(models.Model):
     # 강의 제목
-    class_title = models.TextField(max_length=50)
+    class_title = models.CharField(max_length=50)
     # 담당 교수 이름
     class_advisor = models.CharField(max_length=20)
+    # 강의 소개
+    class_explain = models.TextField(max_length=512)
     # 0. 강의형 1. 참여형 2. 프로그래밍
     class_type = models.IntegerField(default=1)
     # 생성일
