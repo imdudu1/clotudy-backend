@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
+from django.db.models import CharField, BooleanField
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 

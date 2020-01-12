@@ -9,6 +9,7 @@ channels_redis==2.4.1  # https://github.com/django/channels_redis
 celery==4.4.0  # pyup: < 5.0  # https://github.com/celery/celery
 django-celery-beat==1.5.0  # https://github.com/celery/django-celery-beat
 django-webpack-loader
+django-cors-headers==3.2.1  # https://github.com/adamchainz/django-cors-headers
 
 # Django
 # ------------------------------------------------------------------------------

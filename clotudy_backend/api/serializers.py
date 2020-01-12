@@ -2,14 +2,29 @@ from rest_framework import serializers
 from .models import QuestionMessage, ClassInformation
 
 
-class ClassInformationSerializer(serializers.ModelSerializer):
+class ClassInformationLCSerializer(serializers.ModelSerializer):
     class Meta:
         fields = [
             'id',
             'class_title',
             'class_advisor',
+            'class_explain',
             'class_type',
             'created_time',
+        ]
+        model = ClassInformation
+
+
+class ClassInformationRUDSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = [
+            'id',
+            'class_title',
+            'class_advisor',
+            'class_explain',
+            'class_type',
+            'created_time',
+            'class_invite_code',
         ]
         model = ClassInformation
 

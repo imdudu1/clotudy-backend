@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_celery_beat",
     "webpack_loader",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -131,6 +132,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -208,6 +210,8 @@ CSRF_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
+# https://en.m.wikipedia.org/wiki/Cross-origin_resource_sharing
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
 # EMAIL
 # ------------------------------------------------------------------------------
