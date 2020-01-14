@@ -10,13 +10,20 @@ urlpatterns = [
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
+
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
+
     # RestAPI
     path("api/", include("clotudy_backend.api.urls", namespace="api")),
+
     # User management
     path("users/", include("clotudy_backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+
+    # lecture
+    path("lecture/", include("clotudy_backend.lecture.urls", namespace="lecture")),
+
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

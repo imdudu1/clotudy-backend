@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra-style %}
+    <style type="text/css">
+        .gu-mirror {
+            position: fixed !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+            opacity: 0.8;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+            filter: alpha(opacity=80);
+        }
+
+        .gu-hide {
+            display: none !important;
+        }
+
+        .gu-unselectable {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+
+        .gu-transit {
+            opacity: 0.2;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+            filter: alpha(opacity=20);
+        }
+
+        .row {
+            /* display:flex; */
+            display: flex;
+            flex-direction: column;
+            padding-top:.5em;
+            margin:1px;
+        }
+
+        .root .dragula-container {
+            padding:0.3rem;
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0px 4px 25px 0px
+            rgba(0, 0, 0, 0.1);
+            transition: all .3s ease-in-out;
+        }
+
+        .col {
+            flex: 1;
+            margin:1px;
+            min-height:1em;
+        }
+
+        .el {
+            background:#e5e5e5;
+            margin:1px;
+            min-height:2em;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+        <div class="flex-row">
+            <div id="left-side-panel">
+                <div class="flex-col">
+                    <div id="ppt-viewer-wrap">
+                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                            <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
+                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/chat/render-pdf/"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="live-qna-chat-wrap">
+                        <div class="content-header">
+                            실시간 질문 게시판
+                        </div>
+                        <div id="live-qna-chat-content">
+                            <div id="live-qna-chat-box">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mid-side-panel">
+                <div class="flex-col">
+                    <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
+                        <div id="user-notepad-content" style="height: calc(100% - 42px);">
+                            <p></p>
+                        </div>
+                    </div>
+                    <div id="user-notepad-preview-wrap">
+                        <div class="content-header">
+                            자료실
+                        </div>
+                        <div id="user-notepad-preview-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="right-side-panel">
+                <div class="content-header">
+                    아이디어 대시보드
+                </div>
+                <div class="lesson-note-content">
+
+                    <!--BEGIN: TEST-->
+                    <div class="row root">
+                        <div id='idea-dashboard' class="col dragula-container">
+                            
+                        </div>
+                    </div>
+                    <!--END: TEST-->
+
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-script %}
+<script type="text/javascript">
+    // Utility functions.
+    function querySelectorAllArray(selector){
+        return Array.prototype.slice.call(
+            document.querySelectorAll(selector), 0
+        );
+    }
+
+    function contains(a, b){
+        return a.contains ?
+            a !== b && a.contains(b) :
+            !!(a.compareDocumentPosition(b) & 16);
+    }
+
+    let qna_messages;
+    $(document).ready(function(){
+        qna_messages = {{ messages|safe }};
+    });
+
+
+    // Dragula JS
+    let last_over_el_id;
+    let current_drop_el_id;
+    let drake = dragula(querySelectorAllArray('.dragula-container'),{
+                    accepts: function (el, target, source, sibling) {
+                        return !contains(el, target);
+                    }
+                }).on('drag', function (el) {
+                    el.className = el.className.replace('ex-moved', '');
+                }).on('drop', function (el) {
+                    el.className += ' ex-moved';
+                    current_drop_el_id = el.id;
+                    sendMoveIdeaPacket(current_drop_el_id, last_over_el_id);
+                }).on('over', function (el, container) {
+                    container.className += ' ex-over';
+                    last_over_el_id = container.id;
+                }).on('out', function (el, container) {
+                    container.className = container.className.replace('ex-over', '');
+                });
+
+
+    // WebSocket
+    const unique_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    let increase_box_id = 0;
+    let current_ppt_page = 1;
+    let ppt_sync_flag = true;
+    let is_exist_new_qna = true;
+
+    function remoteSyncPPTPage(request) {
+        if (!ppt_sync_flag) {
+            return;
+        }
+
+        let page = request['data']['page'];
+        let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+        if((page > numPages) || (page < 1)){
+            return;
+        }
+        document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = page;
+    }
+
+    function liveQnAMessage(request) {
+        let qna = request['data']['qna'];
+
+        if (qna === '') {
+            return
+        }
+
+        let qna_body = qna['body'];
+        let qna_like_count = qna['like-count'];
+        let qna_message_id = qna['message-id'];
+        qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+        is_exist_new_qna = true;
+
+        let live_qna_chat_box = $('#live-qna-chat-box');
+        live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
+        live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
+    }
+
+    function redrawSortingQnAChat() {
+        if (!is_exist_new_qna) {
+            return;
+        } else {
+            is_exist_new_qna = false;
+        }
+
+        $('#live-qna-chat-box').empty();
+        qna_messages.sort((lhs, rhs) => {
+            return rhs['like-count'] - lhs['like-count'];
+        });
+        qna_messages.forEach((message) => {
+            $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
+        });
+    }
+    setInterval(redrawSortingQnAChat, 5000);
+
+    function updateLikeCount(data) {
+        let message_id = data['data']['message-id'];
+        for (let i = 0; i < qna_messages.length; i++) {
+            if (qna_messages[i]['message-id'] === message_id) {
+                qna_messages[i]['like-count'] += 1;
+                break;
+            }
+        }
+    }
+
+    function addIdeaMessage(request) {
+        let body = request['data']['body'];
+        const sender_id = request['data']['sender-id'];
+        const box_id = sender_id + '-box-' + increase_box_id;
+        let html = '<p style="line-height: 14px; margin: 0;display: table-cell;vertical-align: middle;padding: 10px; border-radius: 5px;background: #f6f7f8;border: 2px solid #5a5d60;" id="' + box_id + '" class="el">' + body + '</p>';
+        $('#idea-dashboard').append(html);
+        increase_box_id += 1;
+    }
+
+    function addGroupMessage(request) {
+        const title = request['data']['group-title'];
+        const sender_id = request['data']['sender-id'];
+        const group_id = sender_id + '-group-' + increase_box_id;
+        const container_id = sender_id + '-container-' + increase_box_id;
+        let html =
+            '                            <div id="' + group_id + '" style="border: 2px solid #5a5d60;border-radius: 5px;padding: 3px;background: #f5cf8e;margin: 3px;" class="row">\n' +
+            '                                <div style="color: #565758;font-size: 14px;margin: 3px; font-weight: bold;">' + title + '</div>\n' +
+            '                                <div id="' + container_id + '" style="min-height: 20px;border: 2px solid #5a5d60;border-radius: 5px;background: #b2d6ff;" class="dragula-container">\n' +
+            '                                </div>\n' +
+            '                            </div>';
+        $('#idea-dashboard').append(html);
+        drake.containers.push(document.getElementById(container_id));
+        increase_box_id += 1;
+    }
+
+    function moveIdeaMessage(request) {
+        if (unique_id === request['data']['sender-id']) {
+            return;
+        }
+        let d = request['data'];
+        let src = '#' + d['src'];
+        let des = '#' + d['des'];
+        $(src).appendTo(des);
+    }
+
+    function lockIdeaMessage(request) {
+
+    }
+
+    function removeIdeaMessage(request) {
+
+    }
+
+    let groupSocket;
+    function group_socket_connect() {
+        groupSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/samplegroupid/');
+
+        groupSocket.onmessage = (message) => {
+            let message_data = JSON.parse(message.data);
+            switch (message_data.action) {
+                case 'add-idea-message':
+                    addIdeaMessage(message_data);
+                    break;
+                case 'move-idea-message':
+                    moveIdeaMessage(message_data);
+                    break;
+                case 'lock-idea-message':
+                    lockIdeaMessage(message_data);
+                    break;
+                case 'remove-idea-message':
+                    removeIdeaMessage(message_data);
+                    break;
+                case 'add-group-message':
+                    addGroupMessage(message_data);
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        groupSocket.onclose = (err) => {
+            setTimeout(() => {
+                group_socket_connect();
+            }, 1000);
+        };
+
+        groupSocket.onerror = (err) => {
+            groupSocket.close();
+        };
+    }
+    group_socket_connect();
+
+    let chatSocket;
+    function chat_socket_connect() {
+        chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/sampleroomid/');
+
+        chatSocket.onmessage = (message) => {
+            let message_data = JSON.parse(message.data);
+            switch (message_data.action) {
+                case 'sync-ppt-page':
+                    remoteSyncPPTPage(message_data);
+                    break;
+                case 'live-qna-chat':
+                    liveQnAMessage(message_data);
+                    break;
+                case 'add-like-count':
+                    updateLikeCount(message_data);
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        chatSocket.onclose = (e) => {
+            setTimeout(() => {
+                ws_connect();
+            }, 1000);
+        };
+
+        chatSocket.onerror = (err) => {
+            chatSocket.close();
+        };
+    }
+    chat_socket_connect();
+
+    function questionMsgHtmlGenerator(msg, like_count) {
+        return '<div class="card" style="">\n' +
+            '    <div class="card-body">\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="avatar mr-1">\n' +
+            '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
+            '            </div>\n' +
+            '            <div class="user-page-info">\n' +
+            '                <p class="mb-0">Leeanna Alvord</p>\n' +
+            '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
+            '        </div>\n' +
+            '        <p>' + msg + '</p>\n' +
+            '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="d-flex align-items-center">\n' +
+            '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
+            '                <span>' + like_count + '</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-2">\n' +
+            '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
+            '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
+            '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
+            '                    </li>\n' +
+            '                    <li class="d-inline-block pl-50">\n' +
+            '                        <span>+140 more</span>\n' +
+            '                    </li>\n' +
+            '                </ul>\n' +
+            '            </div>\n' +
+            '            <p class="ml-auto d-flex align-items-center">\n' +
+            '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
+            '            </p>\n' +
+            '        </div>\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="avatar mr-50">\n' +
+            '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
+            '            </div>\n' +
+            '            <div class="user-page-info">\n' +
+            '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
+            '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-auto cursor-pointer">\n' +
+            '                <i class="feather icon-heart mr-50"></i>\n' +
+            '                <i class="feather icon-message-square"></i>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '        <fieldset class="form-label-group mb-50">\n' +
+            '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
+            '            <label for="label-textarea">Add Comment</label>\n' +
+            '        </fieldset>\n' +
+            '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
+            '    </div>\n' +
+            '</div>\n';
+    }
+
+
+    // Packet senders.
+    function sendQuestionMessagePacket(message) {
+        chatSocket.send(JSON.stringify({
+            'action': 'live-qna-chat',
+            'data': {
+                'qna': {
+                    'body': message,
+                },
+                'lecture': {{ room_name_json }},
+            }
+        }));
+    }
+
+    function sendLikeCountPacket(id) {
+        chatSocket.send(JSON.stringify({
+            'action': 'add-like-count',
+            'data': {
+                'message-id': id,
+                'lecture': {{ room_name_json }},
+            }
+        }));
+    }
+
+    function sendAddIdeaPacket(body) {
+        groupSocket.send(JSON.stringify({
+            'action': 'add-idea-message',
+            'data': {
+                'body': body,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+
+    function sendAddGroupPacket(title) {
+        groupSocket.send(JSON.stringify({
+            'action': 'add-group-message',
+            'data': {
+                'group-title': title,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+
+    function sendMoveIdeaPacket(src, des) {
+        groupSocket.send(JSON.stringify({
+            'action': 'move-idea-message',
+            'data': {
+                'src': src,
+                'des': des,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+</script>
+{% endblock %}
