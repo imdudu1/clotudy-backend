@@ -12,10 +12,9 @@ class ClassInformation(models.Model):
     # 강의 종류
     class_type = models.IntegerField(default=0)
     # 생성일
-    created_time = models.DateTimeField(default=timezone.now, blank=True)
+    class_created_time = models.DateTimeField(default=timezone.now, blank=True)
     # 강의 초대 코드
     class_invite_code = models.CharField(max_length=6, default="123")
-
     class_pdf_path = models.CharField(max_length=50, blank=False)
 
 

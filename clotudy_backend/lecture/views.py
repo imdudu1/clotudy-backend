@@ -23,7 +23,7 @@ def pdf_render(request):
 
 
 def get_user_questions_from_db(room_id):
-    qna_messages = QuestionMessage.objects.filter(lecture=room_id)
+    qna_messages = QuestionMessage.objects.filter(class_info=room_id)
     if qna_messages.exists():
         list_qna_message = [{'body': message.text, 'like-count': message.like_count, 'message-id': message.pk}
                             for message in qna_messages]
@@ -34,7 +34,8 @@ def get_user_questions_from_db(room_id):
 
 
 def get_template_html_name(type):
-    # 0: lecture 1: participation
+    # 0: lecture
+    # 1: participation
     if type == 0:
         return "lecture/lecture.html"
     elif type == 1:
