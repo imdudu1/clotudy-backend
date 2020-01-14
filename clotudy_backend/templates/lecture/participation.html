@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "lecture/base.html" %}
 
-{% load static %}
+{% load static compress %}
 
 {% block extra-style %}
     <style type="text/css">
@@ -121,6 +121,7 @@
 {% block footer %}{% endblock %}
 
 {% block extra-script %}
+    {% compress js %}
 <script type="text/javascript">
     // Utility functions.
     function querySelectorAllArray(selector){
@@ -272,7 +273,7 @@
 
     let groupSocket;
     function group_socket_connect() {
-        groupSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/samplegroupid/');
+        groupSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/samplegroupid/');
 
         groupSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
@@ -311,7 +312,7 @@
 
     let chatSocket;
     function chat_socket_connect() {
-        chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/sampleroomid/');
+        chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
 
         chatSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
@@ -453,4 +454,5 @@
         }));
     }
 </script>
+    {% endcompress %}
 {% endblock %}
