@@ -54,6 +54,16 @@ ROOT_URLCONF = "config.urls"
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
 
+ASGI_APPLICATION = "config.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
@@ -67,6 +77,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
 ]
 THIRD_PARTY_APPS = [
+    "channels",
     "crispy_forms",
     "allauth",
     "allauth.account",
@@ -81,6 +92,8 @@ LOCAL_APPS = [
     "clotudy_backend.users.apps.UsersConfig",
     # Your stuff: custom apps go here
     "clotudy_backend.api.apps.ApiConfig",
+    "clotudy_backend.lecture.apps.LectureConfig",
+    "clotudy_backend.cloredis.apps.CloredisConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
