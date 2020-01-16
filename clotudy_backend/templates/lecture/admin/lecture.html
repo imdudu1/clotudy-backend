@@ -1,81 +1,38 @@
 {% extends "lecture/admin/base.html" %}
 
 {% block extra-style %}
-    <style>
-        body, div {
-            margin: 0;
-            padding: 0;
-            outline: 0;
-        }
-
-        .leftContainer {
-        }
-
-        .rightContainer {
-            background: #ffffff;
-        }
-
-        .remoteController {
-            text-align: center;
-        }
-    </style>
+<style>
+    body, div {
+        margin: 0;
+        padding: 0;
+        outline: 0;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-2">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="leftContainer">
-                    <div>
-                        <!-- BEGIN: PPT DIV -->
-                        <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
-                        <!-- END: PPT Div -->
-                    </div>
+<ul class="nav nav-justified">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#qwe">INFO</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#asd">EVENT</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#zxc">MONITOR</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="qwe">
 
-                    <div class="remoteController">
-                        <!-- BEGIN: remote controller DIV -->
-                        <div class="btn-group align-content-center">
-                            <button class="btn btn-primary waves-effect waves-light" type="button">L</button>
-                            <button class="btn btn-danger waves-effect waves-light" type="button">S</button>
-                            <button class="btn btn-info waves-effect waves-light" type="button">R</button>
-                        </div>
-                        <!-- END: remote controller Div -->
-                    </div>
-
-                    <div>
-                        <!-- BEGIN: Description DIV -->
-                        <!-- END: Description Div -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="rightContainer">
-                    <ul class="nav nav-justified">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#qwe">QWE</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#asd">ASD</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#zxc">ZXC</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="qwe">
-
-                        </div>
-                        <div class="tab-pane fade" id="asd">
-
-                        </div>
-                        <div class="tab-pane fade" id="zxc">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+    <div class="tab-pane fade" id="asd">
+
+    </div>
+    <div class="tab-pane fade" id="zxc">
+
+    </div>
+</div>
 {% endblock %}
 
 {% block extra-script %}

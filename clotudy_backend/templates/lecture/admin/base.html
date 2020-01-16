@@ -63,6 +63,11 @@
     <!-- Split JS //-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
 
+    <style>
+        .remoteController {
+            text-align: center;
+        }
+    </style>
     {% block extra-style %}{% endblock %}
 </head>
 
@@ -182,7 +187,39 @@
     </nav>
 
     <div class="lesson-content">
-        {% block content %}{% endblock %}
+        <div class="container mt-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="leftContainer">
+                        <div>
+                            <!-- BEGIN: PPT DIV -->
+                            <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
+                            <!-- END: PPT Div -->
+                        </div>
+
+                        <div class="remoteController">
+                            <!-- BEGIN: remote controller DIV -->
+                            <div class="btn-group align-content-center">
+                                <button class="btn btn-primary waves-effect waves-light" type="button">L</button>
+                                <button class="btn btn-danger waves-effect waves-light" type="button">S</button>
+                                <button class="btn btn-info waves-effect waves-light" type="button">R</button>
+                            </div>
+                            <!-- END: remote controller Div -->
+                        </div>
+
+                        <div>
+                            <!-- BEGIN: Description DIV -->
+                            <!-- END: Description Div -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="rightContainer">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="lesson-bottom">
         {% block footer %}{% endblock %}
