@@ -24,7 +24,7 @@ def pdf_render(request):
 
 
 def get_user_questions_from_db(room_id):
-    qna_messages = QuestionMessage.objects.filter(lecture=room_id)
+    qna_messages = QuestionMessage.objects.filter(class_info=room_id)
     if qna_messages.exists():
         list_qna_message = [{'body': message.text, 'like-count': message.like_count, 'message-id': message.pk}
                             for message in qna_messages]
