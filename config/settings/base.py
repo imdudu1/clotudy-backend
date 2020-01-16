@@ -90,6 +90,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "clotudy_backend.users.apps.UsersConfig",
+
     # Your stuff: custom apps go here
     "clotudy_backend.api.apps.ApiConfig",
     "clotudy_backend.lecture.apps.LectureConfig",
@@ -222,7 +223,7 @@ CSRF_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 # https://en.m.wikipedia.org/wiki/Cross-origin_resource_sharing
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
