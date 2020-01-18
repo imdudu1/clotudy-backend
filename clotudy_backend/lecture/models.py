@@ -35,6 +35,7 @@ class Quiz(models.Model):
     quiz_item_num = models.IntegerField(default=5)
     quiz_score = models.IntegerField(default=1)
     quiz_solve_count = models.IntegerField(default=0)
+    quiz_correct_count = models.IntegerField(default=0)
 
 
 class Answer(models.Model):
