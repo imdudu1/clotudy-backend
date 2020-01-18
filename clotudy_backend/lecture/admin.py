@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import QuestionMessage, ClassInformation
+from .models import *
 
 
 @admin.register(QuestionMessage)
@@ -9,4 +9,24 @@ class QuestionMessageAdmin(admin.ModelAdmin):
 
 @admin.register(ClassInformation)
 class ClassInformationAdmin(admin.ModelAdmin):
-    list_display = ['class_title', 'class_advisor', 'class_type']
+    list_display = ['class_title', 'class_instructor', 'class_description']
+
+
+@admin.register(LectureInformation)
+class LectureInformationAdmin(admin.ModelAdmin):
+    list_display = ['lecture_title']
+
+
+@admin.register(QuizBox)
+class QuizBoxAdmin(admin.ModelAdmin):
+    list_display = ['quiz_box_title']
+
+
+@admin.register(Quiz)
+class Quiz(admin.ModelAdmin):
+    list_display = ['quiz_prob', 'quiz_score', 'quiz_solve_count']
+
+
+@admin.register(Answer)
+class Quiz(admin.ModelAdmin):
+    list_display = ['answer_content', 'answer_choice_count', 'answer_is_correct']
