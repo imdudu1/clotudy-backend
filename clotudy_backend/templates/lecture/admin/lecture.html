@@ -93,9 +93,9 @@
                                                                     <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
                                                                 </div>
                                                                 <div class="mail-meta-item">
-                                                                                <span class="float-right">
-                                                                                    <span class="mr-1 bullet bullet-success bullet-sm"></span><span class="mail-date">4:14 AM</span>
-                                                                                </span>
+                                                                    <span class="float-right">
+                                                                        <span class="mr-1 bullet bullet-success bullet-sm"></span><span class="mail-date">4:14 AM</span>
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                             <div class="mail-message">
@@ -117,68 +117,54 @@
                             <!-- Tab -->
                             <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
                                 <div id="accordion">
+                                    {% for quiz in quiz_data %}
                                     <div class="card mb-0">
-                                        <div class="card-header" id="headingOne">
+                                        <div class="card-header">
                                             <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                    C lang basic syntax quiz
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
+                                                    {{ quiz.category_title }}
                                                 </button>
-                                                <div class>
-
-                                                </div>
                                             </h5>
                                         </div>
-                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+
+                                        <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="nav-vertical">
                                                             <ul class="nav nav-tabs nav-left flex-column" role="tablist">
+                                                                {% for prob in quiz.quiz_content %}
                                                                 <li class="nav-item">
-                                                                    <a class="nav-link active" id="baseVerticalLeft-tab1" data-toggle="tab" aria-controls="tabVerticalLeft1" href="#tabVerticalLeft1" role="tab" aria-selected="true">문제
-                                                                        1</a>
+                                                                {% if forloop.counter == 1 %}
+                                                                    <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
+                                                                {% else %}
+                                                                    <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
+                                                                {% endif %}
                                                                 </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link" id="baseVerticalLeft-tab2" data-toggle="tab" aria-controls="tabVerticalLeft2" href="#tabVerticalLeft2" role="tab" aria-selected="false">문제 2</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link" id="baseVerticalLeft-tab3" data-toggle="tab" aria-controls="tabVerticalLeft3" href="#tabVerticalLeft3" role="tab" aria-selected="false">문제 3 </a>
-                                                                </li>
+                                                                {% endfor %}
                                                             </ul>
+
                                                             <div class="tab-content">
-                                                                <div class="tab-pane active" id="tabVerticalLeft1" role="tabpanel" aria-labelledby="baseVerticalLeft-tab1">
-                                                                    <p class="mb-3">Because the cost of the ____ in the factory equipment was higher than the owner had expected, he only purchased one new machine.</p>
+                                                                {% for prob in quiz.quiz_content %}
+                                                                    {% if forloop.counter == 1 %}
+                                                                <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                    {% else %}
+                                                                <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                    {% endif %}
 
-                                                                    <p>(A) cover</p>
-                                                                    <div class="progress progress-bar-info progress-lg">
+                                                                    <p class="mb-1">{{ prob.problem }}</p><hr />
+                                                                    {% for answer_item in prob.answer %}
+                                                                    <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
+                                                                    <div class="progress progress-bar-info progress-lg mb-1">
                                                                         <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
                                                                     </div>
-
-                                                                    <p>(B) blame</p>
-                                                                    <div class="progress progress-bar-info progress-lg">
-                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                                                    </div>
-
-                                                                    <p>(C) depth</p>
-                                                                    <div class="progress progress-bar-info progress-lg">
-                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                                                    </div>
-
-                                                                    <p>(D) investment</p>
-                                                                    <div class="progress progress-bar-info progress-lg">
-                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                                                    </div>
+                                                                    {% endfor %}
                                                                 </div>
-                                                                <div class="tab-pane" id="tabVerticalLeft2" role="tabpanel" aria-labelledby="baseVerticalLeft-tab2">
-                                                                    <p>
-                                                                    </p>
-                                                                </div>
-                                                                <div class="tab-pane" id="tabVerticalLeft3" role="tabpanel" aria-labelledby="baseVerticalLeft-tab3">
-                                                                    <p></p>
-                                                                </div>
+                                                                {% endfor %}
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-4">
                                                         <div class="row">
                                                             <div class="col-md-12">
@@ -199,6 +185,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
