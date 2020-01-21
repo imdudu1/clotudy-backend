@@ -5,234 +5,343 @@
 {% block extra-style %}{% endblock %}
 
 {% block content %}
-        <div class="flex-row">
-            <div id="left-side-panel">
-                <div class="flex-col">
-                    <div id="ppt-viewer-wrap">
-                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
-                            <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
-                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="live-qna-chat-wrap">
-                        <div class="content-header">
-                            추가 자료
-                        </div>
-                        <div class="lesson-note-content">
+    <div class="flex-row">
+        <div id="left-side-panel">
+            <div class="flex-col">
+                <div id="ppt-viewer-wrap">
+                    <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                        <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
+                            <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="mid-side-panel">
-                <div class="flex-col">
-                    <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
-                        <div id="user-notepad-content" style="height: calc(100% - 42px);">
-                            <p></p>
-                        </div>
+                <div id="live-qna-chat-wrap">
+                    <div class="content-header">
+                        추가 자료
                     </div>
-                    <div id="user-notepad-preview-wrap">
-                        <div class="content-header">
-                            자료실
-                        </div>
-                        <div id="user-notepad-preview-content">
-                        </div>
+                    <div class="lesson-note-content">
                     </div>
-                </div>
-            </div>
-            <div id="right-side-panel">
-                <div class="content-header">
-                    실시간 질문 게시판
-                </div>
-                <div id="live-qna-chat-content">
-                    <!-- TEST -->
-                    <!-- END TEST -->
                 </div>
             </div>
         </div>
+        <div id="mid-side-panel">
+            <div class="flex-col">
+                <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
+                    <div id="user-notepad-content" style="height: calc(100% - 42px);">
+                        <p></p>
+                    </div>
+                </div>
+                <div id="user-notepad-preview-wrap">
+                    <div class="content-header">
+                        자료실
+                    </div>
+                    <div id="user-notepad-preview-content">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="right-side-panel">
+            <div class="content-header">
+                실시간 질문 게시판
+            </div>
+            <div id="live-qna-chat-content">
+                <!-- TEST -->
+                <!-- END TEST -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div id="modal-content-header" class="modal-header">
+
+                </div>
+                <div class="modal-body">
+                    <div class="nav-vertical">
+                        <ul id="modal-nav-wrap" class="nav nav-tabs nav-left flex-column" role="tablist">
+
+                        </ul>
+                        <div id="modal-nav-content-wrap" class="tab-content">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}{% endblock %}
 
 {% block extra-script %}
-<script type="text/javascript">
-    let qna_messages;
-    $(document).ready(function(){
-        qna_messages = {{ messages|safe }};
-    });
-
-    // WebSocket
-    let current_ppt_page = 1;
-    let ppt_sync_flag = true;
-    let is_exist_new_qna = true;
-
-    function remoteSyncPPTPage(data) {
-        if (!ppt_sync_flag) {
-            return;
-        }
-
-        let page = data['data']['page'];
-        let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
-        if((page > numPages) || (page < 1)){
-            return;
-        }
-        document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = page;
-    }
-
-    function liveQnAMessage(request) {
-        let qna = request['data']['qna'];
-
-        if (qna === '') {
-            return
-        }
-
-        let qna_body = qna['body'];
-        let qna_like_count = qna['like-count'];
-        let qna_message_id = qna['message-id'];
-        qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
-        is_exist_new_qna = true;
-
-        let live_qna_chat_box = $('#live-qna-chat-box');
-        live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
-        live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
-    }
-
-    function redrawSortingQnAChat() {
-        if (!is_exist_new_qna) {
-            return;
-        } else {
-            is_exist_new_qna = false;
-        }
-
-        $('#live-qna-chat-box').empty();
-        qna_messages.sort((lhs, rhs) => {
-            return rhs['like-count'] - lhs['like-count'];
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        let qna_messages;
+        $(document).ready(function(){
+            qna_messages = {{ messages|safe }};
         });
-        qna_messages.forEach((message) => {
-            $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
-        });
-    }
-    setInterval(redrawSortingQnAChat, 5000);
 
-    function updateLikeCount(data) {
-        let message_id = data['data']['message-id'];
-        for (let i = 0; i < qna_messages.length; i++) {
-            if (qna_messages[i]['message-id'] === message_id) {
-                qna_messages[i]['like-count'] += 1;
-                break;
+        // WebSocket
+        let current_ppt_page = 1;
+        let ppt_sync_flag = true;
+        let is_exist_new_qna = true;
+
+        function remoteSyncPPTPage(data) {
+            if (!ppt_sync_flag) {
+                return;
+            }
+
+            let page = data['data']['page'];
+            let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+            if((page > numPages) || (page < 1)){
+                return;
+            }
+            document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = page;
+        }
+
+        function liveQnAMessage(request) {
+            let qna = request['data']['qna'];
+
+            if (qna === '') {
+                return
+            }
+
+            let qna_body = qna['body'];
+            let qna_like_count = qna['like-count'];
+            let qna_message_id = qna['message-id'];
+            qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+            is_exist_new_qna = true;
+
+            let live_qna_chat_box = $('#live-qna-chat-box');
+            live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
+            live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
+        }
+
+        function redrawSortingQnAChat() {
+            if (!is_exist_new_qna) {
+                return;
+            } else {
+                is_exist_new_qna = false;
+            }
+
+            $('#live-qna-chat-box').empty();
+            qna_messages.sort((lhs, rhs) => {
+                return rhs['like-count'] - lhs['like-count'];
+            });
+            qna_messages.forEach((message) => {
+                $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
+            });
+        }
+        setInterval(redrawSortingQnAChat, 5000);
+
+        function updateLikeCount(data) {
+            let message_id = data['data']['message-id'];
+            for (let i = 0; i < qna_messages.length; i++) {
+                if (qna_messages[i]['message-id'] === message_id) {
+                    qna_messages[i]['like-count'] += 1;
+                    break;
+                }
             }
         }
-    }
 
-    let chatSocket;
-    function ws_connect() {
-        chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+        function setModalQuizHTML(data) {
+            let modal_header_html =
+                '                    <h5 class="modal-title" id="exampleModalCenterTitle">' + data.category_title + '</h5>\n' +
+                '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+                '                        <span aria-hidden="true">&times;</span>\n' +
+                '                    </button>\n';
+            let modal_content_html = '';
+            let modal_tab_nav_html = '';
 
-        chatSocket.onmessage = (message) => {
-            let message_data = JSON.parse(message.data);
-            switch (message_data.action) {
-                case 'sync-ppt-page':
-                    remoteSyncPPTPage(message_data);
-                    break;
-                case 'live-qna-chat':
-                    liveQnAChat(message_data);
-                    break;
-                case 'add-like-count':
-                    updateLikeCount(message_data);
-                    break;
-                default:
-                    break;
+            let modal_content_dom = $("#modal-body");
+            let modal_title_dom = $("#exampleModalCenterTitle");
+            // clear html
+            modal_content_dom.empty();
+            modal_title_dom.empty();
+
+            let prob_count = 1;
+            for (let quiz_obj of data.quiz_content) {
+                if (prob_count === 1) {
+                    modal_tab_nav_html +=
+                        '                            <li class="nav-item">\n' +
+                        '                                <a class="nav-link active" id="baseVerticalLeft-tab' + prob_count + '" data-toggle="tab" aria-controls="tabVerticalLeft' + prob_count + '" href="#tabVerticalLeft' + prob_count + '" role="tab" aria-selected="true">Prob.' + prob_count + '</a>\n' +
+                        '                            </li>';
+                } else {
+                    modal_tab_nav_html +=
+                        '                            <li class="nav-item">\n' +
+                        '                                <a class="nav-link" id="baseVerticalLeft-tab' + prob_count + '" data-toggle="tab" aria-controls="tabVerticalLeft' + prob_count + '" href="#tabVerticalLeft' + prob_count + '" role="tab" aria-selected="false">Prob.' + prob_count + '</a>\n' +
+                        '                            </li>';
+                }
+
+                let prob_html_begin;
+                if (prob_count === 1) {
+                    prob_html_begin = '<div class="tab-pane active" id="tabVerticalLeft' + prob_count + '" role="tabpanel" aria-labelledby="baseVerticalLeft-tab' + prob_count + '">';
+                } else {
+                    prob_html_begin = '<div class="tab-pane" id="tabVerticalLeft' + prob_count + '" role="tabpanel" aria-labelledby="baseVerticalLeft-tab' + prob_count + '">';
+                }
+                let problem = quiz_obj.problem;
+                prob_html_begin += `<p>${problem}</p><hr />`;
+                let problem_id = quiz_obj.id;
+                let answer_list_html = `<ul class="list-unstyled mb-0">`;
+                for (let answer_obj of quiz_obj.answer) {
+                    answer_list_html +=
+                        '                                   <li class="mr-2">\n' +
+                        '                                        <fieldset>\n' +
+                        '                                            <div class="vs-radio-con vs-radio-success">\n' +
+                        '                                                <input type="radio" name="radiocolor" value="false">\n' +
+                        '                                                <span class="vs-radio">\n' +
+                        '                                                            <span class="vs-radio--border"></span>\n' +
+                        '                                                            <span class="vs-radio--circle"></span>\n' +
+                        '                                                        </span>\n' +
+                        '                                                <span class="">' + answer_obj.content + '</span>\n' +
+                        '                                            </div>\n' +
+                        '                                        </fieldset>\n' +
+                        '                                    </li>';
+                }
+                answer_list_html += '</ul>';
+
+                modal_content_html += prob_html_begin + answer_list_html + '</div>';
+
+                prob_count += 1;
             }
-        };
 
-        chatSocket.onclose = (e) => {
-            setTimeout(() => {
-                ws_connect();
-            }, 1000);
-        };
+            $("#modal-content-header").empty();
+            $("#modal-content-header").append(modal_header_html);
 
-        chatSocket.onerror = (err) => {
-            chatSocket.close();
+            $("#modal-nav-wrap").empty();
+            $("#modal-nav-wrap").append(modal_tab_nav_html);
+
+            $("#modal-nav-content-wrap").empty();
+            $("#modal-nav-content-wrap").append(modal_content_html);
         }
-    }
-    ws_connect();
 
-    function questionMsgHtmlGenerator(msg, like_count) {
-        return '<div class="card" style="">\n' +
-            '    <div class="card-body">\n' +
-            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-            '            <div class="avatar mr-1">\n' +
-            '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
-            '            </div>\n' +
-            '            <div class="user-page-info">\n' +
-            '                <p class="mb-0">Leeanna Alvord</p>\n' +
-            '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
-            '            </div>\n' +
-            '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
-            '        </div>\n' +
-            '        <p>' + msg + '</p>\n' +
-            '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
-            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-            '            <div class="d-flex align-items-center">\n' +
-            '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
-            '                <span>' + like_count + '</span>\n' +
-            '            </div>\n' +
-            '            <div class="ml-2">\n' +
-            '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
-            '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
-            '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
-            '                    </li>\n' +
-            '                    <li class="d-inline-block pl-50">\n' +
-            '                        <span>+140 more</span>\n' +
-            '                    </li>\n' +
-            '                </ul>\n' +
-            '            </div>\n' +
-            '            <p class="ml-auto d-flex align-items-center">\n' +
-            '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
-            '            </p>\n' +
-            '        </div>\n' +
-            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-            '            <div class="avatar mr-50">\n' +
-            '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
-            '            </div>\n' +
-            '            <div class="user-page-info">\n' +
-            '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
-            '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
-            '            </div>\n' +
-            '            <div class="ml-auto cursor-pointer">\n' +
-            '                <i class="feather icon-heart mr-50"></i>\n' +
-            '                <i class="feather icon-message-square"></i>\n' +
-            '            </div>\n' +
-            '        </div>\n' +
-            '        <fieldset class="form-label-group mb-50">\n' +
-            '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
-            '            <label for="label-textarea">Add Comment</label>\n' +
-            '        </fieldset>\n' +
-            '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
-            '    </div>\n' +
-            '</div>\n';
-    }
+        function showQuizModal(data) {
+            axios.get(`/api/quiz/${data.data.quizBoxId}`)
+                .then(res => {
+                    setModalQuizHTML(res.data);
+                    $("#exampleModalCenter").modal("show");
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
 
-    function sendQuestionMessagePacket(message) {
-        chatSocket.send(JSON.stringify({
-            'action': 'live-qna-chat',
-            'data': {
-                'qna': {
-                    'body': message,
-                },
-                'lecture': {{ room_name_json }},
+        let chatSocket;
+        function ws_connect() {
+            chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+            chatSocket.onmessage = (message) => {
+                let message_data = JSON.parse(message.data);
+                switch (message_data.action) {
+                    case 'sync-ppt-page':
+                        remoteSyncPPTPage(message_data);
+                        break;
+                    case 'live-qna-chat':
+                        liveQnAMessage(message_data);
+                        break;
+                    case 'add-like-count':
+                        updateLikeCount(message_data);
+                        break;
+                    case 'show-quiz-modal':
+                        showQuizModal(message_data);
+                        break;
+                    default:
+                        break;
+                }
+            };
+
+            chatSocket.onclose = (e) => {
+                setTimeout(() => {
+                    ws_connect();
+                }, 1000);
+            };
+
+            chatSocket.onerror = (err) => {
+                chatSocket.close();
             }
-        }));
-    }
+        }
+        ws_connect();
 
-    function addLikeCount(id) {
-        chatSocket.send(JSON.stringify({
-            'action': 'add-like-count',
-            'data': {
-                'message-id': id, // QnAMessage.pk
-                'lecture': {{ room_name_json }},
-            }
-        }));
-    }
-</script>
+        function questionMsgHtmlGenerator(msg, like_count) {
+            return '<div class="card" style="">\n' +
+                '    <div class="card-body">\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="avatar mr-1">\n' +
+                '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
+                '            </div>\n' +
+                '            <div class="user-page-info">\n' +
+                '                <p class="mb-0">Leeanna Alvord</p>\n' +
+                '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
+                '        </div>\n' +
+                '        <p>' + msg + '</p>\n' +
+                '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="d-flex align-items-center">\n' +
+                '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
+                '                <span>' + like_count + '</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-2">\n' +
+                '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
+                '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
+                '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
+                '                    </li>\n' +
+                '                    <li class="d-inline-block pl-50">\n' +
+                '                        <span>+140 more</span>\n' +
+                '                    </li>\n' +
+                '                </ul>\n' +
+                '            </div>\n' +
+                '            <p class="ml-auto d-flex align-items-center">\n' +
+                '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
+                '            </p>\n' +
+                '        </div>\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="avatar mr-50">\n' +
+                '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
+                '            </div>\n' +
+                '            <div class="user-page-info">\n' +
+                '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
+                '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-auto cursor-pointer">\n' +
+                '                <i class="feather icon-heart mr-50"></i>\n' +
+                '                <i class="feather icon-message-square"></i>\n' +
+                '            </div>\n' +
+                '        </div>\n' +
+                '        <fieldset class="form-label-group mb-50">\n' +
+                '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
+                '            <label for="label-textarea">Add Comment</label>\n' +
+                '        </fieldset>\n' +
+                '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
+                '    </div>\n' +
+                '</div>\n';
+        }
+
+        function sendQuestionMessagePacket(message) {
+            chatSocket.send(JSON.stringify({
+                'action': 'live-qna-chat',
+                'data': {
+                    'qna': {
+                        'body': message,
+                    },
+                    'lecture': {{ room_name_json }},
+                }
+            }));
+        }
+
+        function addLikeCount(id) {
+            chatSocket.send(JSON.stringify({
+                'action': 'add-like-count',
+                'data': {
+                    'message-id': id, // QnAMessage.pk
+                    'lecture': {{ room_name_json }},
+                }
+            }));
+        }
+    </script>
 {% endblock %}
