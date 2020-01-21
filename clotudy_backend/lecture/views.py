@@ -18,14 +18,16 @@ def lecture_admin(request, room_id):
 
     # Quiz serializer
     recv_quiz_data = []
-    quiz_box_list = QuizBox.objects.filter(lecture_info=room_id)
+    quiz_box_list = QuizBox.objects.filter(lecture_info=pk)
     for quiz_box in quiz_box_list:
-        quiz_set = {"category_id": quiz_box.pk, "category_title": quiz_box.quiz_box_title, "quiz_content": []}
+        quiz_set = {"category_id": quiz_box.pk, "is_open": quiz_box.quiz_is_open,
+                    "category_title": quiz_box.quiz_box_title, "quiz_content": []}
         quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box.pk)
         for quiz in quiz_list:
             answer_list = Answer.objects.filter(quiz_info=quiz.pk)
-            #quiz_set["quiz"][quiz.pk] = {"problem": quiz.quiz_prob, "answer": {{"id": answer.pk, "content": answer.answer_content, "count": answer.answer_choice_count, "is_correct": answer.answer_is_correct} for answer in answer_list}}
-            quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [{"id": answer.pk, "content": answer.answer_content, "count": answer.answer_choice_count, "is_correct": answer.answer_is_correct} for answer in answer_list]})
+            quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
+                {"id": answer.pk, "content": answer.answer_content, "count": answer.answer_choice_count,
+                 "is_correct": answer.answer_is_correct} for answer in answer_list]})
         recv_quiz_data.append(quiz_set)
 
     # return render(request, 'lecture/admin/{}'.format(get_template_html_name(class_info.class_type)), {
