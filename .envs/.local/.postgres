@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=clotudy_backend
+POSTGRES_USER=heRPpCplGrosVPZFgWGFXfRKOITdGEaC
+POSTGRES_PASSWORD=HNMVJoZO4Rka0NxQ07kA9Y2DQdqxrul7qwkq8dVA8IAyP5ynFWemuvJyqWyxIzRp
