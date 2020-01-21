@@ -6,161 +6,160 @@
 
 {% block admin-content %}
     <div class="row">
-        <div class="col-sm-5">
-            <div class="card overflow-hidden">
-                <div class="card-header">
-                    <h4 class="card-title">PPT 관리</h4>
-                    <i data-toggle="tooltip" data-placement="left" title="새 창으로 PPT viewer 띄워 다양한 디스플레이에 표시할 수 있습니다." onclick="javascript:clonePPT();" class="fa fa-clone"></i>
-                </div>
-                <div class="card-content">
-                    <div class="card-body text-center">
-                        <iframe style="width: 100%; height: 350px;" allowfullscreen src="https://mozilla.github.io/pdf.js/web/viewer.html"></iframe>
-                        <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-secondary">Left</button>
-                            <button type="button" class="btn btn-secondary">Middle</button>
-                            <button type="button" class="btn btn-secondary">Right</button>
-                        </div>
+    <div class="col-sm-5">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">PPT 관리</h4>
+                <i data-toggle="tooltip" data-placement="left" title="새 창으로 PPT viewer 띄워 다양한 디스플레이에 표시할 수 있습니다." onclick="javascript:clonePPT();" class="fa fa-clone"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-body text-center">
+                    <iframe style="width: 100%; height: 350px;" allowfullscreen src="https://mozilla.github.io/pdf.js/web/viewer.html"></iframe>
+                    <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary">Left</button>
+                        <button type="button" class="btn btn-secondary">Middle</button>
+                        <button type="button" class="btn btn-secondary">Right</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
-            <div class="card overflow-hidden">
-                <div class="card-header">
-                    <h4 class="card-title">수업 관리 <small class="font-size-small text-muted">수업에 유용한 기능들을 이용해보세요.</small></h4>
-                </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#home-center" aria-controls="home-center" role="tab" aria-selected="true">수업</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#service-center" aria-controls="service-center" role="tab" aria-selected="false">질문</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
-                            </li>
-                        </ul>
+    </div>
+    <div class="col-sm-7">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">수업 관리 <small class="font-size-small text-muted">수업에 유용한 기능들을 이용해보세요.</small></h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <ul class="nav nav-tabs justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#home-center" aria-controls="home-center" role="tab" aria-selected="true">수업</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#service-center" aria-controls="service-center" role="tab" aria-selected="false">질문</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
+                        </li>
+                    </ul>
 
-                        <div class="tab-content">
-                            <!-- Tab -->
-                            <div class="tab-pane active" id="home-center" aria-labelledby="home-tab-center" role="tabpanel">
-                                <h5 class="mt-2">일정</h5><hr />
-                                <h5 class="mt-2">진도</h5><hr />
-                                <div class="col-sm-6">
-                                    <div class="progress progress-bar-info progress-lg">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                    </div>
+                    <div class="tab-content">
+                        <!-- Tab -->
+                        <div class="tab-pane active" id="home-center" aria-labelledby="home-tab-center" role="tabpanel">
+                            <h5 class="mt-2">일정</h5><hr />
+                            <h5 class="mt-2">진도</h5><hr />
+                            <div class="col-sm-6">
+                                <div class="progress progress-bar-info progress-lg">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
                                 </div>
-                                <div class="col-sm-6">
-
-                                </div>
-                                <h5 class="mt-2">PPT 정보</h5><hr />
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div id="ppt-waiting-chart"></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <!-- Line Area Chart -->
-                                        <div id="line-area-chart"></div>
-                                    </div>
-                                </div>
-                                <h5 class="mt-2">년도별 비교</h5><hr />
                             </div>
+                            <div class="col-sm-6">
+
+                            </div>
+                            <h5 class="mt-2">PPT 정보</h5><hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="ppt-waiting-chart"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Line Area Chart -->
+                                    <div id="line-area-chart"></div>
+                                </div>
+                            </div>
+                            <h5 class="mt-2">년도별 비교</h5><hr />
+                        </div>
 
 
-                            <!-- Tab -->
-                            <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
-                                <div class="email-application">
-                                    <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
-                                        <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
-                                            <div class="email-user-list list-group" style="height: 100%;">
-                                                <ul class="users-list-wrapper media-list">
-                                                    <li class="media">
-                                                        <div class="media-left pr-50">
-                                                            <div class="avatar">
-                                                                <img src="{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}" alt="avtar img holder">
-                                                            </div>
-                                                            <div class="user-action">
-                                                                <span class="favorite"><i class="feather icon-star"></i></span>
-                                                            </div>
+                        <!-- Tab -->
+                        <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
+                            <div class="email-application">
+                                <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
+                                    <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
+                                        <div class="email-user-list list-group" style="height: 100%;">
+                                            <ul class="users-list-wrapper media-list">
+                                                <li class="media">
+                                                    <div class="media-left pr-50">
+                                                        <div class="avatar">
+                                                            <img src="{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}" alt="avtar img holder">
                                                         </div>
-                                                        <div class="media-body">
-                                                            <div class="user-details">
-                                                                <div class="mail-items">
-                                                                    <h5 class="list-group-item-heading text-bold-600 mb-25">신병주(5297856)</h5>
-                                                                    <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
-                                                                </div>
-                                                                <div class="mail-meta-item">
+                                                        <div class="user-action">
+                                                            <span class="favorite"><i class="feather icon-star"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <div class="user-details">
+                                                            <div class="mail-items">
+                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">신병주(5297856)</h5>
+                                                                <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
+                                                            </div>
+                                                            <div class="mail-meta-item">
                                                                     <span class="float-right">
                                                                         <span class="mr-1 bullet bullet-success bullet-sm"></span><span class="mail-date">4:14 AM</span>
                                                                     </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mail-message">
-                                                                <p class="list-group-item-text truncate mb-0">이러쿵저러쿵~~</p>
                                                             </div>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="no-results">
-                                                    <h5>No Items Found</h5>
-                                                </div>
+                                                        <div class="mail-message">
+                                                            <p class="list-group-item-text truncate mb-0">이러쿵저러쿵~~</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="no-results">
+                                                <h5>No Items Found</h5>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            <!-- Tab -->
-                            <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
-                                <div id="accordion">
-                                    {% for quiz in quiz_data %}
+                        <!-- Tab -->
+                        <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
+                            <div id="accordion">
+                                {% for quiz in quiz_data %}
                                     <div class="card mb-0">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
-                                                    {{ quiz.category_title }}
-                                                </button>
-                                            </h5>
-                                        </div>
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
+                                                {{ quiz.category_title }}
+                                            </button>
+                                        </h5>
+                                    </div>
 
-                                        <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="nav-vertical">
-                                                            <ul class="nav nav-tabs nav-left flex-column" role="tablist">
-                                                                {% for prob in quiz.quiz_content %}
+                                    <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="nav-vertical">
+                                                        <ul class="nav nav-tabs nav-left flex-column" role="tablist">
+                                                            {% for prob in quiz.quiz_content %}
                                                                 <li class="nav-item">
-                                                                {% if forloop.counter == 1 %}
-                                                                    <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
-                                                                {% else %}
-                                                                    <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
-                                                                {% endif %}
-                                                                </li>
-                                                                {% endfor %}
-                                                            </ul>
-
-                                                            <div class="tab-content">
-                                                                {% for prob in quiz.quiz_content %}
                                                                     {% if forloop.counter == 1 %}
-                                                                <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                        <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
                                                                     {% else %}
-                                                                <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                        <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
                                                                     {% endif %}
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
 
-                                                                    <p class="mb-1">{{ prob.problem }}</p><hr />
-                                                                    {% for answer_item in prob.answer %}
-                                                                    <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
-                                                                    <div class="progress progress-bar-info progress-lg mb-1">
-                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                                                    </div>
-                                                                    {% endfor %}
+                                                        <div class="tab-content">
+                                                            {% for prob in quiz.quiz_content %}
+                                                                {% if forloop.counter == 1 %}
+                                                                    <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                {% else %}
+                                                                    <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                {% endif %}
+                                                            <p class="mb-1">{{ prob.problem }}</p><hr />
+                                                            {% for answer_item in prob.answer %}
+                                                                <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
+                                                                <div class="progress progress-bar-info progress-lg mb-1">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
                                                                 </div>
-                                                                {% endfor %}
+                                                            {% endfor %}
+                                                            </div>
+                                                            {% endfor %}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -185,7 +184,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% endfor %}
+                                {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -198,6 +197,12 @@
 
 {% block extra-script %}
     <script>
+        let all_quiz_data;
+        $(document).ready(function(){
+            all_quiz_data = {{ quiz_data|safe }};
+        });
+
+        // Charts
         var options = {
             series: [{
                 name: '2019-1',
@@ -258,10 +263,6 @@
         var ppt_chart = new ApexCharts(document.querySelector("#ppt-waiting-chart"), options);
         ppt_chart.render();
 
-        function clonePPT() {
-            let handle = window.open("https://mozilla.github.io/pdf.js/web/viewer.html", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
-        }
-
 
         var options = {
             series: [44, 55, 41, 17, 15],
@@ -285,5 +286,50 @@
         chart.render();
         var chart = new ApexCharts(document.querySelector("#q2Chart"), options);
         chart.render();
+
+        function clonePPT() {
+            let handle = window.open("https://mozilla.github.io/pdf.js/web/viewer.html", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+        }
+
+        let global_socket;
+        function global_socket_init() {
+            global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+
+            global_socket.onmessage = (message) => {
+                let message_data = JSON.parse(message.data);
+                switch (message_data.action) {
+                    case 'sync-ppt-page':
+                        break;
+                    case 'live-qna-chat':
+                        break;
+                    case 'add-like-count':
+                        break;
+                    case 'quiz-complete-signal':
+                        break;
+                    default:
+                        break;
+                }
+            };
+
+            global_socket.onclose = (e) => {
+                setTimeout(() => {
+                    global_socket_init();
+                }, 1000);
+            };
+
+            global_socket.onerror = (err) => {
+                global_socket.close();
+            }
+        }
+        global_socket_init();
+
+        function showQuizModal(quizBoxId) {
+            global_socket.send(JSON.stringify({
+                'action': 'show-quiz-modal',
+                'data': {
+                    'quizBoxId': quizBoxId
+                }
+            }));
+        }
     </script>
 {% endblock %}
