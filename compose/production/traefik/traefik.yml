@@ -23,7 +23,7 @@ certificatesResolvers:
 http:
   routers:
     web-router:
-      rule: "Host(`pppr.io`)"
+      rule: "Host(`clotudy.pppr.io`)"
       entryPoints:
         - web
       middlewares:
@@ -32,7 +32,7 @@ http:
       service: django
 
     web-secure-router:
-      rule: "Host(`pppr.io`)"
+      rule: "Host(`clotudy.pppr.io`)"
       entryPoints:
         - web-secure
       middlewares:

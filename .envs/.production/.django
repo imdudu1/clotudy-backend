@@ -4,7 +4,7 @@
 DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=H4QuWSCqtfSfkVoaWAHhRzYu4ufH3QIaFgTTAF2rlkCGHxmLYLzeyDUDoSyapYqS
 DJANGO_ADMIN_URL=GF0Wo4GmbdTJXAMUK8xerZVPagSk6mfv/
-DJANGO_ALLOWED_HOSTS=.pppr.io
+DJANGO_ALLOWED_HOSTS=clotudy.pppr.io
 
 # Security
 # ------------------------------------------------------------------------------
