@@ -4,21 +4,21 @@ from .models import *
 import json
 
 
-def lecture(request, room_id):
-    class_info = ClassInformation.objects.get(pk=room_id)
+def lecture(request, class_id, lecture_id):
+    class_info = ClassInformation.objects.get(pk=class_id)
     # return render(request, "lecture/{}".format(get_template_html_name(class_info.class_type)), {
     return render(request, "lecture/{}".format(_get_template_html_name(0)), {
-        'room_name_json': mark_safe(json.dumps(room_id)),
-        'messages': _get_user_questions_from_db(room_id),
+        'room_name_json': mark_safe(json.dumps(class_id)),
+        'messages': _get_user_questions_from_db(class_id),
     })
 
 
-def lecture_admin(request, room_id):
-    class_info = ClassInformation.objects.get(pk=room_id)
+def lecture_admin(request, class_id, lecture_id):
+    class_info = ClassInformation.objects.get(pk=class_id)
 
     # Quiz serializer
     recv_quiz_data = []
-    quiz_box_list = QuizBox.objects.filter(lecture_info=pk)
+    quiz_box_list = QuizBox.objects.filter(lecture_info=lecture_id)
     for quiz_box in quiz_box_list:
         quiz_set = {"category_id": quiz_box.pk, "is_open": quiz_box.quiz_is_open,
                     "category_title": quiz_box.quiz_box_title, "quiz_content": []}
@@ -32,7 +32,7 @@ def lecture_admin(request, room_id):
 
     # return render(request, 'lecture/admin/{}'.format(get_template_html_name(class_info.class_type)), {
     return render(request, 'lecture/admin/{}'.format(_get_template_html_name(0)), {
-        'room_name_json': mark_safe(json.dumps(room_id)),
+        'room_name_json': mark_safe(json.dumps(class_id)),
         'quiz_data': recv_quiz_data,
     })
 
@@ -48,7 +48,6 @@ def _get_user_questions_from_db(room_id):
                             for message in qna_messages]
     else:
         list_qna_message = []
-
     return list_qna_message
 
 
