@@ -1,4 +1,4 @@
-{% load static %}<!DOCTYPE html>
+{% load static i18n compress %}<!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -36,14 +36,18 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/plugins/tour/tour.css' %}">
     <!-- END: Page CSS-->
 
+    <!-- Include stylesheet -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
     <!-- END: Custom CSS-->
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    {% compress css %}
+    {% block extra-style %}{% endblock %}
+    {% endcompress %}
 
-    <!-- Include stylesheet -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -62,113 +66,6 @@
 
     <!-- Split JS //-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
-
-    <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
-
-        .flex-col {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .flex-row {
-            display: flex;
-            flex-direction: row;
-            height: 100%;
-        }
-
-        .gutter.gutter-horizontal, .gutter.gutter-vertical {
-            background-color: #fff;
-        }
-
-        .gutter.gutter-horizontal {
-            cursor: ew-resize;
-            /* border-right: 1px solid #0b0e0f; border-left: 1px solid #0b0e0f; */
-            background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
-            background-size: 0.875rem 2.25rem;
-            background-color: #fff;
-        }
-
-        .gutter.gutter-vertical {
-            cursor: ns-resize;
-            background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
-            background-size: 2.25rem 0.875rem;
-            background-position-y: bottom;
-            background-repeat: no-repeat;
-            background-position: 50%;
-        }
-
-        #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
-            overflow: auto;
-            background-color: #fff;
-        }
-
-        .lesson-content {
-            height: calc(100vh - 75px);
-        }
-
-        .content-header {
-            border-bottom: 1px solid #dadada;
-            padding: 15px;
-            font-family: 'Noto Sans KR', sans-serif;
-            /* color: #fff; */
-            /* background-color: #3A464B; */
-            background-color: #fbfbfb;
-            font-size: 13px;
-        }
-
-        /* Scrollbar */
-        /* width */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        /* Track
-        ::-webkit-scrollbar-track {
-            background: #2a363b;
-        }
-        */
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #b9ceeb;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #87a8d0;
-        }
-
-        #live-qna-chat-content {
-            position: relative;
-            height: calc(100% - 50px);
-        }
-
-        .lesson-note-content {
-            /* color: #fff; */
-            margin: 10px 15px 10px 15px;
-        }
-
-        .ql-container.ql-snow {
-            border: none;
-        }
-
-        #live-qna-chat-box {
-            height: auto;
-            min-height: 100%;
-            max-height: 100%;
-            overflow-y: scroll;
-            overflow-x: hidden;
-        }
-    </style>
-
-    {% block extra-style %}{% endblock %}
 </head>
 
 <body class="horizontal-layout horizontal-menu 2-columns todo-application navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -302,6 +199,7 @@
 <script src="{% static 'app-assets/vendors/js/ui/jquery.sticky.js' %}"></script>
 <script src="{% static 'app-assets/vendors/js/extensions/tether.min.js' %}"></script>
 <script src="{% static 'app-assets/vendors/js/extensions/shepherd.min.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -315,6 +213,8 @@
 <script src="{% static 'assets/js/room_init.js' %}"></script>
 <!-- END: Page JS-->
 
+{% compress js %}
 {% block extra-script %}{% endblock %}
+{% endcompress %}
 </body>
 </html>

@@ -197,11 +197,6 @@
 
 {% block extra-script %}
     <script>
-        let all_quiz_data;
-        $(document).ready(function(){
-            all_quiz_data = {{ quiz_data|safe }};
-        });
-
         // Charts
         var options = {
             series: [{
