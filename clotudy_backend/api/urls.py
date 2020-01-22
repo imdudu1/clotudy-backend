@@ -3,5 +3,5 @@ from .views import QuizBoxDetail
 
 app_name = "api"
 urlpatterns = [
-    path("quiz/<int:pk>/", QuizBoxDetail.as_view(), name="quizList"),
+    path("quiz/<int:pk>", QuizBoxDetail.as_view(), name="quizList"),
 ]

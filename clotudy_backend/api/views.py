@@ -17,3 +17,17 @@ class QuizBoxDetail(APIView):
                 quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
                     {"id": answer.pk, "content": answer.answer_content} for answer in answer_list]})
         return Response(quiz_set)
+
+    def post(self, request, pk, format=None):
+        total_score = 0
+
+        for key in request.data:
+            if key != "csrfmiddlewaretoken":
+                qz = Quiz.objects.get(pk=key)
+                ans = Answer.objects.get(quiz_info=qz, pk=request.data[key])
+                ans.answer_choice_count += 1
+                if ans.answer_is_correct:
+                    total_score = total_score + qz.quiz_score
+                ans.save()
+
+        return Response(total_score)
