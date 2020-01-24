@@ -332,10 +332,9 @@
         }
 
         function showQuizModal(data) {
-            console.log(data);
             axios.get(`/api/quiz/${data.data.quizBoxId}`)
                 .then(res => {
-                    setModalQuizHTML(res.data);
+                    setModalQuizHTML(res.data[0]);
                     $("#exampleModalCenter").modal("show");
                 })
                 .catch(err => {
