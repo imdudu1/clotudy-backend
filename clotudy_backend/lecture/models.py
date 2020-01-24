@@ -46,3 +46,12 @@ class QuestionMessage(models.Model):
     created_time = models.DateTimeField(default=timezone.now)
     question_content = models.TextField(max_length=200, blank=False)
     like_count = models.IntegerField(default=0)
+
+
+class QuizScoreRecord(models.Model):
+    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
+    quiz_box_info = models.ForeignKey(QuizBox, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=30, blank=False)
+    score = models.IntegerField(default=0)
+    created_date = models.DateTimeField(default=timezone.now)
+
