@@ -151,11 +151,11 @@
                                                                 {% else %}
                                                                     <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
                                                                 {% endif %}
-                                                            <p class="mb-1">{{ prob.problem }}</p><hr />
+                                                                <p class="mb-1">{{ prob.problem }}</p><hr />
                                                             {% for answer_item in prob.answer %}
                                                                 <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
                                                                 <div class="progress progress-bar-info progress-lg mb-1">
-                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
+                                                                  <div class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
                                                                 </div>
                                                             {% endfor %}
                                                             </div>

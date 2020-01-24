@@ -24,9 +24,11 @@ def lecture_admin(request, class_id, lecture_id):
                     "category_title": quiz_box.quiz_box_title, "quiz_content": []}
         quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box.pk)
         for quiz in quiz_list:
-            answer_list = Answer.objects.filter(quiz_info=quiz.pk)
-            quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
-                {"id": answer.pk, "content": answer.answer_content, "count": answer.answer_choice_count,
+            solve_count = quiz.quiz_solve_count
+            correct_count = quiz.quiz_correct_count
+            answer_list = Answer.objects.filter(quiz_info=quiz)
+            quiz_set["quiz_content"].append({"id": quiz.pk, "solve_count": solve_count, "correct_count": correct_count, "problem": quiz.quiz_prob, "answer": [
+                {"id": answer.pk, "content": answer.answer_content,"choice_count_percent": (answer.answer_choice_count / solve_count) * 100, "choice_count": answer.answer_choice_count,
                  "is_correct": answer.answer_is_correct} for answer in answer_list]})
         recv_quiz_data.append(quiz_set)
 
