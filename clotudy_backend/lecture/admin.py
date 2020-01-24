@@ -28,5 +28,10 @@ class Quiz(admin.ModelAdmin):
 
 
 @admin.register(Answer)
-class Quiz(admin.ModelAdmin):
+class Answer(admin.ModelAdmin):
     list_display = ['answer_content', 'answer_choice_count', 'answer_is_correct']
+
+@admin.register(QuizScoreRecord)
+class QuizScoreRecord(admin.ModelAdmin):
+    list_display = ['user_id', 'score', 'created_date']
+
