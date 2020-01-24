@@ -23,7 +23,7 @@ class QuizBoxDetail(APIView):
                     answer_list = Answer.objects.filter(quiz_info=quiz)
                     quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
                         {"id": answer.pk, "content": answer.answer_content} for answer in answer_list]})
-            return Response([quiz_set])
+                return Response([quiz_set])
         return Response([])
 
     def post(self, request, pk, format=None):
@@ -32,7 +32,7 @@ class QuizBoxDetail(APIView):
             if quiz_box.quiz_is_open:
                 try:
                     record = QuizScoreRecord.objects.get(quiz_box_info=quiz_box, user_id=request.user.username)
-                    return Response([])
+                    return Response(['You have already been taken.'])
                 except QuizScoreRecord.DoesNotExist:
                     total_score = 0
                     for key in request.data:
@@ -43,6 +43,8 @@ class QuizBoxDetail(APIView):
                             if ans.answer_is_correct:
                                 total_score = total_score + qz.quiz_score
                             ans.save()
-                    QuizScoreRecord.objects.create(lecture_info=pk, quiz_box_info=quiz_box, user_id=request.user.username, score=total_score)
+                    QuizScoreRecord.objects.create(lecture_info=quiz_box.lecture_info, quiz_box_info=quiz_box, user_id=request.user.username, score=total_score)
                     return Response(total_score)
+            return Response(['This quiz is not open yet.'])
+        return Response(['Please singup and try again.'])
 
