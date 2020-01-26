@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
+from django.http import HttpResponseRedirect
 from .models import *
 import json
 
 
 def lecture(request, class_id, lecture_id):
+    # login required!!
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/")
+
     class_info = ClassInformation.objects.get(pk=class_id)
     # return render(request, "lecture/{}".format(get_template_html_name(class_info.class_type)), {
     return render(request, "lecture/{}".format(_get_template_html_name(0)), {
@@ -14,6 +19,10 @@ def lecture(request, class_id, lecture_id):
 
 
 def lecture_admin(request, class_id, lecture_id):
+    # login required!!
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/")
+
     class_info = ClassInformation.objects.get(pk=class_id)
 
     # Quiz serializer

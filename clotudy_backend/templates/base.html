@@ -1,114 +1,322 @@
-{% load static i18n compress%}<!DOCTYPE html>
+{% load static i18n %}
+<!--
+
+=========================================================
+* Argon Design System - v1.1.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}clotudy_backend{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Start your development with a Design System for Bootstrap 4.">
+  <meta name="author" content="Creative Tim">
+  <title>Argon Design System - Free Design System for Bootstrap 4</title>
+  <!-- Favicon -->
+  <link href="{% static 'assets/img/brand/favicon.png' %}" rel="icon" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{% static 'assets/vendor/nucleo/css/nucleo.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <!-- Argon CSS -->
+  <link type="text/css" href="{% static 'assets/css/argon.css' %}" rel="stylesheet">
+</head>
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <![endif]-->
-
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
-
-    {% block css %}
-    
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-
-    <!-- Your stuff: Third-party CSS libraries go here -->
-    {% compress css %}
-    <!-- This file stores project-specific CSS -->
-    
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
-    {% endcompress %}
-    {% endblock %}
-
-  </head>
-
-  <body>
-
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<body>
+  <header class="header-global">
+    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+      <div class="container">
+        <a class="navbar-brand mr-lg-5" href="./index.html">
+          <img alt="image" src="{% static 'assets/img/brand/clotudy_logo.png' %}">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">clotudy_backend</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
+        <div class="navbar-collapse collapse" id="navbar_global">
+          <div class="navbar-collapse-header">
+            <div class="row">
+              <div class="col-6 collapse-brand">
+                <a href="./index.html">
+                  <img alt="image" src="{% static 'assets/img/brand/clotudy_blue_logo.png' %}">
+                </a>
+              </div>
+              <div class="col-6 collapse-close">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                  <span></span>
+                  <span></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
+              <a class="nav-link nav-link-icon" href="{% url 'about' %}" target="_self">
+                <i class="ni ni-collection d-lg-none"></i>
+                <span class="nav-link-inner--text">소개</span>
+              </a>
             </li>
+          </ul>
+          <ul class="navbar-nav align-items-lg-center ml-lg-auto">
             {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-              </li>
+              <a class="nav-link nav-link-icon" href="{% url 'account_logout' %}" target="_self">
+                <i class="ni ni-collection d-lg-none"></i>
+                <span class="nav-link-inner--text">{% trans "Sign Out" %}</span>
+              </a>
             {% else %}
-              <li class="nav-item">
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link" data-toggle="dropdown" role="button">
+                <i class="ni ni-collection d-lg-none"></i>
+                <span class="nav-link-inner--text">로그인</span>
+              </a>
+              <div class="dropdown-menu">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-              </li>
-              <li class="nav-item">
+                <a href="{% url 'account_login' %}" class="dropdown-item">로그인</a>
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-              </li>
+                <a href="{% url 'account_signup' %}" class="dropdown-item">회원가입</a>
+              </div>
+            </li>
             {% endif %}
           </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <!--
 
+=========================================================
+* Argon Design System - v1.1.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+    <div class="position-relative">
+      <!-- Hero for FREE version -->
+      <section class="section section-lg section-hero section-shaped">
+        <!-- Background circles -->
+        <div class="shape shape-style-1 shape-primary">
+          <span class="span-150"></span>
+          <span class="span-50"></span>
+          <span class="span-50"></span>
+          <span class="span-75"></span>
+          <span class="span-100"></span>
+          <span class="span-75"></span>
+          <span class="span-50"></span>
+          <span class="span-100"></span>
+          <span class="span-50"></span>
+          <span class="span-100"></span>
+        </div>
+        <div class="container shape-container d-flex align-items-center py-lg">
+          <div class="col px-0">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-6 text-center">
+                <img alt="image" src="{% static 'assets/img/brand/clotudy_logo.png' %}" style="width: 200px;" class="img-fluid">
+                <p class="lead text-white">구름처럼 자유롭게 언제 어디서든 스마트한 교실을 만드는 방법.</p>
+                <div class="btn-wrapper mt-5">
+                  <a href="https://www.creative-tim.com/product/argon-design-system" class="btn btn-lg btn-white btn-icon mb-3 mb-sm-0">
+                    <span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                    <span class="btn-inner--text"><span class="text-primary">참여하기</span></span>
+                  </a>
+                  <a href="https://github.com/creativetimofficial/argon-design-system" class="btn btn-lg btn-github btn-icon mb-3 mb-sm-0" target="_blank">
+                    <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+                    <span class="btn-inner--text"><span class="text-warning">개설하기</span></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- SVG separator -->
+        <div class="separator separator-bottom separator-skew zindex-100">
+          <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+          </svg>
+        </div>
+      </section>
     </div>
+    <section class="section section-components pb-0" id="section-components">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <!-- Basic elements -->
+            <h2 class="mb-5">
+              <span>소개</span>
+            </h2>
+            <div class="col-sm-12">
+              <h1 class="display-3 mb-0 align-center">어디든지 스마트한 강의실</h1>
+              <div class="col-lg-12 col-md-12 mt-3 mb-3 d-flex flex-wrap align-items-center justify-content-center">
+                <img style="height: 150px; margin: 10px;" src="{% static 'assets/img/edu/cloud-computing.png' %}" />
+              </div>
+              <p>Clotudy는 웹 기반을 통해 PC, 모바일, 태블릿 등 다양한 기기를 호환하여 학습자들의 접근성을 높이고 실시간 통신으로 교육자와 학습자 간의 더욱 원활한 환경을 만들기 위해 노력하였습니다. 구름(Cloud)과 공부(Study)를 합친 Clotudy는 떠다니는 자유로운 구름처럼 어디서든 공부를 할 수 있는 공간을 만들고 더욱 스마트한 수업을 위하여 다양한 수업에 알맞은 기능을 통해서 교육자와 학습자의 만족도를 높이는 것이 목표입니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section pb-0 section-components">
+      <div class="py-5 bg-secondary">
+        <div class="container">
+          <h2 class="mb-5">
+            <span>Clotudy의 다양한 기능</span>
+          </h2>
+          <!-- Inputs (alternative) -->
+          <div class="mb-3">
+            <small class="text-uppercase font-weight-bold">공통 기능</small>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 d-flex flex-wrap align-items-center justify-content-center">
+              <img style="height: 150px; margin: 10px;" src="{% static 'assets/img/edu/explain.png' %}" />
+            </div>
+            <div class="col-lg-8 col-md-6">
+              <h2 class="mb-1">
+                <span>실시간 PPT 동기화</span>
+              </h2>
+              <p class="text-muted">수업에서 가장 활용도가 높은 PPT. 하지만 빔 프로젝트로 보이는 화면은 뿌옇고 멀리 앉은 사람들에게는 잘 보이지도 않죠? 또 수업시간 중 내 휴대폰이나 PC에서 보기 위해서는 따로 앱을 설치하거나 M사의 특정 프로그램을 유료로 설치하거나 하는 불편함이 존재합니다. 하지만 Clotudy에서는 웹을 통해 선생님이 활용하는 PPT를 볼 수 있을 뿐만 아니라 선생님이 설명 중인 페이지가 학생들의 화면에서도 동기화가 되어 학생들이 일일이 설명 중인 장면을 찾아다닐 필요가 없습니다.</p>
+            </div>
+            <div class="col-lg-4 col-md-6 d-flex flex-wrap align-items-center justify-content-center">
+              <img style="height: 150px; margin: 10px;" src="{% static 'assets/img/edu/question.png' %}" />
+            </div>
+            <div class="col-lg-8 col-md-6">
+              <h2 class="mb-1">
+                <span>간편한 질문</span>
+              </h2>
+              <p class="text-muted">수업 중 질문을 하기란 쉽지 않습니다. 이 질문이 "선생님이 이미 설명했던 부분이면 어떡하지?", "나만 모르는 게 아닐까?" 등 이유는 다양하지만 결국 질문을 하지 못하고 지나가게 되면 후회가 밀려오게 되죠. 이는 선생님에게도 학생들이 이 부분을 모두 이해를 했다는 생각을 가지게 되어 극악의 시험의 난이도가 탄생하게 됩니다. 하지만 Clotudy에서는 익명 또는 기명으로 선생님에게 질문을 하고 자신의 질문에 학생들의 공감을 얻을 수 있으며 선생님은 수업의 흐름에 영향 없이 적절한 순간에 학생들의 질문에 대한 피드백을 줄 수 있으며 학생들이 이해하지 못한 부분에 대해서 쉽게 알 수 있습니다.</p>
+            </div>
+            <div class="col-lg-4 col-md-6 d-flex flex-wrap align-items-center justify-content-center">
+              <img style="height: 150px; margin: 10px;" src="{% static 'assets/img/edu/quiz.png' %}" />
+            </div>
+            <div class="col-lg-8 col-md-6">
+              <h2 class="mb-1">
+                <span>실시간 퀴즈</span>
+              </h2>
+              <p class="text-muted">수업 중에 퀴즈를 내기란 쉽지 않습니다. 만든 문제를 출력하고, 빠듯한 수업시간을 빼서 문제지를 돌리고 걷고 또 모든 학생의 시험지를 채점하는 등 선생님의 부담이 많이 가는 작업입니다. 하지만 퀴즈는 그날 배운 수업의 핵심이며 학생들이 이해했지만 놓친 부분을 학생들 스스로 깨우치게 할 수 있는 효율적인 방법입니다. Clotudy에서는 수업 중 다른 사이트의 서비스를 이용하지 않고 간단히 퀴즈를 출제하고 실시간으로 학생들의 정답률과 응답수를 확인할 수 있습니다. 이를 통해 학생들이 수업의 이해와 어떤 부분이 이해하지 못했는지 명확하게 알 수 있게 됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <h2 class="mb-5">
+          <span>최근 개설된 수업들</span>
+        </h2>
+        <!-- Custom controls -->
+        <div class="row">
 
+        </div>
+      </div>
+    </section>
+    <section class="section section-shaped">
+      <div class="shape shape-style-1 shape-default">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="container py-md">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-lg-5 mb-5 mb-lg-0">
+            <h1 class="text-white font-weight-light">다양한 곳에서 활용되고 있어요!</h1>
+            <p class="text-white mt-4">Clotudy는 정규수업뿐만 아니라 마음 맞는 친구들과 함께하는 스터디 모임, 청중들이 참여할 수 있는 발표 등에서도 활용할 수 있는 다양한 기능을 갖추고 있습니다. Clotudy를 이용해 어디서든 더욱 스마트한 수업 환경을 만들어보세요.</p>
+            <a href="https://demos.creative-tim.com/argon-design-system/docs/components/alerts.html" class="btn btn-white mt-4">사용 사례 살펴보기</a>
+          </div>
+          <div class="col-lg-6 mb-lg-auto">
+            <div class="rounded shadow-lg overflow-hidden transform-perspective-right">
+              <div id="carousel_example" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carousel_example" data-slide-to="0" class="active"></li>
+                  <li data-target="#carousel_example" data-slide-to="1"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="img-fluid" src="{% static 'assets/img/theme/img-1-1200x1000.jpg' %}" alt="First slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="img-fluid" src="{% static 'assets/img/theme/img-2-1200x1000.jpg' %}" alt="Second slide">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carousel_example" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel_example" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SVG separator -->
+      <div class="separator separator-bottom separator-skew">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </section>
+  </main>
+  <footer class="footer has-cards">
     <div class="container">
+      <div class="row row-grid align-items-center my-md">
+      </div>
+      <hr>
+      <div class="row align-items-center justify-content-md-between">
+        <div class="col-md-6">
+          <div class="copyright">
+            &copy; 2019 <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <ul class="nav nav-footer justify-content-end">
+            <li class="nav-item">
+              <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://github.com/creativetimofficial/argon-design-system/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Core -->
+  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/popper/popper.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/headroom/headroom.min.js' %}"></script>
+  <!-- Optional JS -->
+  <script src="{% static 'assets/vendor/onscreen/onscreen.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/nouislider/js/nouislider.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+  <!-- Argon JS -->
+  <script src="{% static 'assets/js/argon.js' %}"></script>
+</body>
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
-          {% endfor %}
-      {% endif %}
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
-
-    {% block modal %}{% endblock modal %}
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block javascript %}
-      
-      <!-- Bootstrap JS and its dependencies-->
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-      <!-- Your stuff: Third-party javascript libraries go here -->
-      
-
-      <!-- place project specific Javascript in this file -->
-      {% compress js %}
-      <script src="{% static 'js/project.js' %}"></script>
-      {% endcompress %}
-
-    {% endblock javascript %}
-  </body>
 </html>
- 
