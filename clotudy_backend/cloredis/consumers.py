@@ -12,6 +12,10 @@ class Consumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
 
     async def connect(self):
+        # Login required!!
+        if not self.scope['user'].is_authenticated:
+            return
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -25,6 +29,10 @@ class Consumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
+        # Login required!!
+        if not self.scope['user'].is_authenticated:
+            return
+
         text_data_json = json.loads(text_data)
         action = text_data_json['action']
         data = text_data_json['data']
@@ -33,6 +41,11 @@ class Consumer(AsyncWebsocketConsumer):
             await self.save_qna_message(data)
         elif action == 'add-like-count':
             await self.add_like_count(data)
+        elif action == 'sync-ppt-page':
+            sender_name = self.scope['user'].username
+            is_owner = await self.check_class_owner(sender_name, data['class_id'])
+            if is_owner:
+                return
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -40,19 +53,16 @@ class Consumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'action': action,
-                'data': data
+                'data': data,
             }
         )
 
     async def chat_message(self, event):
         if 'action' in event and 'data' in event:
-            action = event['action']
-            data = event['data']
-
             # Send message to WebSocket
             await self.send(text_data=json.dumps({
-                'action': action,
-                'data': data
+                'action': event['action'],
+                'data': event['data'],
             }))
 
     @database_sync_to_async
@@ -79,3 +89,12 @@ class Consumer(AsyncWebsocketConsumer):
         else:
             message.like_count += 1
             message.save()
+
+    @database_sync_to_async
+    def check_class_owner(self, user_name, class_id):
+        instructor_id = ClassInformation.objects.get(pk=class_id).class_instructor_id
+        if user_name == instructor_id:
+            return True
+        return False
+
+
