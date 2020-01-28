@@ -12,7 +12,6 @@ class QuizBoxDetail(APIView):
         # TODO: Check if member is subscribed to the meeting
         return request.user.is_authenticated
 
-
     def get(self, request, pk, format=None):
         if self.check_login(request):
             quiz_box = get_object_or_404(QuizBox, lecture_info=pk)
@@ -26,7 +25,6 @@ class QuizBoxDetail(APIView):
                         {"id": answer.pk, "content": answer.answer_content} for answer in answer_list]})
                 return Response([quiz_set])
         return Response([])
-
 
     def post(self, request, pk, format=None):
         if self.check_login(request):
@@ -49,8 +47,8 @@ class QuizBoxDetail(APIView):
                                 quiz_box.save()
                             ans.save()
                             qz.save()
-                    QuizScoreRecord.objects.create(lecture_info=quiz_box.lecture_info, quiz_box_info=quiz_box, user_id=request.user.username, score=total_score)
+                    QuizScoreRecord.objects.create(lecture_info=quiz_box.lecture_info, quiz_box_info=quiz_box,
+                                                   user_id=request.user.username, score=total_score)
                     return Response(total_score)
             return Response(['This quiz is not open yet.'])
-        return Response(['Please singup and try again.'])
-
+        return Response(['Please login and try again.'])

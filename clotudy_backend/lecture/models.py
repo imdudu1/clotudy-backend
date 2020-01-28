@@ -5,16 +5,19 @@ from django.utils import timezone
 class ClassInformation(models.Model):
     class_title = models.CharField(max_length=50, blank=False)
     class_instructor = models.CharField(max_length=20, blank=False)
+    class_instructor_id = models.CharField(default="root", max_length=50, blank=False)
     class_description = models.TextField(max_length=512)
     class_created_time = models.DateTimeField(default=timezone.now, blank=True)
     class_invite_code = models.CharField(max_length=6, default="111111")
+    class_thumbnail_path = models.CharField(max_length=100, default="")
 
 
 class LectureInformation(models.Model):
     class_info = models.ForeignKey(ClassInformation, on_delete=models.CASCADE)
     lecture_title = models.CharField(max_length=50)
     lecture_type = models.IntegerField(default=0)
-    lecture_rsrc_path = models.CharField(max_length=256)
+    lecture_pdf_path = models.CharField(max_length=100, default="")
+    lecture_note = models.TextField(default="")
 
 
 class QuizBox(models.Model):
@@ -54,4 +57,3 @@ class QuizScoreRecord(models.Model):
     user_id = models.CharField(max_length=30, blank=False)
     score = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
-
