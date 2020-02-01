@@ -682,8 +682,8 @@
                                               <ul class="timeline">
                                                 {% for obj in list_lecture %}
                                                 <li>
-                                                  <a target="_blank" href="/lecture/{{ class_data.id }}/{{ obj.id }}">{{ obj.title }}</a>
-                                                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
+                                                  <a target="_self" href="/lecture/{{ class_data.id }}/{{ obj.id }}">{{ obj.title }}</a>
+                                                  <p>{{ obj.note }}</p>
                                                 </li>
                                                 {% endfor %}
                                               </ul>
