@@ -8,29 +8,30 @@ import json
 def lecture(request, class_id, lecture_id):
     # login required!!
     if not request.user.is_authenticated:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/accounts/login/")
 
-    lecture_info = LectureInformation.objects.get(class_info=class_id, pk=lecture_id)
-    lecture_data = {
-            "title": lecture_info.lecture_title,
-            "pdf_path": lecture_info.lecture_pdf_path,
-            "lecture_type": lecture_info.lecture_type,
-            "lecture_note": lecture_info.lecture_note,
-            }
-
-    class_info = ClassInformation.objects.get(pk=class_id)
-    # return render(request, "lecture/{}".format(_get_template_html_name(0)), {
-    return render(request, "lecture/{}".format(_get_template_html_name(lecture_info.lecture_type)), {
-        'room_name_json': mark_safe(json.dumps(class_id)),
-        'messages': _get_user_questions_from_db(class_id),
-        'lecture_data': lecture_data,
-    })
+    try:
+        lecture_info = LectureInformation.objects.get(class_info=class_id, pk=lecture_id)
+        lecture_data = {
+                "title": lecture_info.lecture_title,
+                "pdf_path": lecture_info.lecture_pdf_path,
+                "lecture_type": lecture_info.lecture_type,
+                "lecture_note": lecture_info.lecture_note,
+                }
+    except LectureInformation.DoesNotExist:
+        return HttpResponseRedirect("/lecture/list")
+    else:
+        return render(request, "lecture/{}".format(_get_template_html_name(lecture_info.lecture_type)), {
+            'room_name_json': mark_safe(json.dumps(lecture_id)),
+            'messages': _get_user_questions_from_db(lecture_id),
+            'lecture_data': lecture_data,
+        })
 
 
 def lecture_admin(request, class_id, lecture_id):
     # login required!!
     if not request.user.is_authenticated:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/accounts/login/")
 
     class_info = ClassInformation.objects.get(pk=class_id)
     lecture_info = LectureInformation.objects.get(class_info=class_info, pk=lecture_id)
@@ -80,6 +81,7 @@ def class_detail(request, class_id):
         list_lecture = [{
                 "id": obj.pk,
                 "title": obj.lecture_title,
+                "note": obj.lecture_note,
             }]
 
     return render(request, 'lecture/classDetail.html', {
@@ -107,9 +109,9 @@ def class_list(request):
 
 
 def _get_user_questions_from_db(room_id):
-    qna_messages = QuestionMessage.objects.filter(class_info=room_id)
+    qna_messages = QuestionMessage.objects.filter(lecture_info=room_id)
     if qna_messages.exists():
-        list_qna_message = [{'body': message.text, 'like-count': message.like_count, 'message-id': message.pk}
+        list_qna_message = [{'body': message.question_content, 'likeCount': message.like_count, 'messageId': message.pk}
                             for message in qna_messages]
     else:
         list_qna_message = []

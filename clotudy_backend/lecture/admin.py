@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(QuestionMessage)
 class QuestionMessageAdmin(admin.ModelAdmin):
-    list_display = ['class_info', 'created_time', 'like_count']
+    list_display = ['lecture_info', 'created_time', 'like_count']
 
 
 @admin.register(ClassInformation)

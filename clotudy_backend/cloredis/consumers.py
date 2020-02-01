@@ -1,7 +1,7 @@
 # chat/consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from clotudy_backend.lecture.models import QuestionMessage, ClassInformation
+from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation
 import json
 
 
@@ -68,15 +68,14 @@ class Consumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_qna_message(self, data):
         try:
-            lecture = ClassInformation.objects.get(pk=data['lecture'])
+            lecture = LectureInformation.objects.get(pk=data['lecture'])
         except ClassInformation.DoesNotExist:
             return
         else:
             QuestionMessage.objects.create(
-                text=data['qna']['body'],
-                user_id=1,
-                like_count=0,
-                lecture=lecture,
+                question_content=data['qna']['body'],
+                user_id=self.scope['user'].username,
+                lecture_info=lecture,
             )
 
     @database_sync_to_async

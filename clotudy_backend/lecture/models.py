@@ -45,8 +45,9 @@ class Answer(models.Model):
 
 
 class QuestionMessage(models.Model):
-    class_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
+    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
     created_time = models.DateTimeField(default=timezone.now)
+    user_id = models.CharField(max_length=30, default="root", blank=False)
     question_content = models.TextField(max_length=200, blank=False)
     like_count = models.IntegerField(default=0)
 
