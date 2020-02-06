@@ -41,11 +41,14 @@ class Consumer(AsyncWebsocketConsumer):
             await self.save_qna_message(data)
         elif action == 'add-like-count':
             await self.add_like_count(data)
+        """
         elif action == 'sync-ppt-page':
             sender_name = self.scope['user'].username
+            # VULNERABILITY
             is_owner = await self.check_class_owner(sender_name, data['class_id'])
-            if is_owner:
+            if not is_owner:
                 return
+        """
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -95,5 +98,3 @@ class Consumer(AsyncWebsocketConsumer):
         if user_name == instructor_id:
             return True
         return False
-
-

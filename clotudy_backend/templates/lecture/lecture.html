@@ -118,7 +118,7 @@
                 <div id="ppt-viewer-wrap">
                     <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
                         <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
-                            <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
+                            <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=http://192.168.0.7:8000/static/pdfs/clotudy.pdf"></iframe>
                         </div>
                     </div>
                 </div>
@@ -264,12 +264,14 @@
                 return;
             }
 
+            ppt_sync_flag = false;
             let page = data['data']['page'];
             let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
             if((page > numPages) || (page < 1)){
                 return;
             }
             document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = page;
+            ppt_sync_flag = true;
         }
 
         function liveQnAMessage(request) {

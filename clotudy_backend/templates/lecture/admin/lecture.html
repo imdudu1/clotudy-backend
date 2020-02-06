@@ -14,11 +14,11 @@
             </div>
             <div class="card-content">
                 <div class="card-body text-center">
-                    <iframe style="width: 100%; height: 350px;" allowfullscreen src="https://mozilla.github.io/pdf.js/web/viewer.html"></iframe>
+                    <iframe id="ppt-frame" style="width: 100%; height: 350px;" allowfullscreen src="/lecture/pdf/?file=http://192.168.0.7:8000/static/pdfs/clotudy.pdf"></iframe>
                     <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-secondary">Left</button>
+                        <button onclick="remotePPTPageSync(-1)" type="button" class="btn btn-secondary">Left</button>
                         <button type="button" class="btn btn-secondary">Middle</button>
-                        <button type="button" class="btn btn-secondary">Right</button>
+                        <button onclick="remotePPTPageSync(1)" type="button" class="btn btn-secondary">Right</button>
                     </div>
                 </div>
             </div>
@@ -77,6 +77,7 @@
                                     <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
                                         <div class="email-user-list list-group" style="height: 100%;">
                                             <ul class="users-list-wrapper media-list">
+                                                {% for obj in questions %}
                                                 <li class="media">
                                                     <div class="media-left pr-50">
                                                         <div class="avatar">
@@ -89,7 +90,7 @@
                                                     <div class="media-body">
                                                         <div class="user-details">
                                                             <div class="mail-items">
-                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">신병주(5297856)</h5>
+                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ request.user.username }}</h5>
                                                                 <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
                                                             </div>
                                                             <div class="mail-meta-item">
@@ -99,10 +100,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="mail-message">
-                                                            <p class="list-group-item-text truncate mb-0">이러쿵저러쿵~~</p>
+                                                            <p class="list-group-item-text truncate mb-0">{{ obj.body }}</p>
                                                         </div>
                                                     </div>
                                                 </li>
+                                                {% endfor %}
                                             </ul>
                                             <div class="no-results">
                                                 <h5>No Items Found</h5>
@@ -112,7 +114,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <!-- Tab -->
                         <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
@@ -197,6 +198,15 @@
 
 {% block extra-script %}
     <script>
+        function getCurrentTime() {
+          return (new Date()).getTime();
+        }
+
+        let delta_time;
+        let last_time = getCurrentTime();
+        let currentPage = 1;
+        let sync_lock = true;
+
         // Charts
         var options = {
             series: [{
@@ -232,9 +242,13 @@
         chart.render();
 
 
+        function createZeroArray(size) {
+          return Array(size).fill(0);
+        }
+
         var options = {
             series: [{
-                data: [34, 44, 54, 21, 12, 43, 33, 23, 66, 66, 58]
+                data: []
             }],
             chart: {
                 type: 'line',
@@ -286,6 +300,28 @@
             let handle = window.open("https://mozilla.github.io/pdf.js/web/viewer.html", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
         }
 
+        function remotePPTPageSync(v) {
+            if (sync_lock) {
+                sync_lock = false;
+                let tmpPage = currentPage + v;
+                let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+                if((tmpPage > numPages) || (tmpPage < 1)) {
+                    sync_lock = true;
+                    return;
+                }
+                addPptTime(currentPage, numPages);
+                currentPage = tmpPage;
+                document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = currentPage;
+                global_socket.send(JSON.stringify({
+                    'action': 'sync-ppt-page',
+                    'data': {
+                        'page': currentPage
+                    }
+                }));
+                sync_lock = true;
+            }
+        }
+
         let global_socket;
         function global_socket_init() {
             global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
@@ -325,6 +361,23 @@
                     'quizBoxId': quizBoxId
                 }
             }));
+        }
+
+        function addPptTime(page, max_pages) {
+          let cur_time = getCurrentTime();
+          let delta_time = (cur_time - last_time) / 1000;
+          last_time = cur_time;
+
+          let times = ppt_chart.w.globals.series.slice()[0];
+          if (times.length < max_pages) {
+            times = Array(max_pages).fill(0)
+          }
+          if (!times.hasOwnProperty(page) && 1 <= page && page <= max_pages) {
+            times[page-1] = delta_time;
+          } else {
+            times[page-1] += delta_time;
+          }
+          ppt_chart.updateSeries([{data: times}]);
         }
     </script>
 {% endblock %}
