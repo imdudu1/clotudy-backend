@@ -115,3 +115,5 @@ def _get_template_html_name(class_type):
         return "lecture.html"
     elif class_type == 1:
         return "participation.html"
+    elif class_type == 2:
+        return "programming.html"
