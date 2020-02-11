@@ -1,0 +1,933 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="PIXINVENT">
+    <title>CLOTUDY :: {{ lecture_data.title }}</title>
+    <link rel="apple-touch-icon" href="{% static 'app-assets/images/ico/apple-icon-120.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'app-assets/images/ico/favicon.ico' %}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/vendors.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/charts/apexcharts.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/tether-theme-arrows.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/tether.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/shepherd-theme-default.css' %}">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap-extended.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/colors.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/components.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/dark-layout.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/semi-dark-layout.css' %}">
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/users.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/menu/menu-types/horizontal-menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/colors/palette-gradient.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/dashboard-analytics.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/card-analytics.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/plugins/tour/tour.css' %}">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <!-- END: Custom CSS-->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!-- Include stylesheet -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <!-- Include the Quill library -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Noto Sans KR font CDN -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Pdf viewer JS //-->
+    <script src="{% static 'assets/js/pdf.js' %}"></script>
+
+    <!-- Pdf object JS //-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+
+    <!-- Dragula JS //-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.js'></script>
+
+    <!-- Split JS //-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
+
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+
+            /*
+            position: relative;
+            height: auto;
+            min-height: 100% !important;
+            */
+
+            /* background-color: #2a363b; */
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: auto;
+
+            /* padding: 15px; */
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        .gutter.gutter-horizontal, .gutter.gutter-vertical {
+            background-color: #fff;
+        }
+
+        .gutter.gutter-horizontal {
+            cursor: ew-resize;
+            /* border-right: 1px solid #0b0e0f; border-left: 1px solid #0b0e0f; */
+            background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
+            background-size: 0.875rem 2.25rem;
+            background-color: #fff;
+        }
+
+        .gutter.gutter-vertical {
+            cursor: ns-resize;
+            /* border-top: 1px solid #0b0e0f; border-bottom: 1px solid #0b0e0f; */
+            background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
+            background-size: 2.25rem 0.875rem;
+            background-position-y: bottom;
+            background-repeat: no-repeat;
+            background-position: 50%;
+        }
+
+        #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
+            overflow: auto;
+            background-color: #fff;
+        }
+
+        .lesson-content {
+            height: calc(100vh - 75px);
+        }
+
+        .content-header {
+            border-bottom: 1px solid #dadada;
+            padding: 15px;
+            font-family: 'Noto Sans KR', sans-serif;
+            /* color: #fff; */
+            /* background-color: #3A464B; */
+            background-color: #fbfbfb;
+            font-size: 13px;
+        }
+
+        /* Scrollbar */
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track
+        ::-webkit-scrollbar-track {
+            background: #2a363b;
+        }
+        */
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #b9ceeb;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #87a8d0;
+        }
+
+        #live-qna-chat-content {
+            position: relative;
+            height: calc(100% - 50px);
+        }
+
+        .lesson-note-content {
+            /* color: #fff; */
+            margin: 10px 15px 10px 15px;
+        }
+
+        .ql-container.ql-snow {
+            border: none;
+        }
+
+        #live-qna-chat-box {
+            height: auto;
+            min-height: 100%;
+            max-height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+    </style>
+
+    <!-- Dragula style -->
+    <style type="text/css">
+        .gu-mirror {
+            position: fixed !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+            opacity: 0.8;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+            filter: alpha(opacity=80);
+        }
+
+        .gu-hide {
+            display: none !important;
+        }
+
+        .gu-unselectable {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+
+        .gu-transit {
+            opacity: 0.2;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+            filter: alpha(opacity=20);
+        }
+
+        .row {
+            /* display:flex; */
+            display: flex;
+            flex-direction: column;
+            padding-top:.5em;
+            margin:1px;
+        }
+
+        .root .dragula-container {
+            padding:0.3rem;
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0px 4px 25px 0px
+            rgba(0, 0, 0, 0.1);
+            transition: all .3s ease-in-out;
+        }
+
+        .col {
+            flex: 1;
+            margin:1px;
+            min-height:1em;
+        }
+
+        .el {
+            background:#e5e5e5;
+            margin:1px;
+            min-height:2em;
+        }
+    </style>
+</head>
+
+<body class="horizontal-layout horizontal-menu 2-columns todo-application navbar-floating footer-static" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
+<div class="lesson-wrap" style="height: 100%">
+    <!-- <div class="lesson-title"></div> -->
+
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-shadow navbar-brand-center">
+        <div class="navbar-header d-xl-block d-none">
+            <ul class="nav navbar-nav flex-row">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="#">
+                        <div class="brand-logo"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-wrapper">
+            <div class="navbar-container content">
+                <div class="navbar-collapse" id="navbar-mobile">
+                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
+                        </ul>
+                        <ul class="nav navbar-nav bookmark-icons">
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html" data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon feather icon-mail"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calender.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon feather icon-calendar"></i></a></li>
+                        </ul>
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon feather icon-star warning"></i></a>
+                                <div class="bookmark-input search-input">
+                                    <div class="bookmark-input-icon"><i class="feather icon-search primary"></i></div>
+                                    <input class="form-control input" type="text" placeholder="Explore Vuexy..." tabindex="0" data-search="template-list">
+                                    <ul class="search-list search-list-bookmark"></ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="nav navbar-nav float-right">
+                        <li class="dropdown dropdown-language nav-item"><a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="#" data-language="en"><i class="flag-icon flag-icon-us"></i> English</a><a class="dropdown-item" href="#" data-language="fr"><i class="flag-icon flag-icon-fr"></i> French</a><a class="dropdown-item" href="#" data-language="de"><i class="flag-icon flag-icon-de"></i> German</a><a class="dropdown-item" href="#" data-language="pt"><i class="flag-icon flag-icon-pt"></i> Portuguese</a></div>
+                        </li>
+                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon feather icon-maximize"></i></a></li>
+                        <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon feather icon-search"></i></a>
+                            <div class="search-input">
+                                <div class="search-input-icon"><i class="feather icon-search primary"></i></div>
+                                <input class="input" type="text" placeholder="Explore Vuexy..." tabindex="-1" data-search="template-list">
+                                <div class="search-input-close"><i class="feather icon-x"></i></div>
+                                <ul class="search-list search-list-main"></ul>
+                            </div>
+                        </li>
+                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up">5</span></a>
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                                <li class="dropdown-menu-header">
+                                    <div class="dropdown-header m-0 p-2">
+                                        <h3 class="white">5 New</h3><span class="notification-title">App Notifications</span>
+                                    </div>
+                                </li>
+                                <li class="scrollable-container media-list"><a class="d-flex justify-content-between" href="javascript:void(0)">
+                                    <div class="media d-flex align-items-start">
+                                        <div class="media-left"><i class="feather icon-plus-square font-medium-5 primary"></i></div>
+                                        <div class="media-body">
+                                            <h6 class="primary media-heading">You have new order!</h6><small class="notification-text"> Are your going to meet me tonight?</small>
+                                        </div><small>
+                                        <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">9 hours ago</time></small>
+                                    </div>
+                                </a><a class="d-flex justify-content-between" href="javascript:void(0)">
+                                    <div class="media d-flex align-items-start">
+                                        <div class="media-left"><i class="feather icon-download-cloud font-medium-5 success"></i></div>
+                                        <div class="media-body">
+                                            <h6 class="success media-heading red darken-1">99% Server load</h6><small class="notification-text">You got new order of goods.</small>
+                                        </div><small>
+                                        <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">5 hour ago</time></small>
+                                    </div>
+                                </a><a class="d-flex justify-content-between" href="javascript:void(0)">
+                                    <div class="media d-flex align-items-start">
+                                        <div class="media-left"><i class="feather icon-alert-triangle font-medium-5 danger"></i></div>
+                                        <div class="media-body">
+                                            <h6 class="danger media-heading yellow darken-3">Warning notifixation</h6><small class="notification-text">Server have 99% CPU usage.</small>
+                                        </div><small>
+                                        <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Today</time></small>
+                                    </div>
+                                </a><a class="d-flex justify-content-between" href="javascript:void(0)">
+                                    <div class="media d-flex align-items-start">
+                                        <div class="media-left"><i class="feather icon-check-circle font-medium-5 info"></i></div>
+                                        <div class="media-body">
+                                            <h6 class="info media-heading">Complete the task</h6><small class="notification-text">Cake sesame snaps cupcake</small>
+                                        </div><small>
+                                        <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Last week</time></small>
+                                    </div>
+                                </a><a class="d-flex justify-content-between" href="javascript:void(0)">
+                                    <div class="media d-flex align-items-start">
+                                        <div class="media-left"><i class="feather icon-file font-medium-5 warning"></i></div>
+                                        <div class="media-body">
+                                            <h6 class="warning media-heading">Generate monthly report</h6><small class="notification-text">Chocolate cake oat cake tiramisu marzipan</small>
+                                        </div><small>
+                                        <time class="media-meta" datetime="2015-06-11T18:29:20+08:00">Last month</time></small>
+                                    </div>
+                                </a></li>
+                                <li class="dropdown-menu-footer"><a class="dropdown-item p-1 text-center" href="javascript:void(0)">Read all notifications</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                            <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">John Doe</span><span class="user-status">Available</span></div><span><img class="round" src="{% static 'app-assets/images/portrait/small/avatar-s-11.jpg' %}" alt="avatar" height="40" width="40"></span>
+                        </a>
+                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" href="auth-login.html"><i class="feather icon-power"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-content">
+        <div class="flex-row">
+            <div id="left-side-panel">
+                <div class="flex-col">
+                    <div id="ppt-viewer-wrap">
+                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                            <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
+                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="live-qna-chat-wrap">
+                        <div class="content-header">
+                            실시간 질문 게시판
+                        </div>
+                        <div id="live-qna-chat-content">
+                            <div id="live-qna-chat-box">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mid-side-panel">
+                <div class="flex-col">
+                    <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
+                        <div id="user-notepad-content" style="height: calc(100% - 42px);">
+                            <p></p>
+                        </div>
+                    </div>
+                    <div id="user-notepad-preview-wrap">
+                        <div class="content-header">
+                            자료실
+                        </div>
+                        <div id="user-notepad-preview-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="right-side-panel">
+                <div class="content-header">
+                    아이디어 대시보드
+                    <div class="text-right">
+                        <button onclick="showAddGroupModal()" class="btn btn-primary">Group</button>
+                        <button onclick="showAddIdeaModal()" class="btn btn-success">Node</button>
+                    </div>
+                </div>
+                <div class="lesson-note-content">
+
+                    <!--BEGIN: TEST-->
+                    <div class="row root">
+                        <div id='idea-dashboard' class="col dragula-container">
+
+                        </div>
+                    </div>
+                    <!--END: TEST-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lesson-bottom">
+
+    </div>
+
+    <!-- BEGIN: Modal -->
+    <div class="modal fade" id="addGroupModalCenter" tabindex="-1" role="dialog" aria-labelledby="addGroupModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div id="modal-content-header" class="modal-header">
+                    <p>Add Group</p>
+                </div>
+                <div class="modal-body">
+                    <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addIdeaModalCenter" tabindex="-1" role="dialog" aria-labelledby="addIdeaModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div id="modal-content-header" class="modal-header">
+                    <p>Add Idea node</p>
+                </div>
+                <div class="modal-body">
+                    <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal -->
+</div>
+
+<!-- BEGIN: Vendor JS-->
+<script src="{% static 'app-assets/vendors/js/vendors.min.js' %}"></script>
+<!-- BEGIN Vendor JS-->
+
+<!-- BEGIN: Page Vendor JS-->
+<script src="{% static 'app-assets/vendors/js/ui/jquery.sticky.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/charts/apexcharts.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/tether.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/shepherd.min.js' %}"></script>
+<!-- END: Page Vendor JS-->
+
+<!-- BEGIN: Theme JS-->
+<script src="{% static 'app-assets/js/core/app-menu.js' %}"></script>
+<script src="{% static 'app-assets/js/core/app.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/components.js' %}"></script>
+<!-- END: Theme JS-->
+
+<!-- BEGIN: Page JS-->
+<script src="{% static 'app-assets/js/scripts/pages/dashboard-analytics.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/pages/app-todo.js' %}"></script>
+<!-- END: Page JS-->
+
+<script type="text/javascript">
+    // Split.js layout
+    Split(['#left-side-panel', '#mid-side-panel', '#right-side-panel'], {
+        elementStyle: (dimension, size, gutterSize) => ({
+            'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+        }),
+        gutterStyle: (dimension, gutterSize) => ({
+            'flex-basis': `${gutterSize}px`,
+        }),
+        onDrag: () => {
+        },
+        onDragEnd: () => {
+        },
+
+        gutterSize: 24,
+        minSize: [0, 0, 0],
+    });
+
+    Split(['#ppt-viewer-wrap', '#live-qna-chat-wrap'], {
+        elementStyle: (dimension, size, gutterSize) => ({
+            'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+        }),
+        gutterStyle: (dimension, gutterSize) => ({
+            'flex-basis': `${gutterSize}px`,
+        }),
+
+        gutterSize: 14,
+        direction: 'vertical',
+        cursor: 'row-resize',
+        minSize: [0, 0],
+    });
+
+    Split(['#user-notepad-wrap', '#user-notepad-preview-wrap'], {
+        elementStyle: (dimension, size, gutterSize) => ({
+            'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+        }),
+        gutterStyle: (dimension, gutterSize) => ({
+            'flex-basis': `${gutterSize}px`,
+        }),
+
+        gutterSize: 14,
+        direction: 'vertical',
+        cursor: 'row-resize',
+        minSize: [0, 0],
+    });
+
+
+    // Initialize Quill editor
+    const quill = new Quill('#user-notepad-content', {
+        theme: 'snow'
+    });
+
+
+    // Utility functions.
+    function querySelectorAllArray(selector){
+        return Array.prototype.slice.call(
+            document.querySelectorAll(selector), 0
+        );
+    }
+
+    function contains(a, b){
+        return a.contains ?
+            a !== b && a.contains(b) :
+            !!(a.compareDocumentPosition(b) & 16);
+    }
+
+    let qna_messages;
+    $(document).ready(function(){
+        qna_messages = {{ messages|safe }};
+    });
+
+
+    // Dragula JS
+    let last_over_el_id;
+    let current_drop_el_id;
+    let drake = dragula(querySelectorAllArray('.dragula-container'),{
+                    accepts: function (el, target, source, sibling) {
+                        return !contains(el, target);
+                    }
+                }).on('drag', function (el) {
+                    el.className = el.className.replace('ex-moved', '');
+                }).on('drop', function (el) {
+                    el.className += ' ex-moved';
+                    current_drop_el_id = el.id;
+                    sendMoveIdeaPacket(current_drop_el_id, last_over_el_id);
+                }).on('over', function (el, container) {
+                    container.className += ' ex-over';
+                    last_over_el_id = container.id;
+                }).on('out', function (el, container) {
+                    container.className = container.className.replace('ex-over', '');
+                });
+
+
+    // WebSocket
+    const unique_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    let increase_box_id = 0;
+    let current_ppt_page = 1;
+    let ppt_sync_flag = true;
+    let is_exist_new_qna = true;
+
+    function remoteSyncPPTPage(request) {
+        if (!ppt_sync_flag) {
+            return;
+        }
+
+        let page = request['data']['page'];
+        let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+        if((page > numPages) || (page < 1)){
+            return;
+        }
+        document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = page;
+    }
+
+    function liveQnAMessage(request) {
+        let qna = request['data']['qna'];
+
+        if (qna === '') {
+            return
+        }
+
+        let qna_body = qna['body'];
+        let qna_like_count = qna['like-count'];
+        let qna_message_id = qna['message-id'];
+        qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+        is_exist_new_qna = true;
+
+        let html_code =
+            '<div class="card" style="">\n' +
+            '    <div class="card-body">\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="avatar mr-1">\n' +
+            '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
+            '            </div>\n' +
+            '            <div class="user-page-info">\n' +
+            '                <p class="mb-0">Leeanna Alvord</p>\n' +
+            '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
+            '        </div>\n' +
+            '        <p>' + qna_body + '</p>\n' +
+            '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="d-flex align-items-center">\n' +
+            '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
+            '                <span>' + qna_like_count + '</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-2">\n' +
+            '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
+            '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
+            '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
+            '                    </li>\n' +
+            '                    <li class="d-inline-block pl-50">\n' +
+            '                        <span>+140 more</span>\n' +
+            '                    </li>\n' +
+            '                </ul>\n' +
+            '            </div>\n' +
+            '            <p class="ml-auto d-flex align-items-center">\n' +
+            '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
+            '            </p>\n' +
+            '        </div>\n' +
+            '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+            '            <div class="avatar mr-50">\n' +
+            '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
+            '            </div>\n' +
+            '            <div class="user-page-info">\n' +
+            '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
+            '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
+            '            </div>\n' +
+            '            <div class="ml-auto cursor-pointer">\n' +
+            '                <i class="feather icon-heart mr-50"></i>\n' +
+            '                <i class="feather icon-message-square"></i>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '        <fieldset class="form-label-group mb-50">\n' +
+            '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
+            '            <label for="label-textarea">Add Comment</label>\n' +
+            '        </fieldset>\n' +
+            '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
+            '    </div>\n' +
+            '</div>\n';
+
+        let live_qna_chat_box = $('#live-qna-chat-box');
+        live_qna_chat_box.append(html_code);
+        live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
+    }
+
+    function redrawSortingQnAChat() {
+        if (!is_exist_new_qna) {
+            return;
+        } else {
+            is_exist_new_qna = false;
+        }
+
+        $('#live-qna-chat-box').empty();
+        qna_messages.sort((lhs, rhs) => {
+            return rhs['like-count'] - lhs['like-count'];
+        });
+        qna_messages.forEach((message) => {
+            let html_code =
+                '<div class="card" style="">\n' +
+                '    <div class="card-body">\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="avatar mr-1">\n' +
+                '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
+                '            </div>\n' +
+                '            <div class="user-page-info">\n' +
+                '                <p class="mb-0">Leeanna Alvord</p>\n' +
+                '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
+                '        </div>\n' +
+                '        <p>' + message['body'] + '</p>\n' +
+                '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="d-flex align-items-center">\n' +
+                '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
+                '                <span>' + message['like-count'] + '</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-2">\n' +
+                '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
+                '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
+                '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
+                '                    </li>\n' +
+                '                    <li class="d-inline-block pl-50">\n' +
+                '                        <span>+140 more</span>\n' +
+                '                    </li>\n' +
+                '                </ul>\n' +
+                '            </div>\n' +
+                '            <p class="ml-auto d-flex align-items-center">\n' +
+                '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
+                '            </p>\n' +
+                '        </div>\n' +
+                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
+                '            <div class="avatar mr-50">\n' +
+                '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
+                '            </div>\n' +
+                '            <div class="user-page-info">\n' +
+                '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
+                '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
+                '            </div>\n' +
+                '            <div class="ml-auto cursor-pointer">\n' +
+                '                <i class="feather icon-heart mr-50"></i>\n' +
+                '                <i class="feather icon-message-square"></i>\n' +
+                '            </div>\n' +
+                '        </div>\n' +
+                '        <fieldset class="form-label-group mb-50">\n' +
+                '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
+                '            <label for="label-textarea">Add Comment</label>\n' +
+                '        </fieldset>\n' +
+                '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
+                '    </div>\n' +
+                '</div>\n';
+
+            $('#live-qna-chat-box').append(html_code);
+        });
+    }
+    setInterval(redrawSortingQnAChat, 5000);
+
+    function updateLikeCount(data) {
+        let message_id = data['data']['message-id'];
+        for (let i = 0; i < qna_messages.length; i++) {
+            if (qna_messages[i]['message-id'] === message_id) {
+                qna_messages[i]['like-count'] += 1;
+                break;
+            }
+        }
+    }
+
+    function addIdeaMessage(request) {
+        let body = request['data']['body'];
+        const sender_id = request['data']['sender-id'];
+        const box_id = sender_id + '-box-' + increase_box_id;
+        let html = '<p style="line-height: 14px; margin: 0;display: table-cell;vertical-align: middle;padding: 10px; border-radius: 5px;background: #f6f7f8;border: 2px solid #5a5d60;" id="' + box_id + '" class="el">' + body + '</p>';
+        $('#idea-dashboard').append(html);
+        increase_box_id += 1;
+    }
+
+    function addGroupMessage(request) {
+        const title = request['data']['group-title'];
+        const sender_id = request['data']['sender-id'];
+        const group_id = sender_id + '-group-' + increase_box_id;
+        const container_id = sender_id + '-container-' + increase_box_id;
+        let html =
+            '                            <div id="' + group_id + '" style="border: 2px solid #5a5d60;border-radius: 5px;padding: 3px;background: #f5cf8e;margin: 3px;" class="row">\n' +
+            '                                <div style="color: #565758;font-size: 14px;margin: 3px; font-weight: bold;">' + title + '</div>\n' +
+            '                                <div id="' + container_id + '" style="min-height: 20px;border: 2px solid #5a5d60;border-radius: 5px;background: #b2d6ff;" class="dragula-container">\n' +
+            '                                </div>\n' +
+            '                            </div>';
+        $('#idea-dashboard').append(html);
+        drake.containers.push(document.getElementById(container_id));
+        increase_box_id += 1;
+    }
+
+    function moveIdeaMessage(request) {
+        if (unique_id === request['data']['sender-id']) {
+            return;
+        }
+        let d = request['data'];
+        let src = '#' + d['src'];
+        let des = '#' + d['des'];
+        $(src).appendTo(des);
+    }
+
+    function lockIdeaMessage(request) {
+
+    }
+
+    function removeIdeaMessage(request) {
+
+    }
+
+    let groupSocket;
+    function group_socket_connect() {
+        groupSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/samplegroupid/');
+
+        groupSocket.onmessage = (message) => {
+            let message_data = JSON.parse(message.data);
+            switch (message_data.action) {
+                case 'add-idea-message':
+                    addIdeaMessage(message_data);
+                    break;
+                case 'move-idea-message':
+                    moveIdeaMessage(message_data);
+                    break;
+                case 'lock-idea-message':
+                    lockIdeaMessage(message_data);
+                    break;
+                case 'remove-idea-message':
+                    removeIdeaMessage(message_data);
+                    break;
+                case 'add-group-message':
+                    addGroupMessage(message_data);
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        groupSocket.onclose = (err) => {
+            setTimeout(() => {
+                group_socket_connect();
+            }, 1000);
+        };
+
+        groupSocket.onerror = (err) => {
+            groupSocket.close();
+        };
+    }
+    group_socket_connect();
+
+    let chatSocket;
+    function chat_socket_connect() {
+        chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+
+        chatSocket.onmessage = (message) => {
+            let message_data = JSON.parse(message.data);
+            switch (message_data.action) {
+                case 'sync-ppt-page':
+                    remoteSyncPPTPage(message_data);
+                    break;
+                case 'live-qna-chat':
+                    liveQnAMessage(message_data);
+                    break;
+                case 'add-like-count':
+                    updateLikeCount(message_data);
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        chatSocket.onclose = (e) => {
+            setTimeout(() => {
+                chat_socket_connect();
+            }, 1000);
+        };
+
+        chatSocket.onerror = (err) => {
+            chatSocket.close();
+        };
+    }
+    chat_socket_connect();
+
+    document.querySelector('#message').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#message-submit').click();
+        }
+    };
+
+
+    // Packet senders.
+    document.querySelector('#message-submit').onclick = (error) => {
+        let messageInputDom = document.querySelector('#message');
+        let message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'action': 'live-qna-chat',
+            'data': {
+                'qna': {
+                    'body': message,
+                },
+                'lecture': {{ room_name_json }},
+            }
+        }));
+
+        messageInputDom.value = '';
+    };
+
+    function sendLikeCountPacket(id) {
+        chatSocket.send(JSON.stringify({
+            'action': 'add-like-count',
+            'data': {
+                'message-id': id,
+                'lecture': {{ room_name_json }},
+            }
+        }));
+    }
+
+    function showAddIdeaModal() {$("#addIdeaModalCenter").modal("show");}
+    function sendAddIdeaPacket() {
+        let body = $("#addideatextarea").val();
+        groupSocket.send(JSON.stringify({
+            'action': 'add-idea-message',
+            'data': {
+                'body': body,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+
+    function showAddGroupModal() {$("#addGroupModalCenter").modal("show");}
+    function sendAddGroupPacket() {
+        let title = $("#addgrouptextarea").val();
+        groupSocket.send(JSON.stringify({
+            'action': 'add-group-message',
+            'data': {
+                'group-title': title,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+
+    function sendMoveIdeaPacket(src, des) {
+        groupSocket.send(JSON.stringify({
+            'action': 'move-idea-message',
+            'data': {
+                'src': src,
+                'des': des,
+                'sender-id': unique_id,
+            }
+        }));
+    }
+</script>
+</body>
+</html>
