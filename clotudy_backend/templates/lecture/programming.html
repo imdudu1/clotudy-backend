@@ -108,6 +108,15 @@
             background-color: #fff;
         }
 
+        p.event_desc {
+              font: bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+              line-height: 14px;
+              margin: 0px;
+              display: table-cell;
+              vertical-align: middle;
+              padding: 10px;
+        }
+
         .gutter.gutter-vertical {
             cursor: ns-resize;
             /* border-top: 1px solid #0b0e0f; border-bottom: 1px solid #0b0e0f; */
@@ -402,14 +411,21 @@
                         </div>
                         <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
                             <div id="rsrc-viewer-content" style="height: 100%; width: 100%;">
-                                <div>
-                                    <div>
+                                <!-- BEGIN -->
+                                <div class="card" style="box-shadow: none;">
+                                    <div class="card-header">
+                                        <p class="event_desc">hello.c</p>
+                                        <i onclick="requestCompile('src1')" class="feather icon-cpu"></i>
                                     </div>
-                                    <div>
-                                        <button onclick="requestCompile('src1')">Run</button>
-                                        <textarea id="src1"></textarea>
+                                    <div class="card-body pt-0">
+                                        <div id="src1" class="ace-editor">#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, World!!\n");
+}</div>
                                     </div>
                                 </div>
+                                <!-- END -->
                             </div>
                         </div>
                     </div>
@@ -418,8 +434,7 @@
                             Console
                         </div>
                         <div id="console-viewer-content">
-                            <div id="console-viewer-box">
-                            </div>
+                            <textarea id="console-viewer-box" readonly style="width: 100%; height: auto; min-height: 200px; border: none;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -485,6 +500,7 @@
 <!-- BEGIN: Page JS-->
 <script src="{% static 'app-assets/js/scripts/pages/dashboard-analytics.js' %}"></script>
 <script src="{% static 'app-assets/js/scripts/pages/app-todo.js' %}"></script>
+<script src="{% static 'js/ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
 <!-- END: Page JS-->
 
 <script type="text/javascript">
@@ -572,26 +588,41 @@
         qna_messages = {{ messages|safe }};
     });
 
+    let editorDict = {};
+    function editorInit() {
+        let editors = $('[class="ace-editor"]')
+        for (let i = 0; i < editors.length; i++) {
+            let editor = ace.edit(editors[i].id);
+            editor.setTheme("ace/theme/github");
+            editor.session.setMode("ace/mode/c_cpp");
+            editor.setOptions({
+                maxLines: Infinity
+            });
+
+            editorDict[editors[i].id] = editor;
+        }
+    }
+    editorInit();
 
     // Dragula JS
     let last_over_el_id;
     let current_drop_el_id;
     let drake = dragula(querySelectorAllArray('.dragula-container'),{
-                    accepts: function (el, target, source, sibling) {
-                        return !contains(el, target);
-                    }
-                }).on('drag', function (el) {
-                    el.className = el.className.replace('ex-moved', '');
-                }).on('drop', function (el) {
-                    el.className += ' ex-moved';
-                    current_drop_el_id = el.id;
-                    sendMoveIdeaPacket(current_drop_el_id, last_over_el_id);
-                }).on('over', function (el, container) {
-                    container.className += ' ex-over';
-                    last_over_el_id = container.id;
-                }).on('out', function (el, container) {
-                    container.className = container.className.replace('ex-over', '');
-                });
+        accepts: function (el, target, source, sibling) {
+            return !contains(el, target);
+        }
+    }).on('drag', function (el) {
+        el.className = el.className.replace('ex-moved', '');
+    }).on('drop', function (el) {
+        el.className += ' ex-moved';
+        current_drop_el_id = el.id;
+        sendMoveIdeaPacket(current_drop_el_id, last_over_el_id);
+    }).on('over', function (el, container) {
+        container.className += ' ex-over';
+        last_over_el_id = container.id;
+    }).on('out', function (el, container) {
+        container.className = container.className.replace('ex-over', '');
+    });
 
 
     // WebSocket
@@ -868,7 +899,7 @@
     chat_socket_connect();
 
     function requestCompile(dom_id) {
-        let src = $("#" + dom_id)[0].value;
+        let src = editorDict[dom_id].getValue();
         compileSocket.send(JSON.stringify({
             "type": 0,
             "src": src
