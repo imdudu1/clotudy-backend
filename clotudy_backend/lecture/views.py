@@ -74,7 +74,7 @@ def class_detail(request, class_id):
     for obj in lecture_info:
         list_lecture = [{"id": obj.pk,
                          "title": obj.lecture_title,
-                         "note": obj.lecture_note}]
+                         "description": obj.lecture_description}]
 
     return render(request, 'lecture/classDetail.html', {
             "class_data": class_data,
