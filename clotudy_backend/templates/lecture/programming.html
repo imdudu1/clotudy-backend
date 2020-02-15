@@ -412,17 +412,14 @@
                         <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
                             <div id="rsrc-viewer-content" style="height: 100%; width: 100%;">
                                 <!-- BEGIN -->
+{{ lecture_data.lecture_note }}
                                 <div class="card" style="box-shadow: none;">
                                     <div class="card-header">
                                         <p class="event_desc">hello.c</p>
                                         <i onclick="requestCompile('src1')" class="feather icon-cpu"></i>
                                     </div>
                                     <div class="card-body pt-0">
-                                        <div id="src1" class="ace-editor">#include &lt;stdio.h&gt;
-
-int main() {
-    printf("Hello, World!!\n");
-}</div>
+                                        <div id="src1" class="ace-editor"></div>
                                     </div>
                                 </div>
                                 <!-- END -->
