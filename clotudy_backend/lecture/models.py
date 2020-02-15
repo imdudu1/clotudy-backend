@@ -15,6 +15,7 @@ class ClassInformation(models.Model):
 class LectureInformation(models.Model):
     class_info = models.ForeignKey(ClassInformation, on_delete=models.CASCADE)
     lecture_title = models.CharField(max_length=50)
+    lecture_description = models.TextField(max_length=128, default="")
     lecture_type = models.IntegerField(default=0)
     lecture_pdf_path = models.CharField(max_length=100, default="")
     lecture_note = models.TextField(default="")
