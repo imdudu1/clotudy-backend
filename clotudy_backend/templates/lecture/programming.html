@@ -834,7 +834,7 @@
 
     let compileSocket;
     function compile_socket_connect() {
-        compileSocket = new WebSocket('ws://clotudy.pppr.io:3000/cp/abcd');
+        compileSocket = new WebSocket('ws://clotudy.pppr.io:3000/cp/' + unique_id);
 
         compileSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
