@@ -117,6 +117,10 @@
               padding: 10px;
         }
 
+        #ppt-viewer-wrap img {
+            width: 100%;
+        }
+
         .gutter.gutter-vertical {
             cursor: ns-resize;
             /* border-top: 1px solid #0b0e0f; border-bottom: 1px solid #0b0e0f; */
@@ -832,7 +836,7 @@
         compileSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
             console.log(message_data);
-            $("#" + runCodeDom + "-console").text(message_data.exec_stdout + "\r\n\r\n" + message_data.compile_stderr);
+            $("#" + runCodeDom + "-console").text(message_data.exec_stdout);
         };
 
         compileSocket.onclose = (e) => {
