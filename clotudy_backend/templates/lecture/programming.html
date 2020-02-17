@@ -417,14 +417,6 @@
                             </div>
                         </div>
                     </div>
-                    <div id="console-viewer-wrap">
-                        <div class="content-header">
-                            Console
-                        </div>
-                        <div id="console-viewer-content" style="position: relative; height: calc(100% - 50px); padding: 15px; background: black;">
-                            <span id="console-viewer-box" readonly style="height: auto; min-height:100%; max-height: 100%; overflow-y: scroll; overflow-x: hidden; white-space: pre-line; font-size: 14px; font-family: 'Courier New', Courier, monospace; color: white; width: 100%; height: auto; min-height: 200px; border: none;"></span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -537,7 +529,7 @@
         minSize: [0, 0],
     });
 
-    Split(['#rsrc-viewer-wrap', '#console-viewer-wrap'], {
+    Split(['#rsrc-viewer-wrap'], {
         elementStyle: (dimension, size, gutterSize) => ({
             'flex-basis': `calc(${size}% - ${gutterSize}px)`,
         }),
@@ -833,13 +825,14 @@
     }
 
     let compileSocket;
+    let runCodeDom;
     function compile_socket_connect() {
         compileSocket = new WebSocket('ws://clotudy.pppr.io:3000/cp/' + unique_id);
 
         compileSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
             console.log(message_data);
-            $("#console-viewer-box").text(message_data.exec_stdout + "\r\n\r\n" + message_data.compile_stderr);
+            $("#" + runCodeDom + "-console").text(message_data.exec_stdout + "\r\n\r\n" + message_data.compile_stderr);
         };
 
         compileSocket.onclose = (e) => {
@@ -893,6 +886,7 @@
             "type": 0,
             "src": src
         }));
+        runCodeDom = dom_id;
     }
 
     document.querySelector('#message').onkeyup = function(e) {
