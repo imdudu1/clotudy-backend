@@ -60,26 +60,29 @@ def pdf_render(request):
 
 
 def class_detail(request, class_id):
-    class_info = ClassInformation.objects.get(pk=class_id)
-    class_data = {"id": class_info.pk,
-                  "title": class_info.class_title,
-                  "description": class_info.class_description,
-                  "thumbnail": class_info.class_thumbnail_path,
-                  "created_time": class_info.class_created_time,
-                  "instructor": class_info.class_instructor,
-                  "instructor_id": class_info.class_instructor_id}
+    try:
+        class_info = ClassInformation.objects.get(pk=class_id)
+        class_data = {"id": class_info.pk,
+                      "title": class_info.class_title,
+                      "description": class_info.class_description,
+                      "thumbnail": class_info.class_thumbnail_path,
+                      "created_time": class_info.class_created_time,
+                      "instructor": class_info.class_instructor,
+                      "instructor_id": class_info.class_instructor_id}
 
-    lecture_info = LectureInformation.objects.filter(class_info=class_info)
-    list_lecture = []
-    for obj in lecture_info:
-        list_lecture = [{"id": obj.pk,
-                         "title": obj.lecture_title,
-                         "description": obj.lecture_description}]
+        lecture_info = LectureInformation.objects.filter(class_info=class_info)
+        list_lecture = []
+        for obj in lecture_info:
+            list_lecture = [{"id": obj.pk,
+                             "title": obj.lecture_title,
+                             "description": obj.lecture_description}]
 
-    return render(request, 'lecture/classDetail.html', {
+        return render(request, 'lecture/classDetail.html', {
             "class_data": class_data,
             "list_lecture": list_lecture,
         })
+    except ClassInformation.DoesNotExist:
+        return render(request, 'lecture/classDetail.html', {})
 
 
 def class_list(request):
