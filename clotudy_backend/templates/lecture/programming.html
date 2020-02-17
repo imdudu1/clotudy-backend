@@ -413,7 +413,7 @@
                         <div class="content-header">
                             추가 자료
                         </div>
-                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                        <div style="width: 100%; height: 100%; overflow-y: hidden; padding: 20px;" id="ppt-viewer-wrap">
                             <div id="rsrc-viewer-content" style="height: 100%; width: 100%;">
                                 <!-- BEGIN -->
 {{ lecture_data.lecture_note|safe}}
@@ -836,7 +836,7 @@
         compileSocket.onmessage = (message) => {
             let message_data = JSON.parse(message.data);
             console.log(message_data);
-            $("#" + runCodeDom + "-console").text(message_data.exec_stdout);
+            $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + "\r\n\r\n---------COMPILE OUTPUT---------\r\n" + message_data.compile_stderr);
         };
 
         compileSocket.onclose = (e) => {
