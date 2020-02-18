@@ -463,6 +463,22 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div id="modal-content-header" class="modal-header">
+                    <p>질문하기</p>
+                </div>
+                <div class="modal-body">
+                    <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- END: Modal -->
 </div>
 
@@ -895,16 +911,16 @@
         runCodeDom = dom_id;
     }
 
+    function showAddQnAModal() {$("#addQnAModalCenter").modal("show");}
     document.querySelector('#message').onkeyup = function(e) {
         if (e.keyCode === 13) {  // enter, return
             document.querySelector('#message-submit').click();
         }
     };
 
-
     // Packet senders.
-    document.querySelector('#message-submit').onclick = (error) => {
-        let messageInputDom = document.querySelector('#message');
+    document.querySelector('#addQnAButton').onclick = (error) => {
+        let messageInputDom = document.querySelector('#addqnatextarea');
         let message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
             'action': 'live-qna-chat',
