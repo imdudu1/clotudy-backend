@@ -69,7 +69,6 @@
                             <h5 class="mt-2">년도별 비교</h5><hr />
                         </div>
 
-
                         <!-- Tab -->
                         <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
                             <div class="email-application">
@@ -378,6 +377,14 @@
             times[page-1] += delta_time;
           }
           ppt_chart.updateSeries([{data: times}]);
+        }
+
+        function savePPTTime() {
+            let times = ppt_chart.w.globals.series.slice()[0];
+            let history_str = "";
+            for (let i = 0; i < times.length; i++) {
+                history_str += str(times[i]) + ";";
+            }
         }
     </script>
 {% endblock %}

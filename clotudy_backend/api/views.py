@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord
+from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -52,3 +52,24 @@ class QuizBoxDetail(APIView):
                     return Response(total_score)
             return Response(['This quiz is not open yet.'])
         return Response(['Please login and try again.'])
+
+
+class PPTTimeHistory(APIView):
+
+    def get(self, request, pk, format=None):
+        if request.user.is_authenticated:
+            lecture = get_object_or_404(LectureInformation, pk=pk)
+            times = lecture.lecture_ppt_times.split(';')
+            res = []
+            for time in times:
+                res.append(int(time))
+            return Response(res)
+        return Response([])
+
+    def post(self, request, pk, format=None):
+        if request.user.is_authenticated:
+            lecture = get_object_or_404(LectureInformation, pk=pk)
+            lecture.lecture_ppt_times = request.POST['history']
+            lecture.save()
+            return Response([])
+        return Response(['Please login and try again'])
