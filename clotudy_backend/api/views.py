@@ -56,17 +56,6 @@ class QuizBoxDetail(APIView):
 
 class PPTTimeHistory(APIView):
 
-    def get(self, request, pk, format=None):
-        if request.user.is_authenticated:
-            lecture = get_object_or_404(LectureInformation, pk=pk)
-            times = lecture.lecture_ppt_times.split(';')[:-1]
-            if len(times) > 0:
-                res = []
-                for time in times:
-                    res.append(int(time))
-                return Response(res)
-        return Response([])
-
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
             lecture = get_object_or_404(LectureInformation, pk=pk)
