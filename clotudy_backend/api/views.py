@@ -56,10 +56,21 @@ class QuizBoxDetail(APIView):
 
 class PPTTimeHistory(APIView):
 
+    def get(self, request, pk, format=None):
+        if request.user.is_authenticated:
+            lecture = get_object_or_404(LectureInformation, pk=pk)
+            times = lecture.lecture_ppt_times.split(';')
+            time_list = []
+            if len(times) > 0:
+                for time in times:
+                    time_list.append(int(time))
+            return Response(time_list)
+        return Response(['Please login and try again.'])
+
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
             lecture = get_object_or_404(LectureInformation, pk=pk)
             lecture.lecture_ppt_times = request.POST['history']
             lecture.save()
             return Response([])
-        return Response(['Please login and try again'])
+        return Response(['Please login and try again.'])
