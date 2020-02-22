@@ -204,6 +204,8 @@
 
 {% block extra-script %}
     <script>
+        const unique_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
         function getCurrentTime() {
           return (new Date()).getTime();
         }
@@ -384,6 +386,55 @@
             times[page-1] += delta_time;
           }
           ppt_chart.updateSeries([{data: times}]);
+        }
+        
+        let compileSocket;
+        let runCodeDom;
+        function compile_socket_connect() {
+            compileSocket = new WebSocket('ws://clotudy.pppr.io:3000/cp/' + unique_id);
+
+            compileSocket.onmessage = (message) => {
+                let message_data = JSON.parse(message.data);
+                console.log(message_data);
+                $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + "\r\n\r\n---------COMPILE OUTPUT---------\r\n" + message_data.compile_stderr);
+            };
+
+            compileSocket.onclose = (e) => {
+                setTimeout(() => {
+                    compile_socket_connect();
+                }, 1000);
+            };
+
+            compileSocket.onerror = (err) => {
+                compileSocket.close();
+            };
+        }
+        compile_socket_connect();
+
+        let editorDict = {};
+        function editorInit() {
+            let editors = $('[class="ace-editor"]')
+            for (let i = 0; i < editors.length; i++) {
+                let editor = ace.edit(editors[i].id);
+                editor.setTheme("ace/theme/github");
+                editor.session.setMode("ace/mode/c_cpp");
+                editor.setOptions({
+                    maxLines: Infinity
+                });
+                editor.setReadOnly(true);
+
+                editorDict[editors[i].id] = editor;
+            }
+        }
+        editorInit();
+
+        function requestCompile(dom_id) {
+            let src = editorDict[dom_id].getValue();
+            compileSocket.send(JSON.stringify({
+                "type": 0,
+                "src": src
+            }));
+            runCodeDom = dom_id;
         }
     </script>
 {% endblock %}
