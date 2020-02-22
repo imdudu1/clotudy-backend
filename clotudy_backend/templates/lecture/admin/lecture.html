@@ -42,7 +42,7 @@
                             <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
+                            <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
                         </li>
                     </ul>
 
@@ -194,7 +194,7 @@
 
                         <!-- Tab -->
                         <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
-                            {{ lecture_data.lecture_note }}
+                            {{ lecture_data.lecture_note | safe }}
                         </div>
                     </div>
                 </div>

@@ -42,7 +42,7 @@
                             <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
+                            <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
                         </li>
                     </ul>
 
@@ -71,7 +71,6 @@
                             </div>
                             <h5 class="mt-2">년도별 비교</h5><hr />
                         </div>
-
 
                         <!-- Tab -->
                         <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
@@ -126,7 +125,7 @@
                                     <div class="card-header">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
-                                                {{ quiz.category_title }}
+                                                {{ quiz.category_title | safe }}
                                             </button>
                                         </h5>
                                     </div>
