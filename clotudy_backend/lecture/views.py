@@ -20,6 +20,12 @@ def lecture(request, class_id, lecture_id):
                         "pdf_path": lecture_info.lecture_pdf_path,
                         "lecture_type": lecture_info.lecture_type,
                         "lecture_note": lecture_info.lecture_note}
+
+        times = lecture_info.lecture_ppt_times.split(';')
+        time_list = []
+        if len(times) > 0:
+            for time in times:
+                time_list.append(int(time))
     except LectureInformation.DoesNotExist or ClassInformation.DoesNotExist:
         return HttpResponseRedirect("/lecture/list")
     else:
@@ -27,6 +33,7 @@ def lecture(request, class_id, lecture_id):
             'room_name_json': mark_safe(json.dumps(lecture_id)),
             'messages': _get_user_questions_from_db(lecture_id),
             'lecture_data': lecture_data,
+            'time_list': time_list
         })
 
 
@@ -48,8 +55,14 @@ def lecture_admin(request, class_info, lecture_id):
                  "is_correct": answer.answer_is_correct} for answer in answer_list]})
         recv_quiz_data.append(quiz_set)
 
+    times = lecture_info.lecture_ppt_times.split(';')
+    time_list = []
+    if len(times) > 0:
+        for time in times:
+            time_list.append(int(time))
+
     return render(request, 'lecture/admin/{}'.format(_get_template_html_name(lecture_info.lecture_type)), {
-        'room_name_json': mark_safe(json.dumps(class_info.pk)),
+        'room_name_json': mark_safe(json.dumps(lecture_id)),
         'quiz_data': recv_quiz_data,
         'questions': _get_user_questions_from_db(lecture_id),
     })

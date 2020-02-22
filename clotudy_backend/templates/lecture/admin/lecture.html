@@ -205,6 +205,7 @@
         let last_time = getCurrentTime();
         let currentPage = 1;
         let sync_lock = true;
+        let lecture_id = {{ room_name_json }}
 
         // Charts
         var options = {
@@ -247,7 +248,7 @@
 
         var options = {
             series: [{
-                data: []
+                data: {{ time_list }}
             }],
             chart: {
                 type: 'line',
@@ -383,8 +384,20 @@
             let times = ppt_chart.w.globals.series.slice()[0];
             let history_str = "";
             for (let i = 0; i < times.length; i++) {
-                history_str += str(times[i]) + ";";
+                history_str += parseInt(times[i]) + ";";
             }
+
+            axios.post(`/api/ppthistory/${lecture_id}`, {
+                'history': history_str.slice(0,-1);
+            })
+            .then(res => {
+            })
+            .catch(err => {
+                console.log(err);
+            })
         }
+        setInterval(5000, () => {
+            savePPTTime();
+        });
     </script>
 {% endblock %}

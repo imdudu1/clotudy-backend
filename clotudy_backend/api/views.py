@@ -60,11 +60,12 @@ class PPTTimeHistory(APIView):
         if request.user.is_authenticated:
             lecture = get_object_or_404(LectureInformation, pk=pk)
             times = lecture.lecture_ppt_times.split(';')
-            res = []
-            for time in times:
-                res.append(int(time))
-            return Response(res)
-        return Response([])
+            time_list = []
+            if len(times) > 0:
+                for time in times:
+                    time_list.append(int(time))
+            return Response(time_list)
+        return Response(['Please login and try again.'])
 
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
@@ -72,4 +73,4 @@ class PPTTimeHistory(APIView):
             lecture.lecture_ppt_times = request.POST['history']
             lecture.save()
             return Response([])
-        return Response(['Please login and try again'])
+        return Response(['Please login and try again.'])
