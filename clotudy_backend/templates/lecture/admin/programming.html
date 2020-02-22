@@ -41,6 +41,9 @@
                         <li class="nav-item">
                             <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
+                        </li>
                     </ul>
 
                     <div class="tab-content">
@@ -188,6 +191,10 @@
                                 {% endfor %}
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="tab-pane active" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
+                        {{ lecture_data.lecture_note }}
                         </div>
                     </div>
                 </div>

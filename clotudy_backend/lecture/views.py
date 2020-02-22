@@ -26,6 +26,7 @@ def lecture(request, class_id, lecture_id):
         if len(times) > 0:
             for time in times:
                 time_list.append(int(time))
+
     except LectureInformation.DoesNotExist or ClassInformation.DoesNotExist:
         return HttpResponseRedirect("/lecture/list")
     else:
@@ -39,6 +40,11 @@ def lecture(request, class_id, lecture_id):
 
 def lecture_admin(request, class_info, lecture_id):
     lecture_info = LectureInformation.objects.get(class_info=class_info, pk=lecture_id)
+    lecture_data = {"title": lecture_info.lecture_title,
+                    "pdf_path": lecture_info.lecture_pdf_path,
+                    "lecture_type": lecture_info.lecture_type,
+                    "lecture_note": lecture_info.lecture_note}
+
     # Quiz serializer
     recv_quiz_data = []
     quiz_box_list = QuizBox.objects.filter(lecture_info=lecture_info)
@@ -65,6 +71,7 @@ def lecture_admin(request, class_info, lecture_id):
         'room_name_json': mark_safe(json.dumps(lecture_id)),
         'quiz_data': recv_quiz_data,
         'questions': _get_user_questions_from_db(lecture_id),
+        'lecture_data': lecture_data,
     })
 
 
