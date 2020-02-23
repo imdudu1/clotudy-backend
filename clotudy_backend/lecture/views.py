@@ -72,6 +72,7 @@ def lecture_admin(request, class_info, lecture_id):
         'quiz_data': recv_quiz_data,
         'questions': _get_user_questions_from_db(lecture_id),
         'lecture_data': lecture_data,
+        'ppt_time': time_list,
     })
 
 
