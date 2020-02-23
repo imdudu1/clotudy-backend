@@ -445,19 +445,22 @@
                 history_str += parseInt(times[i]) + ";";
             }
 
-            axios.post(`/api/ppthistory/${lecture_id}`, {
-                params: {
-                    'history': history_str.slice(0,-1)
-                }
-            })
-            .then(res => {
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            axios({
+                    method: 'post',
+                    url: `/api/ppthistory/${lecture_id}`,
+                    data: {
+                        'history': history_str,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    headers: {
+                        "content-type": "application/json"
+                    }).then(function (response) {
+                        console.log(response)
+                    }).catch(function (error) {
+                        console.log(error)
+                    }
+                });
         }
-        setInterval(60000, () => {
-            savePPTTime();
-        });
+        setInterval(savePPTTime, 60000);
     </script>
 {% endblock %}
