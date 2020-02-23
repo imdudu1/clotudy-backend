@@ -446,7 +446,9 @@
             }
 
             axios.post(`/api/ppthistory/${lecture_id}`, {
-                'history': history_str.slice(0,-1)
+                params: {
+                    'history': history_str.slice(0,-1)
+                }
             })
             .then(res => {
             })
