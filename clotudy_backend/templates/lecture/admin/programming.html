@@ -449,7 +449,7 @@
                     method: 'post',
                     url: `/api/ppthistory/${lecture_id}`,
                     data: {
-                        'history': history_str,
+                        'history': history_str.slice(0, -1),
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                     },
                     headers: {
