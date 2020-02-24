@@ -68,7 +68,6 @@ class PPTTimeHistory(APIView):
             return Response(time_list)
         return Response(['Please login and try again.'])
 
-    @csrf_exempt
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
             lecture = get_object_or_404(LectureInformation, pk=pk)
