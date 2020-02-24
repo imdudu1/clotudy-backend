@@ -4,7 +4,7 @@ from django.shortcuts import render
 from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from braces.views import CsrfExemptMixin
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
 class QuizBoxDetail(APIView):
@@ -55,8 +55,14 @@ class QuizBoxDetail(APIView):
         return Response(['Please login and try again.'])
 
 
-class PPTTimeHistory(CsrfExemptMixin, APIView):
-    authentication_classes = []
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
+
+
+class PPTTimeHistory(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def get(self, request, pk, format=None):
         if request.user.is_authenticated:
