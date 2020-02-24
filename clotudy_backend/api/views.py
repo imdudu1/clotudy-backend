@@ -4,6 +4,7 @@ from django.shortcuts import render
 from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 
 class QuizBoxDetail(APIView):
@@ -67,6 +68,7 @@ class PPTTimeHistory(APIView):
             return Response(time_list)
         return Response(['Please login and try again.'])
 
+    @csrf_exempt
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
             lecture = get_object_or_404(LectureInformation, pk=pk)
