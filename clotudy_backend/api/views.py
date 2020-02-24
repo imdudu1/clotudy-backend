@@ -77,8 +77,9 @@ class PPTTimeHistory(APIView):
 
     def post(self, request, pk, format=None):
         if request.user.is_authenticated:
-            #lecture = get_object_or_404(LectureInformation, pk=pk)
-            #lecture.lecture_ppt_times = request.POST.get('history', None)
-            #lecture.save()
-            return Response(json.loads(request.body.decode("utf-8")))
+            lecture = get_object_or_404(LectureInformation, pk=pk)
+            recv_json_data = json.loads(request.body.decode("utf-8"))
+            lecture.lecture_ppt_times = recv_json_data['history']
+            lecture.save()
+            return Response()
         return Response(['Please login and try again.'])
