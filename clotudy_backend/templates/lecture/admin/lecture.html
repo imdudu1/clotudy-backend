@@ -310,6 +310,7 @@
         function remotePPTPageSync(v) {
             if (sync_lock) {
                 sync_lock = false;
+                let currentPage = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page;
                 let tmpPage = currentPage + v;
                 let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
                 if((tmpPage > numPages) || (tmpPage < 1)) {
