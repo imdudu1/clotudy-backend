@@ -568,12 +568,12 @@
                         <h2 class="content-header-title float-left mb-0">Tabs</h2>
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">홈</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Components</a>
+                                <li class="breadcrumb-item"><a href="/lecture/list">강의 목록</a>
                                 </li>
-                                <li class="breadcrumb-item active">Tabs
-                                </li>
+                                <li class="breadcrumb-item active">{{ class_data.title }}</li>
+                                <li class="breadcrumb-item active">{{ lecture_data.title }}</li>
                             </ol>
                         </div>
                     </div>
