@@ -34,7 +34,7 @@ def lecture(request, class_id, lecture_id):
             'room_name_json': mark_safe(json.dumps(lecture_id)),
             'messages': _get_user_questions_from_db(lecture_id),
             'lecture_data': lecture_data,
-            'time_list': time_list
+            'ppt_time': time_list
         })
 
 
