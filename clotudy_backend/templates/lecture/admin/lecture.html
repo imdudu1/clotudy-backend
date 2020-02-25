@@ -1,6 +1,8 @@
 {% extends "lecture/admin/base.html" %}
 {% load static %}
 
+{% block title %}{{ lecture_data.title }}{% endblock %}
+
 {% block extra-style %}
 {% endblock %}
 
@@ -14,7 +16,7 @@
             </div>
             <div class="card-content">
                 <div class="card-body text-center">
-                    <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
+                    <iframe id="ppt-frame" style="border: none; min-height: 500px; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
                     <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
                         <button onclick="remotePPTPageSync(-1)" type="button" class="btn btn-secondary">Left</button>
                         <button type="button" class="btn btn-secondary">Middle</button>
@@ -304,7 +306,7 @@
         chart.render();
 
         function clonePPT() {
-            let handle = window.open("https://mozilla.github.io/pdf.js/web/viewer.html", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+            let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
         }
 
         function remotePPTPageSync(v) {
