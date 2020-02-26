@@ -57,7 +57,7 @@ def lecture_admin(request, class_info, lecture_id):
             correct_count = quiz.quiz_correct_count
             answer_list = Answer.objects.filter(quiz_info=quiz)
             quiz_set["quiz_content"].append({"id": quiz.pk, "solve_count": solve_count, "correct_count": correct_count, "problem": quiz.quiz_prob, "answer": [
-                {"id": answer.pk, "content": answer.answer_content,"choice_count_percent": (answer.answer_choice_count / solve_count) * 100 if solve_count == 0 else 0, "choice_count": answer.answer_choice_count,
+                {"id": answer.pk, "content": answer.answer_content,"choice_count_percent": (answer.answer_choice_count / solve_count) * 100 if solve_count != 0 else 0, "choice_count": answer.answer_choice_count,
                  "is_correct": answer.answer_is_correct} for answer in answer_list]})
         recv_quiz_data.append(quiz_set)
 
