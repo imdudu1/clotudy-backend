@@ -1,7 +1,7 @@
 # chat/consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation
+from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation, QuizBox
 import json
 
 
@@ -41,6 +41,8 @@ class Consumer(AsyncWebsocketConsumer):
             await self.save_qna_message(data)
         elif action == 'add-like-count':
             await self.add_like_count(data)
+        elif action == 'show-quiz-modal':
+            await self.set_quiz_box(data)
         """
         elif action == 'sync-ppt-page':
             sender_name = self.scope['user'].username
@@ -98,3 +100,12 @@ class Consumer(AsyncWebsocketConsumer):
         if user_name == instructor_id:
             return True
         return False
+
+    @database_sync_to_async
+    def set_quiz_box(self, data):
+        box = QuizBox.objects.get(pk=data['quizBoxId'])
+        if box.quiz_is_open == False:
+            box.quiz_is_open = True
+        else:
+            box.quiz_is_open = False
+        box.save()
