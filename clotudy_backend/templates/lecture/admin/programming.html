@@ -396,7 +396,7 @@
         let compileSocket;
         let runCodeDom;
         function compile_socket_connect() {
-            compileSocket = new WebSocket('ws://clotudy.pppr.io:3000/cp/' + unique_id);
+            compileSocket = new WebSocket('ws://'+window.location.host+':3000/cp/' + unique_id);
 
             compileSocket.onmessage = (message) => {
                 let message_data = JSON.parse(message.data);
