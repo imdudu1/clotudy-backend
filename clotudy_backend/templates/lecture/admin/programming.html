@@ -187,6 +187,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button onclick="showQuizModal({{ quiz.quiz_content.id }})" class="btn btn-primary">시작하기</button>
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -431,6 +432,15 @@
             }
         }
         editorInit();
+
+        function showQuizModal(quizBoxId) {
+            global_socket.send(JSON.stringify({
+                'action': 'show-quiz-modal',
+                'data': {
+                    'quizBoxId': quizBoxId
+                }
+            }));
+        }
 
         function requestCompile(dom_id) {
             let src = editorDict[dom_id].getValue();
