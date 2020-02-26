@@ -186,8 +186,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12">
+                                                    <button onclick="showQuizModal({{ quiz.category_id }})" class="btn btn-primary">시작하기</button>
+                                                </div>
                                             </div>
-                                            <button onclick="showQuizModal({{ quiz.quiz_content.id }})" class="btn btn-primary">시작하기</button>
                                         </div>
                                     </div>
                                 {% endfor %}
