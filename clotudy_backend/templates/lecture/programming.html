@@ -980,6 +980,10 @@
             });
     }
 
+    function quiz_form_submit() {
+        document.getElementById("quiz_form").submit();
+    }
+
     let chatSocket;
     function chat_socket_connect() {
         chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
