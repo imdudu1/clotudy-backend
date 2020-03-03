@@ -396,7 +396,7 @@
         }
 
         function showQuizModal(data) {
-            axios.get(`/api/quiz/${data.data.quizBoxId}`)
+            axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
                 .then(res => {
                     setModalQuizHTML(res.data[0]);
                     $("#exampleModalCenter").modal("show");

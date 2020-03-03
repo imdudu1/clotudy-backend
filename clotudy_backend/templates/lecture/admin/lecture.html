@@ -368,7 +368,8 @@
             global_socket.send(JSON.stringify({
                 'action': 'show-quiz-modal',
                 'data': {
-                    'quizBoxId': quizBoxId
+                    'quizBoxId': quizBoxId,
+                    'classID': {{ class_id }}
                 }
             }));
         }
