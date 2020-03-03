@@ -305,7 +305,7 @@
 
             $('#live-qna-chat-box').empty();
             qna_messages.sort((lhs, rhs) => {
-                return rhs['like-count'] - lhs['like-count'];
+                return rhs['likeCount'] - lhs['likeCount'];
             });
             qna_messages.forEach((message) => {
                 $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
