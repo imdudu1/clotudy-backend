@@ -94,7 +94,7 @@
                                                     <div class="media-body">
                                                         <div class="user-details">
                                                             <div class="mail-items">
-                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ request.user.username }}</h5>
+                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ obj.userID }}</h5>
                                                                 <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
                                                             </div>
                                                             <div class="mail-meta-item">
@@ -320,7 +320,7 @@
         }
 
         let is_exist_new_qna = true;
-        function questionMsgHtmlGenerator(msg, like_count) {
+        function questionMsgHtmlGenerator(userID, msg, like_count) {
             return $("<li>").addClass("media").append(
                         $("<div>").addClass("media-left pr-50").append(
                             $("<div>").addClass("avatar").append(
@@ -333,7 +333,7 @@
                         $("<div>").addClass("media-body").append(
                             $("<div>").addClass("user-details").append(
                                 $("<div>").addClass("mail-items").append(
-                                    $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").text("username"),
+                                    $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").text(userID),
                                     $("<span>").addClass("list-group-item-text text-truncate")
                                 ),
                                 $("<div>").addClass("mail-meta-item").append(
@@ -343,10 +343,10 @@
                                         )
                                     )
                                 )
+                            ),
+                            $("<div>").addClass("mail-message").append(
+                                $("<p>").addClass("list-group-item-text truncate mb-0").text(msg)
                             )
-                        ),
-                        $("<div>").addClass("mail-message").append(
-                            $("<p>").addClass("list-group-item-text truncate mb-0").text(msg)
                         )
                     );
         }
@@ -363,7 +363,7 @@
                 return lhs['likeCount'] - rhs['likeCount'];
             });
             qna_messages.forEach((message) => {
-                $('#questions-tab-list').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
+                $('#questions-tab-list').append(questionMsgHtmlGenerator(message['userID'], message['body'], message['likeCount']));
             });
         }
         setInterval(redrawSortingQnAChat, 5000);
