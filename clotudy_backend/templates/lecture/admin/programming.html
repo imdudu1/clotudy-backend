@@ -360,7 +360,7 @@
 
             $('#questions-tab-list').empty();
             qna_messages.sort((lhs, rhs) => {
-                return lhs['likeCount'] - rhs['likeCount'];
+                return rhs['likeCount'] - lhs['likeCount'];
             });
             qna_messages.forEach((message) => {
                 $('#questions-tab-list').append(questionMsgHtmlGenerator(message['userID'], message['body'], message['likeCount']));
