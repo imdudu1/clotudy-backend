@@ -39,8 +39,8 @@ def lecture(request, class_id, lecture_id):
         })
 
 
-def lecture_admin(request, class_info, lecture_id):
-    lecture_info = LectureInformation.objects.get(class_info=class_info, pk=lecture_id)
+def lecture_admin(request, class_id, lecture_id):
+    lecture_info = LectureInformation.objects.get(class_info=class_id, pk=lecture_id)
     lecture_data = {"title": lecture_info.lecture_title,
                     "pdf_path": lecture_info.lecture_pdf_path,
                     "lecture_type": lecture_info.lecture_type,
@@ -73,7 +73,7 @@ def lecture_admin(request, class_info, lecture_id):
         'quiz_data': recv_quiz_data,
         'questions': _get_user_questions_from_db(lecture_id),
         'lecture_data': lecture_data,
-        'class_id': class_info,
+        'class_id': class_id,
         'ppt_time': time_list,
     })
 
