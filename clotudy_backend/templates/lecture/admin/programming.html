@@ -80,7 +80,7 @@
                                 <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
                                     <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
                                         <div class="email-user-list list-group" style="height: 100%;">
-                                            <ul class="users-list-wrapper media-list">
+                                            <ul id="questions-tab-list" class="users-list-wrapper media-list">
                                                 {% for obj in questions %}
                                                 <li class="media">
                                                     <div class="media-left pr-50">
@@ -220,6 +220,11 @@
         let currentPage = 1;
         let sync_lock = true;
         let lecture_id = {{ room_name_json }};
+        let qna_messages;
+
+        $(document).ready(function(){
+            qna_messages = {{ questions|safe }};
+        });
 
         // Charts
         var options = {
@@ -314,6 +319,65 @@
             let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
         }
 
+        let is_exist_new_qna = true;
+        function questionMsgHtmlGenerator(msg, like_count) {
+            return $("<li>").addClass("media").append(
+                        $("<div>").addClass("media-left pr-50").append(
+                            $("<div>").addClass("avatar").append(
+                                $("<img>").attr("src", "{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}")
+                            ),
+                            $("<div>").addClass("user-action").append(
+                                $("<span>").addClass("favorite").text(like_count)
+                            )
+                        ),
+                        $("<div>").addClass("media-body").append(
+                            $("<div>").addClass("user-details").append(
+                                $("<div>").addClass("mail-items").append(
+                                    $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").text("username"),
+                                    $("<span>").addClass("list-group-item-text text-truncate")
+                                ),
+                                $("<div>").addClass("mail-meta-item").append(
+                                    $("<span>").addClass("float-right").append(
+                                        $("<span>").addClass("mr-1 bullet bullet-success bullet-sm").append(
+                                            $("<span>").addClass("mail-date")
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        $("<div>").addClass("mail-message").append(
+                            $("<p>").addClass("list-group-item-text truncate mb-0").text(msg)
+                        )
+                    );
+        }
+
+        function redrawSortingQnAChat() {
+            if (!is_exist_new_qna) {
+                return;
+            } else {
+                is_exist_new_qna = false;
+            }
+
+            $('#questions-tab-list').empty();
+            qna_messages.sort((lhs, rhs) => {
+                return rhs['like-count'] - lhs['like-count'];
+            });
+            qna_messages.forEach((message) => {
+                $('#questions-tab-list').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
+            });
+        }
+        setInterval(redrawSortingQnAChat, 5000);
+
+        function updateLikeCount(data) {
+            let message_id = data['data']['message-id'];
+            for (let i = 0; i < qna_messages.length; i++) {
+                if (qna_messages[i]['message-id'] === message_id) {
+                    qna_messages[i]['like-count'] += 1;
+                    break;
+                }
+            }
+        }
+
         function remotePPTPageSync(v) {
             if (sync_lock) {
                 sync_lock = false;
@@ -349,9 +413,10 @@
                     case 'live-qna-chat':
                         break;
                     case 'add-like-count':
+                        updateLikeCount(message_data);
                         break;
                     case 'quiz-complete-signal':
-                        break;
+                        break;                
                     default:
                         break;
                 }
