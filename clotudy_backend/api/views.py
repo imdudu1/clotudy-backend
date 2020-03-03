@@ -7,7 +7,15 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
 
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
+
+
 class QuizBoxDetail(APIView):
+
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def check_login(self, request):
@@ -64,13 +72,8 @@ class QuizBoxDetail(APIView):
         return Response(['Please login and try again.'])
 
 
-class CsrfExemptSessionAuthentication(SessionAuthentication):
-
-    def enforce_csrf(self, request):
-        return  # To not perform the csrf check previously happening
-
-
 class PPTTimeHistory(APIView):
+
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def get(self, request, pk, format=None):
