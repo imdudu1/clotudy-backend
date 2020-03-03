@@ -441,7 +441,7 @@
                 <div id="modal-content-header" class="modal-header">
 
                 </div>
-                <form id="quiz_form" action="/api/quiz/1" method="post">
+                <form id="quiz_form" action="/api/quiz/1/1" method="post">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="nav-vertical">
@@ -971,7 +971,7 @@
     }
 
     function showQuizModal(data) {
-        axios.get(`/api/quiz/${data.data.quizBoxId}`)
+        axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
             .then(res => {
                 setModalQuizHTML(res.data[0]);
                 $("#exampleModalCenter").modal("show");
