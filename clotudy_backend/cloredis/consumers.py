@@ -87,7 +87,7 @@ class Consumer(AsyncWebsocketConsumer):
     def add_like_count(self, data):
         try:
             lecture = ClassInformation.objects.get(pk=data['lecture'])
-            message = QuestionMessage.objects.get(lecture=lecture, pk=data['message-id'])
+            message = QuestionMessage.objects.get(lecture=lecture, pk=data['messageId'])
         except ClassInformation.DoesNotExist or QuestionMessage.DoesNotExist:
             return
         else:

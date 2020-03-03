@@ -286,9 +286,10 @@
             }
 
             let qna_body = qna['body'];
-            let qna_like_count = qna['like-count'];
-            let qna_message_id = qna['message-id'];
-            qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+            let qna_like_count = qna['likeCount'];
+            let qna_message_id = qna['messageId'];
+            let qna_username = qna['userID'];
+            qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
             is_exist_new_qna = true;
 
             let live_qna_chat_box = $('#live-qna-chat-content');
@@ -308,16 +309,16 @@
                 return rhs['likeCount'] - lhs['likeCount'];
             });
             qna_messages.forEach((message) => {
-                $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['like-count']));
+                $('#live-qna-chat-box').append(questionMsgHtmlGenerator(message['body'], message['likeCount']));
             });
         }
         setInterval(redrawSortingQnAChat, 5000);
 
         function updateLikeCount(data) {
-            let message_id = data['data']['message-id'];
+            let message_id = data['data']['messageId'];
             for (let i = 0; i < qna_messages.length; i++) {
-                if (qna_messages[i]['message-id'] === message_id) {
-                    qna_messages[i]['like-count'] += 1;
+                if (qna_messages[i]['messageId'] === message_id) {
+                    qna_messages[i]['likeCount'] += 1;
                     break;
                 }
             }
@@ -512,7 +513,7 @@
             chatSocket.send(JSON.stringify({
                 'action': 'add-like-count',
                 'data': {
-                    'message-id': id, // QnAMessage.pk
+                    'messageId': id, // QnAMessage.pk
                     'lecture': {{ room_name_json }},
                 }
             }));

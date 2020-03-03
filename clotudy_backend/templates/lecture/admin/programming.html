@@ -369,10 +369,10 @@
         setInterval(redrawSortingQnAChat, 5000);
 
         function updateLikeCount(data) {
-            let message_id = data['data']['message-id'];
+            let message_id = data['data']['messageId'];
             for (let i = 0; i < qna_messages.length; i++) {
-                if (qna_messages[i]['message-id'] === message_id) {
-                    qna_messages[i]['like-count'] += 1;
+                if (qna_messages[i]['messageId'] === message_id) {
+                    qna_messages[i]['likeCount'] += 1;
                     break;
                 }
             }
@@ -401,6 +401,24 @@
             }
         }
 
+        function liveQnAMessage(request) {
+            let qna = request['data']['qna'];
+
+            if (qna === '') {
+                return
+            }
+
+            let qna_body = qna['body'];
+            let qna_like_count = qna['likeCount'];
+            let qna_message_id = qna['messageId'];
+            let qna_username = qna['userID'];
+            qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
+            is_exist_new_qna = true;
+
+            let live_qna_chat_box = $('#questions-tab-list');
+            live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
+        }
+
         let global_socket;
         function global_socket_init() {
             global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
@@ -408,9 +426,8 @@
             global_socket.onmessage = (message) => {
                 let message_data = JSON.parse(message.data);
                 switch (message_data.action) {
-                    case 'sync-ppt-page':
-                        break;
                     case 'live-qna-chat':
+                        liveQnAMessage(message_data);
                         break;
                     case 'add-like-count':
                         updateLikeCount(message_data);
