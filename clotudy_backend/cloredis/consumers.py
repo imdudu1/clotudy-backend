@@ -38,7 +38,8 @@ class Consumer(AsyncWebsocketConsumer):
         data = text_data_json['data']
 
         if action == 'live-qna-chat':
-            await self.save_qna_message(data)
+            msg_pk = await self.save_qna_message(data)
+            data['messageId'] = msg_pk
         elif action == 'add-like-count':
             await self.add_like_count(data)
         elif action == 'show-quiz-modal':
@@ -75,13 +76,13 @@ class Consumer(AsyncWebsocketConsumer):
         try:
             lecture = LectureInformation.objects.get(pk=data['lecture'])
         except ClassInformation.DoesNotExist:
-            return
+            return -1
         else:
-            QuestionMessage.objects.create(
+            return QuestionMessage.objects.create(
                 question_content=data['qna']['body'],
                 user_id=self.scope['user'].username,
                 lecture_info=lecture,
-            )
+            ).pk;
 
     @database_sync_to_async
     def add_like_count(self, data):
