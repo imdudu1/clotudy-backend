@@ -686,9 +686,10 @@
         }
 
         let qna_body = qna['body'];
-        let qna_like_count = qna['like-count'];
-        let qna_message_id = qna['message-id'];
-        qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+        let qna_like_count = qna['likeCount'];
+        let qna_message_id = qna['messageId'];
+        let qna_userID = qna['userID'];
+        qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_userID});
         is_exist_new_qna = true;
 
         let html_code =
@@ -760,7 +761,7 @@
 
         $('#live-qna-chat-box').empty();
         qna_messages.sort((lhs, rhs) => {
-            return rhs['like-count'] - lhs['like-count'];
+            return rhs['likeCount'] - lhs['likeCount'];
         });
         qna_messages.forEach((message) => {
             let html_code =
@@ -781,7 +782,7 @@
                 '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
                 '            <div class="d-flex align-items-center">\n' +
                 '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
-                '                <span>' + message['like-count'] + '</span>\n' +
+                '                <span>' + message['likeCount'] + '</span>\n' +
                 '            </div>\n' +
                 '            <div class="ml-2">\n' +
                 '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
@@ -824,10 +825,10 @@
     setInterval(redrawSortingQnAChat, 5000);
 
     function updateLikeCount(data) {
-        let message_id = data['data']['message-id'];
+        let message_id = data['data']['messageId'];
         for (let i = 0; i < qna_messages.length; i++) {
-            if (qna_messages[i]['message-id'] === message_id) {
-                qna_messages[i]['like-count'] += 1;
+            if (qna_messages[i]['messageId'] === message_id) {
+                qna_messages[i]['likeCount'] += 1;
                 break;
             }
         }
@@ -1058,7 +1059,7 @@
         chatSocket.send(JSON.stringify({
             'action': 'add-like-count',
             'data': {
-                'message-id': id,
+                'messageId': id,
                 'lecture': {{ room_name_json }},
             }
         }));
