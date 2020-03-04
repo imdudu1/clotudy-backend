@@ -40,6 +40,7 @@ class Consumer(AsyncWebsocketConsumer):
         if action == 'live-qna-chat':
             msg_pk = await self.save_qna_message(data)
             data['messageId'] = msg_pk
+            data['userID'] = self.scope['user'].username
         elif action == 'add-like-count':
             await self.add_like_count(data)
         elif action == 'show-quiz-modal':
