@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation, ClassInformation
+from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation, ClassInformation, BonusPoint
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -94,4 +94,22 @@ class PPTTimeHistory(APIView):
             lecture.lecture_ppt_times = recv_json_data['history']
             lecture.save()
             return Response()
+        return Response(['Please login and try again.'])
+
+
+class StudentBonusPoin(APIView):
+
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, class_pk, lecture_pk, format=None):
+        if request.user.is_authenticated:
+            class_info = get_object_or_404(ClassInformation, pk=class_pk)
+            if class_info.class_instructor_id == request.user.username:
+                lecture_info = get_object_or_404(LectureInformation, pk=lecture_pk)
+                try:
+                    BonusPoint.create(lecture_info=lecture_info, user_id=request.data['stu_name'], point=request.data['point'])
+                    return Response(['Success.'])
+                except KeyError:
+                    return Response(['Error.'])
+            return Response(['Do not hack.'])
         return Response(['Please login and try again.'])

@@ -60,3 +60,10 @@ class QuizScoreRecord(models.Model):
     user_id = models.CharField(max_length=30, blank=False)
     score = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
+
+
+class BonusPoint(models.Model):
+    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=30, blank=False)
+    point = models.IntegerField(default=0)
+    date = models.DateTimeField(default=timezone.now)
