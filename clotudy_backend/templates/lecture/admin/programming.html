@@ -46,6 +46,9 @@
                         <li class="nav-item">
                             <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="bonus-tab-center" data-toggle="tab" href="#bonus-center" aria-controls="bonus-center" role="tab" aria-selected="false">추가 점수</a>
+                        </li>
                     </ul>
 
                     <div class="tab-content">
@@ -198,6 +201,9 @@
                         <!-- Tab -->
                         <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
                             {{ lecture_data.lecture_note|safe }}
+                        </div>
+                        <div class="tab-pane" id="bonus-center" aria-labelledby="bonus-tab-center" role="tabpanel">
+
                         </div>
                         </div>
                     </div>
@@ -551,5 +557,39 @@
                     });
         }
         setInterval(savePPTTime, 60000);
+
+        function fillBonusPointList(data) {
+            $("#bonus-center").empty();
+            data.forEach((d) => {
+                let elems = $("<div>").append(
+                    $("<div>").append(
+                        $("<span>").text(d['id'])
+                    ),
+                    $("<div>").append(
+                        $("<span>").text(d['point'])
+                    ),
+                    $("<div>").append(
+                        $("<span>").text(d['date'])
+                    )
+                )
+                $("#bonus-center").append(elems);
+            });
+        }
+
+        function getBonusPointList() {
+            axios({
+                method: 'get',
+                url: `/api/bonus/{{class_id}}/${lecture_id}`,
+                headers: {
+                    "content-type": "application/json"
+                }
+                }).then(function (response) {
+                    console.log(response)
+                    fillBonusPointList(response)
+                }).catch(function (error) {
+                    console.log(error)
+                });
+            })
+        }
     </script>
 {% endblock %}

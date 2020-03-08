@@ -100,6 +100,17 @@ class PPTTimeHistory(APIView):
 class StudentBonusPoin(APIView):
 
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+    
+    def get(self, request, class_pk, lecture_pk, format=None):
+        if request.user.is_authenticated:
+            class_info = get_object_or_404(ClassInformation, pk=class_pk)
+            if class_info.class_instructor_id == request.user.username:
+                lecture_info = get_object_or_404(LectureInformation, pk=lecture_pk)
+                point_infos = BonusPoint.filter(lecture_info=lecture_info)
+                res_data = [{'id': bonus.user_id, 'point': bonus.point, 'date': bonus.date} for bonus in point_infos]
+                return Response(res_data)
+            return Response(['Do not hack.'])
+        return Response(['Please login and try again.'])
 
     def post(self, request, class_pk, lecture_pk, format=None):
         if request.user.is_authenticated:
@@ -108,7 +119,7 @@ class StudentBonusPoin(APIView):
                 lecture_info = get_object_or_404(LectureInformation, pk=lecture_pk)
                 try:
                     BonusPoint.create(lecture_info=lecture_info, user_id=request.data['stu_name'], point=request.data['point'])
-                    return Response(['Success.'])
+                    return Response()
                 except KeyError:
                     return Response(['Error.'])
             return Response(['Do not hack.'])
