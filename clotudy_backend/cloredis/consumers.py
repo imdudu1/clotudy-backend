@@ -1,7 +1,7 @@
 # chat/consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation
+from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation, QuizBox
 import json
 
 
@@ -38,9 +38,13 @@ class Consumer(AsyncWebsocketConsumer):
         data = text_data_json['data']
 
         if action == 'live-qna-chat':
-            await self.save_qna_message(data)
+            msg_pk = await self.save_qna_message(data)
+            data['messageId'] = msg_pk
+            data['userID'] = self.scope['user'].username
         elif action == 'add-like-count':
             await self.add_like_count(data)
+        elif action == 'show-quiz-modal':
+            await self.set_quiz_box(data)
         """
         elif action == 'sync-ppt-page':
             sender_name = self.scope['user'].username
@@ -73,19 +77,19 @@ class Consumer(AsyncWebsocketConsumer):
         try:
             lecture = LectureInformation.objects.get(pk=data['lecture'])
         except ClassInformation.DoesNotExist:
-            return
+            return -1
         else:
-            QuestionMessage.objects.create(
+            return QuestionMessage.objects.create(
                 question_content=data['qna']['body'],
                 user_id=self.scope['user'].username,
                 lecture_info=lecture,
-            )
+            ).pk;
 
     @database_sync_to_async
     def add_like_count(self, data):
         try:
             lecture = ClassInformation.objects.get(pk=data['lecture'])
-            message = QuestionMessage.objects.get(lecture=lecture, pk=data['message-id'])
+            message = QuestionMessage.objects.get(lecture=lecture, pk=data['messageId'])
         except ClassInformation.DoesNotExist or QuestionMessage.DoesNotExist:
             return
         else:
@@ -98,3 +102,12 @@ class Consumer(AsyncWebsocketConsumer):
         if user_name == instructor_id:
             return True
         return False
+
+    @database_sync_to_async
+    def set_quiz_box(self, data):
+        box = QuizBox.objects.get(pk=data['quizBoxId'])
+        if box.quiz_is_open == False:
+            box.quiz_is_open = True
+        else:
+            box.quiz_is_open = False
+        box.save()

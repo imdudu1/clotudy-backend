@@ -15,9 +15,11 @@ class ClassInformation(models.Model):
 class LectureInformation(models.Model):
     class_info = models.ForeignKey(ClassInformation, on_delete=models.CASCADE)
     lecture_title = models.CharField(max_length=50)
+    lecture_description = models.TextField(max_length=128, default="")
     lecture_type = models.IntegerField(default=0)
     lecture_pdf_path = models.CharField(max_length=100, default="")
     lecture_note = models.TextField(default="")
+    lecture_ppt_times = models.TextField(default="")
 
 
 class QuizBox(models.Model):
@@ -58,3 +60,10 @@ class QuizScoreRecord(models.Model):
     user_id = models.CharField(max_length=30, blank=False)
     score = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
+
+
+class BonusPoint(models.Model):
+    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=30, blank=False)
+    point = models.IntegerField(default=0)
+    date = models.DateTimeField(default=timezone.now)

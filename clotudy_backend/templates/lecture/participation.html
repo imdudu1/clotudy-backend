@@ -102,7 +102,8 @@
 
         .gutter.gutter-horizontal {
             cursor: ew-resize;
-            /* border-right: 1px solid #0b0e0f; border-left: 1px solid #0b0e0f; */
+            border-right: 1px solid #eaeaea; 
+            border-left: 1px solid #eaeaea;
             background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
             background-size: 0.875rem 2.25rem;
             background-color: #fff;
@@ -110,7 +111,8 @@
 
         .gutter.gutter-vertical {
             cursor: ns-resize;
-            /* border-top: 1px solid #0b0e0f; border-bottom: 1px solid #0b0e0f; */
+            border-top: 1px solid #eaeaea; 
+            border-bottom: 1px solid #eaeaea;
             background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
             background-size: 2.25rem 0.875rem;
             background-position-y: bottom;
@@ -161,7 +163,7 @@
 
         #live-qna-chat-content {
             position: relative;
-            height: calc(100% - 50px);
+            height: calc(100% - 90px);
         }
 
         .lesson-note-content {
@@ -363,13 +365,16 @@
                     <div id="ppt-viewer-wrap">
                         <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
                             <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
-                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/"></iframe>
+                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
                             </div>
                         </div>
                     </div>
                     <div id="live-qna-chat-wrap">
                         <div class="content-header">
                             실시간 질문 게시판
+                            <div class="text-right">
+                                <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
+                            </div>
                         </div>
                         <div id="live-qna-chat-content">
                             <div id="live-qna-chat-box">
@@ -425,13 +430,13 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div id="modal-content-header" class="modal-header">
-                    <p>Add Group</p>
+                    <p>새 그룹 추가</p>
                 </div>
                 <div class="modal-body">
                     <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                    <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
                 </div>
             </div>
         </div>
@@ -441,13 +446,29 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div id="modal-content-header" class="modal-header">
-                    <p>Add Idea node</p>
+                    <p>새 노드 추가</p>
                 </div>
                 <div class="modal-body">
                     <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                    <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div id="modal-content-header" class="modal-header">
+                    <p>질문하기</p>
+                </div>
+                <div class="modal-body">
+                    <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
                 </div>
             </div>
         </div>
@@ -598,9 +619,10 @@
         }
 
         let qna_body = qna['body'];
-        let qna_like_count = qna['like-count'];
-        let qna_message_id = qna['message-id'];
-        qna_messages.push({'body': qna_body, 'like-count': qna_like_count, 'message-id': qna_message_id});
+        let qna_like_count = request['data']['likeCount'];
+        let qna_message_id = request['data']['messageId'];
+        let qna_userID = request['data']['userID'];
+        qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_userID});
         is_exist_new_qna = true;
 
         let html_code =
@@ -672,7 +694,7 @@
 
         $('#live-qna-chat-box').empty();
         qna_messages.sort((lhs, rhs) => {
-            return rhs['like-count'] - lhs['like-count'];
+            return rhs['likeCount'] - lhs['likeCount'];
         });
         qna_messages.forEach((message) => {
             let html_code =
@@ -683,7 +705,7 @@
                 '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
                 '            </div>\n' +
                 '            <div class="user-page-info">\n' +
-                '                <p class="mb-0">Leeanna Alvord</p>\n' +
+                '                <p class="mb-0">{{ request.user.username }}</p>\n' +
                 '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
                 '            </div>\n' +
                 '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
@@ -693,7 +715,7 @@
                 '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
                 '            <div class="d-flex align-items-center">\n' +
                 '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
-                '                <span>' + message['like-count'] + '</span>\n' +
+                '                <span>' + message['likeCount'] + '</span>\n' +
                 '            </div>\n' +
                 '            <div class="ml-2">\n' +
                 '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
@@ -736,10 +758,10 @@
     setInterval(redrawSortingQnAChat, 5000);
 
     function updateLikeCount(data) {
-        let message_id = data['data']['message-id'];
+        let message_id = data['data']['messageId'];
         for (let i = 0; i < qna_messages.length; i++) {
-            if (qna_messages[i]['message-id'] === message_id) {
-                qna_messages[i]['like-count'] += 1;
+            if (qna_messages[i]['messageId'] === message_id) {
+                qna_messages[i]['likeCount'] += 1;
                 break;
             }
         }
@@ -860,16 +882,16 @@
     }
     chat_socket_connect();
 
-    document.querySelector('#message').onkeyup = function(e) {
+    function showAddQnAModal() {$("#addQnAModalCenter").modal("show");}
+    document.querySelector('#addqnatextarea').onkeyup = function(e) {
         if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#message-submit').click();
+            document.querySelector('#addQnAButton').click();
         }
     };
 
-
     // Packet senders.
-    document.querySelector('#message-submit').onclick = (error) => {
-        let messageInputDom = document.querySelector('#message');
+    document.querySelector('#addQnAButton').onclick = (error) => {
+        let messageInputDom = document.querySelector('#addqnatextarea');
         let message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
             'action': 'live-qna-chat',
@@ -888,7 +910,7 @@
         chatSocket.send(JSON.stringify({
             'action': 'add-like-count',
             'data': {
-                'message-id': id,
+                'messageId': id,
                 'lecture': {{ room_name_json }},
             }
         }));

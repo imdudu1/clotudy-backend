@@ -9,7 +9,7 @@
     <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
-    <title>Tabs - Vuexy - Bootstrap HTML admin template</title>
+    <title>CLOTUDY :: {% block title %}{% endblock %}</title>
     <link rel="apple-touch-icon" href="{% static 'app-assets/images/ico/apple-icon-120.png' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'app-assets/images/ico/favicon.ico' %}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/menu/menu-types/vertical-menu.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/colors/palette-gradient.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/app-email.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ace.js" integrity="sha256-C7DTYRJLG+B/VEzHGeoPMw699nsTQYPAXHKXZb+q04E=" crossorigin="anonymous"></script>
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -567,12 +568,11 @@
                         <h2 class="content-header-title float-left mb-0">Tabs</h2>
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">홈</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Components</a>
+                                <li class="breadcrumb-item"><a href="/lecture/list">강의 목록</a>
                                 </li>
-                                <li class="breadcrumb-item active">Tabs
-                                </li>
+                                <li class="breadcrumb-item active">{{ lecture_data.title }}</li>
                             </ol>
                         </div>
                     </div>
@@ -622,6 +622,7 @@
 <script src="{% static 'app-assets/js/core/app-menu.js' %}"></script>
 <script src="{% static 'app-assets/js/core/app.js' %}"></script>
 <script src="{% static 'app-assets/js/scripts/components.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

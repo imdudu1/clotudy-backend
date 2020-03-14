@@ -1,10 +1,10 @@
 {% extends "lecture/admin/base.html" %}
 {% load static %}
 
-{% block title %}{{ lecture_data.title }}{% endblock %}
-
 {% block extra-style %}
 {% endblock %}
+
+{% block title %}{{ lecture_data.title }}{% endblock %}
 
 {% block admin-content %}
     <div class="row">
@@ -46,6 +46,9 @@
                         <li class="nav-item">
                             <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="bonus-tab-center" data-toggle="tab" href="#bonus-center" aria-controls="bonus-center" role="tab" aria-selected="false">추가 점수</a>
+                        </li>
                     </ul>
 
                     <div class="tab-content">
@@ -80,7 +83,7 @@
                                 <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
                                     <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
                                         <div class="email-user-list list-group" style="height: 100%;">
-                                            <ul class="users-list-wrapper media-list">
+                                            <ul id="questions-tab-list" class="users-list-wrapper media-list">
                                                 {% for obj in questions %}
                                                 <li class="media">
                                                     <div class="media-left pr-50">
@@ -94,7 +97,7 @@
                                                     <div class="media-body">
                                                         <div class="user-details">
                                                             <div class="mail-items">
-                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ request.user.username }}</h5>
+                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ obj.userID }}</h5>
                                                                 <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
                                                             </div>
                                                             <div class="mail-meta-item">
@@ -127,7 +130,7 @@
                                     <div class="card-header">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
-                                                {{ quiz.category_title }}
+                                                {{ quiz.category_title | safe }}
                                             </button>
                                         </h5>
                                     </div>
@@ -186,15 +189,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12">
+                                                    <button onclick="showQuizModal({{ quiz.category_id }})" class="btn btn-primary">시작하기</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
                                 </div>
-                            </div>
+                            </div>                        
                         <!-- Tab -->
                         <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
                             {{ lecture_data.lecture_note|safe }}
+                        </div>
+                        <div class="tab-pane" id="bonus-center" aria-labelledby="bonus-tab-center" role="tabpanel">
+
                         </div>
                         </div>
                     </div>
@@ -206,6 +215,8 @@
 
 {% block extra-script %}
     <script>
+        const unique_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
         function getCurrentTime() {
           return (new Date()).getTime();
         }
@@ -215,6 +226,11 @@
         let currentPage = 1;
         let sync_lock = true;
         let lecture_id = {{ room_name_json }};
+        let qna_messages;
+
+        $(document).ready(function(){
+            qna_messages = {{ questions|safe }};
+        });
 
         // Charts
         var options = {
@@ -257,7 +273,7 @@
 
         var options = {
             series: [{
-                data: {{ ppt_time }}
+                data: {{ ppt_time|safe }}
             }],
             chart: {
                 type: 'line',
@@ -309,6 +325,65 @@
             let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
         }
 
+        let is_exist_new_qna = true;
+        function questionMsgHtmlGenerator(userID, msg, like_count) {
+            return $("<li>").addClass("media").append(
+                        $("<div>").addClass("media-left pr-50").append(
+                            $("<div>").addClass("avatar").append(
+                                $("<img>").attr("src", "{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}")
+                            ),
+                            $("<div>").addClass("user-action").append(
+                                $("<span>").addClass("favorite").text(like_count)
+                            )
+                        ),
+                        $("<div>").addClass("media-body").append(
+                            $("<div>").addClass("user-details").append(
+                                $("<div>").addClass("mail-items").append(
+                                    $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").text(userID),
+                                    $("<span>").addClass("list-group-item-text text-truncate")
+                                ),
+                                $("<div>").addClass("mail-meta-item").append(
+                                    $("<span>").addClass("float-right").append(
+                                        $("<span>").addClass("mr-1 bullet bullet-success bullet-sm").append(
+                                            $("<span>").addClass("mail-date")
+                                        )
+                                    )
+                                )
+                            ),
+                            $("<div>").addClass("mail-message").append(
+                                $("<p>").addClass("list-group-item-text truncate mb-0").text(msg)
+                            )
+                        )
+                    );
+        }
+
+        function redrawSortingQnAChat() {
+            if (!is_exist_new_qna) {
+                return;
+            } else {
+                is_exist_new_qna = false;
+            }
+
+            $('#questions-tab-list').empty();
+            qna_messages.sort((lhs, rhs) => {
+                return rhs['likeCount'] - lhs['likeCount'];
+            });
+            qna_messages.forEach((message) => {
+                $('#questions-tab-list').append(questionMsgHtmlGenerator(message['userID'], message['body'], message['likeCount']));
+            });
+        }
+        setInterval(redrawSortingQnAChat, 5000);
+
+        function updateLikeCount(data) {
+            let message_id = data['data']['messageId'];
+            for (let i = 0; i < qna_messages.length; i++) {
+                if (qna_messages[i]['messageId'] === message_id) {
+                    qna_messages[i]['likeCount'] += 1;
+                    break;
+                }
+            }
+        }
+
         function remotePPTPageSync(v) {
             if (sync_lock) {
                 sync_lock = false;
@@ -332,6 +407,24 @@
             }
         }
 
+        function liveQnAMessage(request) {
+            let qna = request['data']['qna'];
+
+            if (qna === '') {
+                return
+            }
+
+            let qna_body = qna['body'];
+            let qna_like_count = request['data']['likeCount'];
+            let qna_message_id = request['data']['messageId'];
+            let qna_username = request['data']['userID'];
+            qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
+            is_exist_new_qna = true;
+
+            let live_qna_chat_box = $('#questions-tab-list');
+            live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
+        }
+
         let global_socket;
         function global_socket_init() {
             global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
@@ -339,14 +432,14 @@
             global_socket.onmessage = (message) => {
                 let message_data = JSON.parse(message.data);
                 switch (message_data.action) {
-                    case 'sync-ppt-page':
-                        break;
                     case 'live-qna-chat':
+                        liveQnAMessage(message_data);
                         break;
                     case 'add-like-count':
+                        updateLikeCount(message_data);
                         break;
                     case 'quiz-complete-signal':
-                        break;
+                        break;                
                     default:
                         break;
                 }
@@ -390,6 +483,55 @@
           }
           ppt_chart.updateSeries([{data: times}]);
         }
+        
+        let compileSocket;
+        let runCodeDom;
+        function compile_socket_connect() {
+            compileSocket = new WebSocket('ws://'+window.location.host+':3000/cp/' + unique_id);
+
+            compileSocket.onmessage = (message) => {
+                let message_data = JSON.parse(message.data);
+                console.log(message_data);
+                $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + "\r\n\r\n---------COMPILE OUTPUT---------\r\n" + message_data.compile_stderr);
+            };
+
+            compileSocket.onclose = (e) => {
+                setTimeout(() => {
+                    compile_socket_connect();
+                }, 1000);
+            };
+
+            compileSocket.onerror = (err) => {
+                compileSocket.close();
+            };
+        }
+        compile_socket_connect();
+
+        let editorDict = {};
+        function editorInit() {
+            let editors = $('[class="ace-editor"]')
+            for (let i = 0; i < editors.length; i++) {
+                let editor = ace.edit(editors[i].id);
+                editor.setTheme("ace/theme/github");
+                editor.session.setMode("ace/mode/c_cpp");
+                editor.setOptions({
+                    maxLines: Infinity
+                });
+                editor.setReadOnly(true);
+
+                editorDict[editors[i].id] = editor;
+            }
+        }
+        editorInit();
+
+        function requestCompile(dom_id) {
+            let src = editorDict[dom_id].getValue();
+            compileSocket.send(JSON.stringify({
+                "type": 0,
+                "src": src
+            }));
+            runCodeDom = dom_id;
+        }
 
         function savePPTTime() {
             let times = ppt_chart.w.globals.series.slice()[0];
@@ -415,5 +557,39 @@
                     });
         }
         setInterval(savePPTTime, 60000);
+
+        function fillBonusPointList(data) {
+            $("#bonus-center").empty();
+            data.forEach((d) => {
+                let elems = $("<div>").append(
+                    $("<div>").append(
+                        $("<span>").text(d['id'])
+                    ),
+                    $("<div>").append(
+                        $("<span>").text(d['point'])
+                    ),
+                    $("<div>").append(
+                        $("<span>").text(d['date'])
+                    )
+                )
+                $("#bonus-center").append(elems);
+            });
+        }
+
+        function getBonusPointList() {
+            axios({
+                method: 'get',
+                url: `/api/bonus/{{class_id}}/${lecture_id}`,
+                headers: {
+                    "content-type": "application/json"
+                }
+                }).then(function (response) {
+                    console.log(response)
+                    fillBonusPointList(response)
+                }).catch(function (error) {
+                    console.log(error)
+                });
+            })
+        }
     </script>
 {% endblock %}

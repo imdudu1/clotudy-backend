@@ -7,6 +7,9 @@ service postgresql start
 sudo -u postgres createuser ubuntu
 sudo -u postgres createdb clotudy_backend --owner=ubuntu
 
+curl https://raw.githubusercontent.com/pshved/timeout/master/timeout | \
+sudo tee /usr/bin/timeout && sudo chmod 755 "/usr/bin/timeout"
+
 # sudo -i -u postgres
 # psql
 # ALTER USER postgres WITH PASSWORD 'new_password';
