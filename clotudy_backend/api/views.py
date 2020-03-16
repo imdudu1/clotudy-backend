@@ -19,7 +19,6 @@ class QuizBoxDetail(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def check_login(self, request):
-        # TODO: Check if member is subscribed to the meeting
         return request.user.is_authenticated
 
     def get(self, request, class_pk, lecture_pk, format=None):
@@ -27,20 +26,38 @@ class QuizBoxDetail(APIView):
             quiz_box = get_object_or_404(QuizBox, lecture_info=lecture_pk)
             if quiz_box.quiz_is_open:
                 class_info = get_object_or_404(ClassInformation, pk=class_pk)
-                quiz_set = {"category_id": quiz_box.pk, "is_open": quiz_box.quiz_is_open,
-                            "category_title": quiz_box.quiz_box_title, "quiz_content": []}
+                quiz_set = {
+                    "category_id": quiz_box.pk, 
+                    "is_open": quiz_box.quiz_is_open,
+                    "category_title": quiz_box.quiz_box_title, 
+                    "quiz_content": []
+                }
+
                 if class_info.class_instructor_id == request.user.username:
                     quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box)
                     for quiz in quiz_list:
                         answer_list = Answer.objects.filter(quiz_info=quiz)
-                        quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
-                            {"id": answer.pk, "content": answer.answer_content} for answer in answer_list]})
+                        quiz_set["quiz_content"].append({
+                                "id": quiz.pk, 
+                                "problem": quiz.quiz_prob, 
+                                "answer": [{
+                                    "id": answer.pk, 
+                                    "content": answer.answer_content, 
+                                    "is_correct": answer.answer_is_correct
+                                } for answer in answer_list]
+                            })
                 else:
                     quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box)
                     for quiz in quiz_list:
                         answer_list = Answer.objects.filter(quiz_info=quiz)
-                        quiz_set["quiz_content"].append({"id": quiz.pk, "problem": quiz.quiz_prob, "answer": [
-                            {"id": answer.pk, "content": answer.answer_content} for answer in answer_list]})
+                        quiz_set["quiz_content"].append({
+                                "id": quiz.pk, 
+                                "problem": quiz.quiz_prob, 
+                                "answer": [{
+                                    "id": answer.pk, 
+                                    "content": answer.answer_content, 
+                                } for answer in answer_list]
+                            })
                 return Response([quiz_set])
         return Response([])
 

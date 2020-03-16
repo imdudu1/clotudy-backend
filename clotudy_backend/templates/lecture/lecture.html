@@ -325,76 +325,74 @@
         }
 
         function setModalQuizHTML(data) {
-            let modal_header_html =
-                '                    <h5 class="modal-title" id="exampleModalCenterTitle">' + data.category_title + '</h5>\n' +
-                '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
-                '                        <span aria-hidden="true">&times;</span>\n' +
-                '                    </button>\n';
-            let modal_content_html = '';
-            let modal_tab_nav_html = '';
+            $("#modal-nav-wrap").empty();
+            $("#modal-content-header").empty();
+            $("#modal-nav-content-wrap").empty();
 
-            let modal_content_dom = $("#modal-body");
-            let modal_title_dom = $("#exampleModalCenterTitle");
-            // clear html
-            modal_content_dom.empty();
-            modal_title_dom.empty();
+            $("#modal-content-header").append(
+                $("<h5>").addClass("modal-title").attr("id", "exampleModalCenterTitle").text(data.category_title),
+                $("<button>").attr("type", "button").addClass("close").attr("data-dismiss", "modal").attr("aria-label", "Close").append(
+                    $("<span>").attr("aria-hidden", "true").text("&times;")
+                )
+            );
 
             let prob_count = 1;
             for (let quiz_obj of data.quiz_content) {
-                if (prob_count === 1) {
-                    modal_tab_nav_html +=
-                        '                            <li class="nav-item">\n' +
-                        '                                <a class="nav-link active" id="baseVerticalLeft-tab' + prob_count + '" data-toggle="tab" aria-controls="tabVerticalLeft' + prob_count + '" href="#tabVerticalLeft' + prob_count + '" role="tab" aria-selected="true">Prob.' + prob_count + '</a>\n' +
-                        '                            </li>';
-                } else {
-                    modal_tab_nav_html +=
-                        '                            <li class="nav-item">\n' +
-                        '                                <a class="nav-link" id="baseVerticalLeft-tab' + prob_count + '" data-toggle="tab" aria-controls="tabVerticalLeft' + prob_count + '" href="#tabVerticalLeft' + prob_count + '" role="tab" aria-selected="false">Prob.' + prob_count + '</a>\n' +
-                        '                            </li>';
-                }
+                $("#modal-nav-wrap").append(
+                    $("<li>").addClass("nav-item").append(
+                        $("<a>").addClass("nav-link " + [] => {
+                            if (prob_count === 1) {
+                                return "active";
+                            } else {
+                                return "";
+                            }
+                        }).attr("id", "baseVerticalLeft-tab" + prob_count)
+                        .attr("data-toggle", "tab")
+                        .attr("aria-controls", "tabVerticalLeft" + prob_count)
+                        .attr("href", "#tabVerticalLeft" + prob_count)
+                        .attr("role", "tab")
+                        .attr("aria-selected", [] => {
+                            if (prob_count === 1) {
+                                return "true";
+                            } else {
+                                return "false";
+                            }
+                        })
+                        .text("문제" + prob_count + "번")
+                    )
+                );
 
-                let prob_html_begin;
-                if (prob_count === 1) {
-                    prob_html_begin = '<div class="tab-pane active" id="tabVerticalLeft' + prob_count + '" role="tabpanel" aria-labelledby="baseVerticalLeft-tab' + prob_count + '">';
-                } else {
-                    prob_html_begin = '<div class="tab-pane" id="tabVerticalLeft' + prob_count + '" role="tabpanel" aria-labelledby="baseVerticalLeft-tab' + prob_count + '">';
-                }
-
-                let problem = quiz_obj.problem;
-                prob_html_begin += `<p>${problem}</p><hr />`;
-
-                let problem_id = quiz_obj.id;
-                let answer_list_html = `<ul class="list-unstyled mb-0">`;
-
-                answer_list_html += '<fieldset>\n';
-                for (let answer_obj of quiz_obj.answer) {
-                    answer_list_html +=
-                        '                                   <li class="mr-2">\n' +
-                        '                                            <div class="vs-radio-con vs-radio-success">\n' +
-                        '                                                <input type="radio" name="' + quiz_obj.id + '" value="' + answer_obj.id + '">\n' +
-                        '                                                <span class="vs-radio">\n' +
-                        '                                                            <span class="vs-radio--border"></span>\n' +
-                        '                                                            <span class="vs-radio--circle"></span>\n' +
-                        '                                                        </span>\n' +
-                        '                                                <span class="">' + answer_obj.content + '</span>\n' +
-                        '                                            </div>\n' +
-                        '                                    </li>';
-                }
-                answer_list_html += '</fieldset>\n';
-
-                answer_list_html += '</ul>';
-                modal_content_html += prob_html_begin + answer_list_html + '</div>';
+                $("#modal-nav-content-wrap").append(
+                    $("<div>").addClass("tab-pane" + [] => {
+                        if (prob_count === 1) {
+                            return "active";
+                        } else {
+                            return "";
+                        }
+                    }).attr("id", "tabVerticalLeft" + prob_count)
+                    .attr("role", "tabpanel")
+                    .attr("aria-labelledby", "baseVerticalLeft-tab" + prob_count)
+                    .append(
+                        $("<p>").text(quiz_obj.problem),
+                        $("<hr />"),
+                        $("<ul>").addClass("list-unstyled mb-0").append(
+                            $("<fieldset>").append(
+                                $("<li>").addClass("mr-2").append(
+                                    $("<div>").addClass("vs-radio-con vs-radio-success").append(
+                                        $("<input>").attr("type", "radio").attr("name", quiz_obj.id).attr("value", answer_obj.id),
+                                        $("<span>").addClass("vs-radio").append(
+                                            $("<span>").addClass("vs-radio--border"),
+                                            $("<span>").addClass("vs-radio--circle")
+                                        ),
+                                        $("<span>").text(answer_obj.content)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
                 prob_count += 1;
             }
-
-            $("#modal-content-header").empty();
-            $("#modal-content-header").append(modal_header_html);
-
-            $("#modal-nav-wrap").empty();
-            $("#modal-nav-wrap").append(modal_tab_nav_html);
-
-            $("#modal-nav-content-wrap").empty();
-            $("#modal-nav-content-wrap").append(modal_content_html);
         }
 
         function showQuizModal(data) {
