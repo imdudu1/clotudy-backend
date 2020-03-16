@@ -60,7 +60,7 @@ function setModalQuizHTML(data) {
     $("#modal-content-header").append(
         $("<h5>").addClass("modal-title").attr("id", "exampleModalCenterTitle").text(data.category_title),
         $("<button>").attr("type", "button").addClass("close").attr("data-dismiss", "modal").attr("aria-label", "Close").append(
-            $("<span>").attr("aria-hidden", "true").text("&times;")
+            $("<span>").attr("aria-hidden", "true").text("X")
         )
     );
 
@@ -90,9 +90,9 @@ function setModalQuizHTML(data) {
                             $("<ul>").addClass("list-unstyled mb-0").append(
                                 $("<fieldset>").append(
                                     () => {
-                                        let ret;
+                                        let ret = [];
                                         for (let answer_obj of quiz_obj.answer) {
-                                            ret.append(
+                                            ret.push(
                                                 $("<li>").addClass("mr-2").append(
                                                     $("<div>").addClass("vs-radio-con vs-radio-success").append(
                                                         $("<input>").attr("type", "radio").attr("name", quiz_obj.id).attr("value", answer_obj.id),
@@ -118,7 +118,7 @@ function setModalQuizHTML(data) {
 function showQuizModal(data) {
     axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
         .then(res => {
-            setModalQuizHTML(res.data[0]);
+            setModalQuizHTML((res.data)[0]);
             $("#exampleModalCenter").modal("show");
         })
         .catch(err => {
