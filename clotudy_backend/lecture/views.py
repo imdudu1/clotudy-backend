@@ -100,7 +100,7 @@ def class_detail(request, class_id):
                              "title": obj.lecture_title,
                              "description": obj.lecture_description}]
 
-        return render(request, 'lecture/classDetail.html', {
+        return render(request, 'lecture/class_detail.html', {
             "class_data": class_data,
             "list_lecture": list_lecture,
         })
