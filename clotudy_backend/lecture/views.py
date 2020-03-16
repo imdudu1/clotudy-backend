@@ -105,7 +105,7 @@ def class_detail(request, class_id):
             "list_lecture": list_lecture,
         })
     except ClassInformation.DoesNotExist:
-        return render(request, 'lecture/classDetail.html', {})
+        return render(request, 'lecture/class_detail.html', {})
 
 
 def class_list(request):
@@ -120,7 +120,7 @@ def class_list(request):
                            "instructor": obj.class_instructor,
                            "instructor_id": obj.class_instructor_id})
 
-    return render(request, 'lecture/listView.html', {
+    return render(request, 'lecture/class_list.html', {
         "list_class": list_class
     })
 

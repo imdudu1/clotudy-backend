@@ -1,0 +1,68 @@
+{% extends 'lecture/base/home.html' %}
+{% load static %}
+{% block content %}
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">강의 목록</h2>
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="{% url 'home' %}">홈</a>
+                                  </li>
+                                  <li class="breadcrumb-item active">강의 목록
+                                  </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+                    <div class="form-group breadcrum-right">
+                        <div class="dropdown">
+                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-settings"></i></button>
+                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Chat</a><a class="dropdown-item" href="#">Email</a><a class="dropdown-item" href="#">Calendar</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Decks section start -->
+                <section id="decks">
+                    <div class="row">
+                        <div class="col-12 mt-3 mb-1">
+                            <h4 class="text-uppercase">강의 목록</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card-deck-wrapper">
+                                <div class="card-deck">
+                                    {% for obj in list_class %}
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <img class="card-img-top img-fluid" src="{% static 'storage/thumbnail/' %}{{ obj.thumbnail }}" alt="Card image cap" />
+                                            <div class="card-body">
+                                                <a href="/lecture/{{ obj.id }}"><h4 class="card-title">{{ obj.title }}</h4></a>
+                                                <p class="card-text">{{ obj.description }}</p>
+                                                <p class="card-text"><small class="text-muted">{{ obj.created_time }}</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Decks section end -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+{% endblock %}

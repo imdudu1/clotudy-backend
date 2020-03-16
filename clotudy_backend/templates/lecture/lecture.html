@@ -1,4 +1,4 @@
-{% extends "lecture/base.html" %}
+{% extends "lecture/base/lecture.html" %}
 
 {% load static %}
 
@@ -359,8 +359,10 @@
                 } else {
                     prob_html_begin = '<div class="tab-pane" id="tabVerticalLeft' + prob_count + '" role="tabpanel" aria-labelledby="baseVerticalLeft-tab' + prob_count + '">';
                 }
+
                 let problem = quiz_obj.problem;
                 prob_html_begin += `<p>${problem}</p><hr />`;
+
                 let problem_id = quiz_obj.id;
                 let answer_list_html = `<ul class="list-unstyled mb-0">`;
 
@@ -442,59 +444,29 @@
         ws_connect();
 
         function questionMsgHtmlGenerator(msg, like_count) {
-            return '<div class="card" style="">\n' +
-                '    <div class="card-body">\n' +
-                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-                '            <div class="avatar mr-1">\n' +
-                '                <img src="../../../app-assets/images/profile/user-uploads/user-01.jpg" alt="avtar img holder" height="45" width="45">\n' +
-                '            </div>\n' +
-                '            <div class="user-page-info">\n' +
-                '                <p class="mb-0">{{ request.user.username }}</p>\n' +
-                '                <span class="font-small-2">12 Dec 2018 at 1:16 AM</span>\n' +
-                '            </div>\n' +
-                '            <div class="ml-auto user-like text-danger"><i class="fa fa-heart"></i></div>\n' +
-                '        </div>\n' +
-                '        <p>' + msg + '</p>\n' +
-                '        <img class="img-fluid card-img-top rounded-sm mb-2" src="../../../app-assets/images/profile/post-media/2.jpg" alt="avtar img holder">\n' +
-                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-                '            <div class="d-flex align-items-center">\n' +
-                '                <i class="feather icon-heart font-medium-2 mr-50"></i>\n' +
-                '                <span>' + like_count + '</span>\n' +
-                '            </div>\n' +
-                '            <div class="ml-2">\n' +
-                '                <ul class="list-unstyled users-list m-0  d-flex align-items-center">\n' +
-                '                    <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">\n' +
-                '                        <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">\n' +
-                '                    </li>\n' +
-                '                    <li class="d-inline-block pl-50">\n' +
-                '                        <span>+140 more</span>\n' +
-                '                    </li>\n' +
-                '                </ul>\n' +
-                '            </div>\n' +
-                '            <p class="ml-auto d-flex align-items-center">\n' +
-                '                <i class="feather icon-message-square font-medium-2 mr-50"></i>77\n' +
-                '            </p>\n' +
-                '        </div>\n' +
-                '        <div class="d-flex justify-content-start align-items-center mb-1">\n' +
-                '            <div class="avatar mr-50">\n' +
-                '                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">\n' +
-                '            </div>\n' +
-                '            <div class="user-page-info">\n' +
-                '                <h6 class="mb-0">Kitty Allanson</h6>\n' +
-                '                <span class="font-small-2">orthoplumbate morningtide naphthaline exarteritis</span>\n' +
-                '            </div>\n' +
-                '            <div class="ml-auto cursor-pointer">\n' +
-                '                <i class="feather icon-heart mr-50"></i>\n' +
-                '                <i class="feather icon-message-square"></i>\n' +
-                '            </div>\n' +
-                '        </div>\n' +
-                '        <fieldset class="form-label-group mb-50">\n' +
-                '            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>\n' +
-                '            <label for="label-textarea">Add Comment</label>\n' +
-                '        </fieldset>\n' +
-                '        <button type="button" class="btn btn-sm btn-primary">Post Comment</button>\n' +
-                '    </div>\n' +
-                '</div>\n';
+            return 
+                $("<div>").addClass("card").append(
+                    $("<div>").addClass("card-body").append(
+                        $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                            $("<div>").addClass("avatar mr-1").append(
+                                $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
+                                          .attr("alt", "avatar img holder")
+                                          .attr("height", "45")
+                                          .attr("width", "45")
+                            ),
+                            $("<div>").addClass("user-page-info").append(
+                                $("<p>").addClass("mb-0").text("{{ request.user.username }}"),
+                                $("<span>").addClass("font-small-2").text("Date 9999-99-99")
+                            )
+                        ),
+                        $("<p>").text(msg),
+                        $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                            $("<p>").addClass("ml-auto d-flex align-items-center").append(
+                                $("<i>").addClass("feather icon-message-square font-medium-2 mr-50")
+                            ).append(like_count)
+                        )
+                    )
+                ); 
         }
 
         function sendQuestionMessagePacket(message) {

@@ -1,4 +1,4 @@
-{% extends "lecture/admin/base.html" %}
+{% extends "lecture/base/lecture_admin.html" %}
 {% load static %}
 
 {% block extra-style %}
@@ -589,7 +589,6 @@
                 }).catch(function (error) {
                     console.log(error)
                 });
-            })
         }
     </script>
 {% endblock %}
