@@ -610,23 +610,31 @@
                                 $("<hr />"),
                                 $("<ul>").addClass("list-unstyled mb-0").append(
                                     $("<fieldset>").append(
-                                        $("<li>").addClass("mr-2").append(
-                                            $("<div>").addClass("vs-radio-con vs-radio-success").append(
-                                                $("<input>").attr("type", "radio").attr("name", quiz_obj.id).attr("value", answer_obj.id),
-                                                $("<span>").addClass("vs-radio").append(
-                                                    $("<span>").addClass("vs-radio--border"),
-                                                    $("<span>").addClass("vs-radio--circle")
-                                                ),
-                                                $("<span>").text(answer_obj.content)
-                                            )
-                                        )
+                                        [] => {
+                                            let ret;
+                                            for (let answer_obj of quiz_obj.answer) {
+                                                ret.append(
+                                                    $("<li>").addClass("mr-2").append(
+                                                        $("<div>").addClass("vs-radio-con vs-radio-success").append(
+                                                            $("<input>").attr("type", "radio").attr("name", quiz_obj.id).attr("value", answer_obj.id),
+                                                            $("<span>").addClass("vs-radio").append(
+                                                                $("<span>").addClass("vs-radio--border"),
+                                                                $("<span>").addClass("vs-radio--circle")
+                                                            ),
+                                                            $("<span>").text(answer_obj.content)
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                            return ret;
+                                        }
                                     )
                                 )
                             )
             );
             prob_count += 1;
         }
-    }
+    } 
 
     function showQuizModal(data) {
         axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
