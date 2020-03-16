@@ -491,7 +491,6 @@
 
             compileSocket.onmessage = (message) => {
                 let message_data = JSON.parse(message.data);
-                console.log(message_data);
                 $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + "\r\n\r\n---------COMPILE OUTPUT---------\r\n" + message_data.compile_stderr);
             };
 
