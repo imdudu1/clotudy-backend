@@ -337,5 +337,5 @@
 {% block extra-script %}
 <script src="{% static 'js/ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'assets/js/lecture_prog_util.js' %}" type="text/javascript" charset="utf-8"></script>
-<script>lecture_init({{ messages|safe }}, {{ room_name_json }})</script>
+<script>lecture_init({{ room_name_json }}, {{ messages|safe }})</script>
 {% endblock %}
