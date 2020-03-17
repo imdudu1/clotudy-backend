@@ -1,5 +1,6 @@
 let qna_messages;
 let lecture_id;
+let user_name;
 
 function quiz_form_submit() {
     document.getElementById("quiz_form").submit();
@@ -129,7 +130,7 @@ function questionMsgHtmlGenerator(msg, like_count) {
                                   .attr("width", "45")
                     ),
                     $("<div>").addClass("user-page-info").append(
-                        $("<p>").addClass("mb-0").text("{{ request.user.username }}"),
+                        $("<p>").addClass("mb-0").text(user_name),
                         $("<span>").addClass("font-small-2").text("Date 9999-99-99")
                     )
                 ),
@@ -165,7 +166,8 @@ function addLikeCount(id) {
     }));
 }
 
-function lecture_init(id, messages) {
+function lecture_init(id, messages, username) {
     lecture_id = id;
     qna_messages = messages;
+    user_name = username;
 }

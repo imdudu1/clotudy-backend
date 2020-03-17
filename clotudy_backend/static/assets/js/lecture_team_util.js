@@ -13,6 +13,7 @@ function contains(a, b){
 
 let qna_messages;
 let lecture_id;
+let user_name;
 
 // Dragula JS
 let last_over_el_id;
@@ -80,7 +81,7 @@ function liveQnAMessage(request) {
                                     .attr("width", "45")
                     ),
                     $("<div>").addClass("user-page-info").append(
-                        $("<p>").addClass("mb-0").text("{{ request.user.username }}"),
+                        $("<p>").addClass("mb-0").text(user_name),
                         $("<span>").addClass("font-small-2").text("Date 9999-99-99")
                     )
                 ),
@@ -120,7 +121,7 @@ function redrawSortingQnAChat() {
                                         .attr("width", "45")
                         ),
                         $("<div>").addClass("user-page-info").append(
-                            $("<p>").addClass("mb-0").text("{{ request.user.username }}"),
+                            $("<p>").addClass("mb-0").text(user_name),
                             $("<span>").addClass("font-small-2").text("Date 9999-99-99")
                         )
                     ),
@@ -334,7 +335,8 @@ function sendMoveIdeaPacket(src, des) {
     }));
 }
 
-function lecture_init(id, messages) {
-    qna_messages = messages;
+function lecture_init(id, messages, username) {
     lecture_id = id;
+    qna_messages = messages;
+    user_name = username;
 }
