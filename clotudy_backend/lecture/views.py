@@ -119,11 +119,11 @@ def class_detail(request, class_id):
         lecture_info = LectureInformation.objects.filter(class_info=class_info)
         list_lecture = []
         for obj in lecture_info:
-            list_lecture = [{
+            list_lecture.append({
                 "id": obj.pk,
                 "title": obj.lecture_title,
                 "description": obj.lecture_description
-            }]
+            })
 
         return render(request, 'lecture/class_detail.html', {
             "class_data": class_data,
