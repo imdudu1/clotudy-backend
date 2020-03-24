@@ -52,15 +52,18 @@ def lecture_admin(request, class_id, lecture_id):
 
     # Quiz serializer
     recv_quiz_data = []
-    quiz_box_list = QuizBox.objects.filter(lecture_info=lecture_info)
-    for quiz_box in quiz_box_list:
+    quiz_box_links = QuizBoxLink.objects.filter(lecture_info=lecture_info)
+    for qb_link in quiz_box_links:
+        #quiz_box_list = QuizBox.objects.filter(lecture_info=lecture_info)
+        #for quiz_box in quiz_box_list:
+        quiz_box = qb_link.quiz_box
         quiz_set = {
             "category_id": quiz_box.pk, 
             "is_open": quiz_box.quiz_is_open,
             "category_title": quiz_box.quiz_box_title, 
             "quiz_content": []
         }
-        quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box.pk)
+        quiz_list = Quiz.objects.filter(quiz_box_info=quiz_box)
         for quiz in quiz_list:
             solve_count = quiz.quiz_solve_count
             correct_count = quiz.quiz_correct_count
@@ -171,3 +174,125 @@ def _get_template_html_name(class_type):
         return "participation.html"
     elif class_type == 2:
         return "programming.html"
+
+
+'''
+JSON example
+{
+    'title': '',
+    'description': '',
+}
+'''
+def class_create(request):
+    # login required!!
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/accounts/login/")
+
+    if request.method == "POST":
+        req_data = json.loads(request.body.decode('utf-8'))
+        title = req_data['title']
+        description = req_data['description']
+        username = request.user.username
+        new_class = ClassInformation.objects.create(
+            class_title=title,
+            class_description=description,
+            class_instructor_id=username,
+        )
+    elif request.method == "GET":
+        return render(request, "lecture/class_create.html", {})
+
+
+'''
+JSON example
+{
+    'title': 'quiz title',
+    'quizs': [
+        {
+            'content': 'quiz content',
+            'answers': [
+                {
+                    'content': '(A) 12.18',
+                    'is_correct': false or true,
+                },
+                {
+                    'content': '(B) 12.06',
+                    'is_correct': false or true,
+                }
+            ]
+        },
+        {
+            'content': 'quiz content',
+            'answers': [
+                {
+                    'content': '(A) 12.12',
+                    'is_correct': false or true,
+                }
+            ]
+        }
+    ]
+}
+'''
+def quiz_create(request):
+    # login required!!
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/accounts/login/")
+
+    if request.method == "POST":
+        req_data = json.loads(request.body.decode('utf-8'))
+        title=req_data['title']
+        new_quiz_box = QuizBox.objects.create(
+            quiz_box_title=title,
+            quiz_box_owner=request.user.username,
+        )
+
+        quizs = req_data['quizs']
+        for quiz in quizs:
+            new_quiz = Quiz.objects.create(
+                quiz_box_info=new_quiz_box,
+                quiz_prob=quiz['content'],
+                quiz_item_num=len(answers),
+            )
+            answers = quiz['answers']
+            for answer in answers:
+                Answer.objects.create(
+                    quiz_info=new_quiz,
+                    answer_content=answer['content'],
+                    answer_is_correct=answer['is_correct'],
+                )
+
+
+'''
+JSON example
+{
+    'class': 1,
+    'title': 'C언어 프로그래밍',
+    'description': '',
+    'type': 0,
+    'pdf': '',
+    'note': '',
+    'quizboxs': [1, 2, ...]
+}
+'''
+def lecture_create(request):
+    # login required!!
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/accounts/login/")
+
+    if request.method == "POST":
+        req_data = json.loads(request.body.decode('utf-8'))
+        class_info = ClassInformation.objects.get(pk=req_data['class'])
+        new_lecture = LectureInformation.objects.create(
+            class_info=class_info,
+            lecture_title=req_data['title'],
+            lecture_description=req_data['description'],
+            lecture_type=req_data['type'],
+            lecture_pdf_path=req_data['pdf'],
+            lecture_note=req_data['note'],
+        )
+        quizboxs = req_data['quizboxs']
+        for quizbox in quizboxs:
+            qb = QuizBox.objects.get(pk=quizbox)
+            QuizBoxLink.objects.create(
+                lecture_info=new_lecture,
+                quiz_box=qb,
+            )

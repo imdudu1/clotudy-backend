@@ -196,139 +196,139 @@
 {% endblock %}
 
 {% block content %}
-        <div class="flex-row">
-            <div id="left-side-panel">
-                <div class="flex-col">
-                    <div id="ppt-viewer-wrap">
-                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
-                            <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
-                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="live-qna-chat-wrap">
-                        <div class="content-header">
-                            실시간 질문 게시판
-                            <div class="text-right">
-                                <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
-                            </div>
-                        </div>
-                        <div id="live-qna-chat-content">
-                            <div id="live-qna-chat-box">
-                            </div>
-                        </div>
+<div class="flex-row">
+    <div id="left-side-panel">
+        <div class="flex-col">
+            <div id="ppt-viewer-wrap">
+                <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                    <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
+                        <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
                     </div>
                 </div>
             </div>
-            <div id="mid-side-panel">
-                <div class="flex-col">
-                    <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
-                        <div id="user-notepad-content" style="height: calc(100% - 42px);">
-                            <p></p>
-                        </div>
-                    </div>
-                    <div id="user-notepad-preview-wrap">
-                        <div class="content-header">
-                            자료실
-                        </div>
-                        <div id="user-notepad-preview-content">
-                        </div>
+            <div id="live-qna-chat-wrap">
+                <div class="content-header">
+                    실시간 질문 게시판
+                    <div class="text-right">
+                        <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
                     </div>
                 </div>
-            </div>
-            <div id="right-side-panel">
-                <div class="flex-col">
-                    <div id="rsrc-viewer-wrap">
-                        <div class="content-header">
-                            추가 자료
-                        </div>
-                        <div style="width: 100%; height: 100%; overflow-y: hidden; padding: 20px;" id="ppt-viewer-wrap">
-                            <div id="rsrc-viewer-content" style="height: 100%; width: 100%;">
-                                <!-- BEGIN -->
-{{ lecture_data.lecture_note|safe}}
-                                <!-- END -->
-                            </div>
-                        </div>
+                <div id="live-qna-chat-content">
+                    <div id="live-qna-chat-box">
                     </div>
                 </div>
-            </div>
-        </div>
-
-    <!-- BEGIN: Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-
-                </div>
-                <form id="quiz_form" action="/api/quiz/1/1" method="post">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="nav-vertical">
-                            <ul id="modal-nav-wrap" class="nav nav-tabs nav-left flex-column" role="tablist">
-
-                            </ul>
-                            <div id="modal-nav-content-wrap" class="tab-content">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button onclick="quiz_form_submit()" class="btn btn-primary" data-dismiss="modal">Submit</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="addGroupModalCenter" tabindex="-1" role="dialog" aria-labelledby="addGroupModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>Add Group</p>
+    <div id="mid-side-panel">
+        <div class="flex-col">
+            <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
+                <div id="user-notepad-content" style="height: calc(100% - 42px);">
+                    <p></p>
                 </div>
+            </div>
+            <div id="user-notepad-preview-wrap">
+                <div class="content-header">
+                    자료실
+                </div>
+                <div id="user-notepad-preview-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="right-side-panel">
+        <div class="flex-col">
+            <div id="rsrc-viewer-wrap">
+                <div class="content-header">
+                    추가 자료
+                </div>
+                <div style="width: 100%; height: 100%; overflow-y: hidden; padding: 20px;" id="ppt-viewer-wrap">
+                    <div id="rsrc-viewer-content" style="height: 100%; width: 100%;">
+                        <!-- BEGIN -->
+{{ lecture_data.lecture_note|safe }}
+                        <!-- END -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BEGIN: Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+
+            </div>
+            <form id="quiz_form" action="/api/quiz/1/1" method="post">
+                {% csrf_token %}
                 <div class="modal-body">
-                    <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
+                    <div class="nav-vertical">
+                        <ul id="modal-nav-wrap" class="nav nav-tabs nav-left flex-column" role="tablist">
+
+                        </ul>
+                        <div id="modal-nav-content-wrap" class="tab-content">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                    <button onclick="quiz_form_submit()" class="btn btn-primary" data-dismiss="modal">Submit</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="addIdeaModalCenter" tabindex="-1" role="dialog" aria-labelledby="addIdeaModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>Add Idea node</p>
-                </div>
-                <div class="modal-body">
-                    <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
-                </div>
+<div class="modal fade" id="addGroupModalCenter" tabindex="-1" role="dialog" aria-labelledby="addGroupModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>Add Group</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>질문하기</p>
-                </div>
-                <div class="modal-body">
-                    <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
-                </div>
+<div class="modal fade" id="addIdeaModalCenter" tabindex="-1" role="dialog" aria-labelledby="addIdeaModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>Add Idea node</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">Submit</button>
             </div>
         </div>
     </div>
-    <!-- END: Modal -->
+</div>
+
+<div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>질문하기</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Modal -->
 {% endblock %}
 
 {% block footer %}
@@ -337,6 +337,10 @@
 {% block extra-script %}
 <script src="{% static 'js/ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+let qna_messages = {{ messages|safe }};
+const lecture_id = {{ room_name_json }};
+const user_name = '{{ request.user.username }}';
+
 // Utility functions.
 function querySelectorAllArray(selector){
     return Array.prototype.slice.call(
@@ -349,10 +353,6 @@ function contains(a, b){
         a !== b && a.contains(b) :
         !!(a.compareDocumentPosition(b) & 16);
 }
-
-let qna_messages;
-let lecture_id;
-let user_name;
 
 let editorDict = {};
 function editorInit() {
@@ -684,12 +684,6 @@ function sendMoveIdeaPacket(src, des) {
             'sender-id': unique_id,
         }
     }));
-}
-
-function lecture_init(id, messages, username) {
-    lecture_id = id;
-    qna_messages = messages;
-    user_name = username;
 }
 </script>
 {% endblock %}

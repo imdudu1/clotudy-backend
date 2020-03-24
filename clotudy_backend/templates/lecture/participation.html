@@ -5,302 +5,306 @@
 {% block title %}{{ lecture_data.title }}{% endblock %}
 
 {% block extra-style %}
-   <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
+<style type="text/css">
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
 
-            /*
-            position: relative;
-            height: auto;
-            min-height: 100% !important;
-            */
-
-            /* background-color: #2a363b; */
-        }
-
-        .flex-col {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: auto;
-
-            /* padding: 15px; */
-        }
-
-        .flex-row {
-            display: flex;
-            flex-direction: row;
-            height: 100%;
-        }
-
-        .gutter.gutter-horizontal, .gutter.gutter-vertical {
-            background-color: #fff;
-        }
-
-        .gutter.gutter-horizontal {
-            cursor: ew-resize;
-            border-right: 1px solid #eaeaea; 
-            border-left: 1px solid #eaeaea;
-            background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
-            background-size: 0.875rem 2.25rem;
-            background-color: #fff;
-        }
-
-        .gutter.gutter-vertical {
-            cursor: ns-resize;
-            border-top: 1px solid #eaeaea; 
-            border-bottom: 1px solid #eaeaea;
-            background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
-            background-size: 2.25rem 0.875rem;
-            background-position-y: bottom;
-            background-repeat: no-repeat;
-            background-position: 50%;
-        }
-
-        #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
-            overflow: auto;
-            background-color: #fff;
-        }
-
-        .lesson-content {
-            height: calc(100vh - 75px);
-        }
-
-        .content-header {
-            border-bottom: 1px solid #dadada;
-            padding: 15px;
-            font-family: 'Noto Sans KR', sans-serif;
-            /* color: #fff; */
-            /* background-color: #3A464B; */
-            background-color: #fbfbfb;
-            font-size: 13px;
-        }
-
-        /* Scrollbar */
-        /* width */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        /* Track
-        ::-webkit-scrollbar-track {
-            background: #2a363b;
-        }
+        /*
+        position: relative;
+        height: auto;
+        min-height: 100% !important;
         */
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #b9ceeb;
-        }
+        /* background-color: #2a363b; */
+    }
 
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #87a8d0;
-        }
+    .flex-col {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: auto;
 
-        #live-qna-chat-content {
-            position: relative;
-            height: calc(100% - 90px);
-        }
+        /* padding: 15px; */
+    }
 
-        .lesson-note-content {
-            /* color: #fff; */
-            margin: 10px 15px 10px 15px;
-        }
+    .flex-row {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
 
-        .ql-container.ql-snow {
-            border: none;
-        }
+    .gutter.gutter-horizontal, .gutter.gutter-vertical {
+        background-color: #fff;
+    }
 
-        #live-qna-chat-box {
-            height: auto;
-            min-height: 100%;
-            max-height: 100%;
-            overflow-y: scroll;
-            overflow-x: hidden;
-        }
-    </style>
+    .gutter.gutter-horizontal {
+        cursor: ew-resize;
+        border-right: 1px solid #eaeaea; 
+        border-left: 1px solid #eaeaea;
+        background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
+        background-size: 0.875rem 2.25rem;
+        background-color: #fff;
+    }
 
-    <!-- Dragula style -->
-    <style type="text/css">
-        .gu-mirror {
-            position: fixed !important;
-            margin: 0 !important;
-            z-index: 9999 !important;
-            opacity: 0.8;
-            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-            filter: alpha(opacity=80);
-        }
+    .gutter.gutter-vertical {
+        cursor: ns-resize;
+        border-top: 1px solid #eaeaea; 
+        border-bottom: 1px solid #eaeaea;
+        background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
+        background-size: 2.25rem 0.875rem;
+        background-position-y: bottom;
+        background-repeat: no-repeat;
+        background-position: 50%;
+    }
 
-        .gu-hide {
-            display: none !important;
-        }
+    #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
+        overflow: auto;
+        background-color: #fff;
+    }
 
-        .gu-unselectable {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-        }
+    .lesson-content {
+        height: calc(100vh - 75px);
+    }
 
-        .gu-transit {
-            opacity: 0.2;
-            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-            filter: alpha(opacity=20);
-        }
+    .content-header {
+        border-bottom: 1px solid #dadada;
+        padding: 15px;
+        font-family: 'Noto Sans KR', sans-serif;
+        /* color: #fff; */
+        /* background-color: #3A464B; */
+        background-color: #fbfbfb;
+        font-size: 13px;
+    }
 
-        .row {
-            /* display:flex; */
-            display: flex;
-            flex-direction: column;
-            padding-top:.5em;
-            margin:1px;
-        }
+    /* Scrollbar */
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
 
-        .root .dragula-container {
-            padding:0.3rem;
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: 0px 4px 25px 0px
-            rgba(0, 0, 0, 0.1);
-            transition: all .3s ease-in-out;
-        }
+    /* Track
+    ::-webkit-scrollbar-track {
+        background: #2a363b;
+    }
+    */
 
-        .col {
-            flex: 1;
-            margin:1px;
-            min-height:1em;
-        }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #b9ceeb;
+    }
 
-        .el {
-            background:#e5e5e5;
-            margin:1px;
-            min-height:2em;
-        }
-    </style>
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #87a8d0;
+    }
+
+    #live-qna-chat-content {
+        position: relative;
+        height: calc(100% - 90px);
+    }
+
+    .lesson-note-content {
+        /* color: #fff; */
+        margin: 10px 15px 10px 15px;
+    }
+
+    .ql-container.ql-snow {
+        border: none;
+    }
+
+    #live-qna-chat-box {
+        height: auto;
+        min-height: 100%;
+        max-height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+<!-- Dragula style -->
+<style type="text/css">
+    .gu-mirror {
+        position: fixed !important;
+        margin: 0 !important;
+        z-index: 9999 !important;
+        opacity: 0.8;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+        filter: alpha(opacity=80);
+    }
+
+    .gu-hide {
+        display: none !important;
+    }
+
+    .gu-unselectable {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+    .gu-transit {
+        opacity: 0.2;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+        filter: alpha(opacity=20);
+    }
+
+    .row {
+        /* display:flex; */
+        display: flex;
+        flex-direction: column;
+        padding-top:.5em;
+        margin:1px;
+    }
+
+    .root .dragula-container {
+        padding:0.3rem;
+        border: none;
+        border-radius: 0.5rem;
+        box-shadow: 0px 4px 25px 0px
+        rgba(0, 0, 0, 0.1);
+        transition: all .3s ease-in-out;
+    }
+
+    .col {
+        flex: 1;
+        margin:1px;
+        min-height:1em;
+    }
+
+    .el {
+        background:#e5e5e5;
+        margin:1px;
+        min-height:2em;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-        <div class="flex-row">
-            <div id="left-side-panel">
-                <div class="flex-col">
-                    <div id="ppt-viewer-wrap">
-                        <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
-                            <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
-                                <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="live-qna-chat-wrap">
-                        <div class="content-header">
-                            실시간 질문 게시판
-                            <div class="text-right">
-                                <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
-                            </div>
-                        </div>
-                        <div id="live-qna-chat-content">
-                            <div id="live-qna-chat-box">
-                            </div>
-                        </div>
+<div class="flex-row">
+    <div id="left-side-panel">
+        <div class="flex-col">
+            <div id="ppt-viewer-wrap">
+                <div style="width: 100%; height: 100%; overflow-y: hidden;" id="ppt-viewer-wrap">
+                    <div id="ppt-viewer-content" style="height: 100%; width: 100%;">
+                        <iframe id="ppt-frame" style="border: none; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
                     </div>
                 </div>
             </div>
-            <div id="mid-side-panel">
-                <div class="flex-col">
-                    <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
-                        <div id="user-notepad-content" style="height: calc(100% - 42px);">
-                            <p></p>
-                        </div>
-                    </div>
-                    <div id="user-notepad-preview-wrap">
-                        <div class="content-header">
-                            자료실
-                        </div>
-                        <div id="user-notepad-preview-content">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="right-side-panel">
+            <div id="live-qna-chat-wrap">
                 <div class="content-header">
-                    아이디어 대시보드
+                    실시간 질문 게시판
                     <div class="text-right">
-                        <button onclick="showAddGroupModal()" class="btn btn-primary">Group</button>
-                        <button onclick="showAddIdeaModal()" class="btn btn-success">Node</button>
+                        <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
                     </div>
                 </div>
-                <div class="lesson-note-content">
-
-                    <!--BEGIN: TEST-->
-                    <div class="row root">
-                        <div id='idea-dashboard' class="col dragula-container">
-
-                        </div>
+                <div id="live-qna-chat-content">
+                    <div id="live-qna-chat-box">
                     </div>
-                    <!--END: TEST-->
-
-                </div>
-            </div>
-        </div>
-
-            <!-- BEGIN: Modal -->
-    <div class="modal fade" id="addGroupModalCenter" tabindex="-1" role="dialog" aria-labelledby="addGroupModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>새 그룹 추가</p>
-                </div>
-                <div class="modal-body">
-                    <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- START: Modal -->
-    <div class="modal fade" id="addIdeaModalCenter" tabindex="-1" role="dialog" aria-labelledby="addIdeaModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>새 노드 추가</p>
+    <div id="mid-side-panel">
+        <div class="flex-col">
+            <div id="user-notepad-wrap" style="background-color: #fff; overflow: hidden;">
+                <div id="user-notepad-content" style="height: calc(100% - 42px);">
+                    <p></p>
                 </div>
-                <div class="modal-body">
-                    <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div id="user-notepad-preview-wrap">
+                <div class="content-header">
+                    자료실
                 </div>
-                <div class="modal-footer">
-                    <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
+                <div id="user-notepad-preview-content">
                 </div>
             </div>
         </div>
     </div>
+    <div id="right-side-panel">
+        <div class="content-header">
+            아이디어 대시보드
+            <div class="text-right">
+                <button onclick="showAddGroupModal()" class="btn btn-primary">Group</button>
+                <button onclick="showAddIdeaModal()" class="btn btn-success">Node</button>
+            </div>
+        </div>
+        <div class="lesson-note-content">
 
-    <div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div id="modal-content-header" class="modal-header">
-                    <p>질문하기</p>
+            <!--BEGIN: TEST-->
+            <div class="row root">
+                <div id='idea-dashboard' class="col dragula-container">
+
                 </div>
-                <div class="modal-body">
-                    <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
-                </div>
+            </div>
+            <!--END: TEST-->
+
+        </div>
+    </div>
+</div>
+
+<!-- BEGIN: Modal -->
+<div class="modal fade" id="addGroupModalCenter" tabindex="-1" role="dialog" aria-labelledby="addGroupModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>새 그룹 추가</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addgrouptextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="sendAddGroupPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
             </div>
         </div>
     </div>
-    <!-- END: Modal -->
+</div>
+
+<!-- START: Modal -->
+<div class="modal fade" id="addIdeaModalCenter" tabindex="-1" role="dialog" aria-labelledby="addIdeaModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>새 노드 추가</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addideatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="sendAddIdeaPacket()" class="btn btn-primary" data-dismiss="modal">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>질문하기</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Modal -->
 {% endblock %}
 
 {% block footer %}{% endblock %}
 
 {% block extra-script %}
 <script type="text/javascript">
+let qna_messages = {{ messages|safe }};
+const lecture_id = {{ room_name_json }};
+const user_name = '{{ request.user.username }}';
+
 // Utility functions.
 function querySelectorAllArray(selector){
     return Array.prototype.slice.call(
@@ -313,10 +317,6 @@ function contains(a, b){
         a !== b && a.contains(b) :
         !!(a.compareDocumentPosition(b) & 16);
 }
-
-let qna_messages;
-let lecture_id;
-let user_name;
 
 // Dragula JS
 let last_over_el_id;
@@ -379,9 +379,9 @@ function liveQnAMessage(request) {
                 $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                     $("<div>").addClass("avatar mr-1").append(
                         $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
-                                    .attr("alt", "avatar img holder")
-                                    .attr("height", "45")
-                                    .attr("width", "45")
+                                  .attr("alt", "avatar img holder")
+                                  .attr("height", "45")
+                                  .attr("width", "45")
                     ),
                     $("<div>").addClass("user-page-info").append(
                         $("<p>").addClass("mb-0").text(user_name),
@@ -419,9 +419,9 @@ function redrawSortingQnAChat() {
                     $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                         $("<div>").addClass("avatar mr-1").append(
                             $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
-                                        .attr("alt", "avatar img holder")
-                                        .attr("height", "45")
-                                        .attr("width", "45")
+                                      .attr("alt", "avatar img holder")
+                                      .attr("height", "45")
+                                      .attr("width", "45")
                         ),
                         $("<div>").addClass("user-page-info").append(
                             $("<p>").addClass("mb-0").text(user_name),
@@ -636,12 +636,6 @@ function sendMoveIdeaPacket(src, des) {
             'sender-id': unique_id,
         }
     }));
-}
-
-function lecture_init(id, messages, username) {
-    lecture_id = id;
-    qna_messages = messages;
-    user_name = username;
 }
 </script>
 {% endblock %}

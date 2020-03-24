@@ -19,13 +19,18 @@ class LectureInformation(models.Model):
     lecture_type = models.IntegerField(default=0)
     lecture_pdf_path = models.CharField(max_length=100, default="")
     lecture_note = models.TextField(default="")
-    lecture_ppt_times = models.TextField(default="")
+    lecture_ppt_times = models.TextField(default="0")
 
 
 class QuizBox(models.Model):
-    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
     quiz_box_title = models.CharField(max_length=30)
     quiz_is_open = models.BooleanField(default=False)
+    quiz_box_owner = models.CharField(default="root", max_length=50, blank=False)
+
+
+class QuizBoxLink(models.Model):
+    lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
+    quiz_box = models.ForeignKey(QuizBox, on_delete=models.CASCADE)
 
 
 class Quiz(models.Model):
