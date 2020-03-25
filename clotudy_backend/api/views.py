@@ -72,6 +72,7 @@ class QuizBoxDetail(APIView):
     def post(self, request, class_pk, lecture_pk, format=None):
         if self.check_login(request):
             quiz_box = get_object_or_404(QuizBox, pk=lecture_pk)
+            lecture_info = QuizBoxLink.objects.get(quiz_box=quiz_box).lecture_info
             if quiz_box.quiz_is_open:
                 try:
                     record = QuizScoreRecord.objects.get(quiz_box_info=quiz_box, user_id=request.user.username)
@@ -90,7 +91,7 @@ class QuizBoxDetail(APIView):
                                 quiz_box.save()
                             ans.save()
                             qz.save()
-                    QuizScoreRecord.objects.create(lecture_info=quiz_box.lecture_info, quiz_box_info=quiz_box,
+                    QuizScoreRecord.objects.create(lecture_info=lecture_info, quiz_box_info=quiz_box,
                                                    user_id=request.user.username, score=total_score)
                     return Response(total_score)
             return Response(['This quiz is not open yet.'])
