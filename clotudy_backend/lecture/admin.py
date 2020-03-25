@@ -36,3 +36,7 @@ class Answer(admin.ModelAdmin):
 class QuizScoreRecord(admin.ModelAdmin):
     list_display = ['user_id', 'score', 'created_date']
 
+
+@admin.register(QuizBoxLink)
+class QuizBoxLink(admin.ModelAdmin):
+    list_display = ['lecture_info', 'quiz_box']
