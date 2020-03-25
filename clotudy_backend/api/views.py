@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from clotudy_backend.lecture.models import QuizBox, Quiz, Answer, QuizScoreRecord, LectureInformation, ClassInformation, BonusPoint
+from clotudy_backend.lecture.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -29,11 +29,6 @@ class QuizBoxDetail(APIView):
     def check_login(self, request):
         return request.user.is_authenticated
 
-    # QhizBox(Quiz(Answer, ...), Quiz(Answer, ...)) 
-    #     ^
-    # QuizBoxLink
-    #     √
-    # lecture
     def get(self, request, class_pk, lecture_pk, format=None):
         if self.check_login(request):
             qb_links = get_object_or_404(QuizBoxLink, lecture_info=lecture_pk)
