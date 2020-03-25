@@ -391,7 +391,6 @@ let drake = dragula(querySelectorAllArray('.dragula-container'),{
     container.className = container.className.replace('ex-over', '');
 });
 
-
 // WebSocket
 let increase_box_id = 0;
 let current_ppt_page = 1;
@@ -421,7 +420,7 @@ function liveQnAMessage(request) {
     let qna_body = qna['body'];
     let qna_like_count = request['data']['likeCount'];
     let qna_message_id = request['data']['messageId'];
-    let qna_userID = request['data']['userID'];;
+    let qna_userID = request['data']['userID'];
     qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_userID});
     is_exist_new_qna = true;
 
@@ -432,9 +431,9 @@ function liveQnAMessage(request) {
                 $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                     $("<div>").addClass("avatar mr-1").append(
                         $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
-                                    .attr("alt", "avatar img holder")
-                                    .attr("height", "45")
-                                    .attr("width", "45")
+                                  .attr("alt", "avatar img holder")
+                                  .attr("height", "45")
+                                  .attr("width", "45")
                     ),
                     $("<div>").addClass("user-page-info").append(
                         $("<p>").addClass("mb-0").text(user_name),
@@ -449,7 +448,7 @@ function liveQnAMessage(request) {
                 )
             )
         )
-    );;
+    );
     live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
 }
 
@@ -471,9 +470,9 @@ function redrawSortingQnAChat() {
                     $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                         $("<div>").addClass("avatar mr-1").append(
                             $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
-                                        .attr("alt", "avatar img holder")
-                                        .attr("height", "45")
-                                        .attr("width", "45")
+                                      .attr("alt", "avatar img holder")
+                                      .attr("height", "45")
+                                      .attr("width", "45")
                         ),
                         $("<div>").addClass("user-page-info").append(
                             $("<p>").addClass("mb-0").text(user_name),
