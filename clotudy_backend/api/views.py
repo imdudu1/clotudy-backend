@@ -31,7 +31,7 @@ class QuizBoxDetail(APIView):
 
     def get(self, request, class_pk, lecture_pk, format=None):
         if self.check_login(request):
-            qb_links = get_object_or_404(QuizBoxLink, lecture_info=lecture_pk)
+            qb_links = QuizBoxLink.objects.filter(lecture_info=lecture_pk)
             class_info = get_object_or_404(ClassInformation, pk=class_pk)
             for link in qb_links:
                 if link.quiz_box.quiz_is_open:
