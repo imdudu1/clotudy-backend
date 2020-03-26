@@ -5,194 +5,194 @@
 {% block title %}{{ lecture_data.title }}{% endblock %}
 
 {% block extra-style %}
-    <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
+<style type="text/css">
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
 
-            /*
-            position: relative;
-            height: auto;
-            min-height: 100% !important;
-            */
-
-            /* background-color: #2a363b; */
-        }
-
-        .flex-col {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: auto;
-
-            /* padding: 15px; */
-        }
-
-        .flex-row {
-            display: flex;
-            flex-direction: row;
-            height: 100%;
-        }
-
-        .gutter.gutter-horizontal, .gutter.gutter-vertical {
-            background-color: #fff;
-        }
-
-        .gutter.gutter-horizontal {
-            cursor: ew-resize;
-            border-right: 1px solid #eaeaea; 
-            border-left: 1px solid #eaeaea;
-            background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
-            background-size: 0.875rem 2.25rem;
-            background-color: #fff;
-        }
-
-        p.event_desc {
-              font: bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
-              line-height: 14px;
-              margin: 0px;
-              display: table-cell;
-              vertical-align: middle;
-              padding: 10px;
-        }
-
-        #ppt-viewer-wrap img {
-            width: 100%;
-        }
-
-        .gutter.gutter-vertical {
-            cursor: ns-resize;
-            border-top: 1px solid #eaeaea; 
-            border-bottom: 1px solid #eaeaea;
-            background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
-            background-size: 2.25rem 0.875rem;
-            background-position-y: bottom;
-            background-repeat: no-repeat;
-            background-position: 50%;
-        }
-
-        #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
-            overflow: auto;
-            background-color: #fff;
-        }
-
-        .lesson-content {
-            height: calc(100vh - 75px);
-        }
-
-        .content-header {
-            border-bottom: 1px solid #dadada;
-            padding: 15px;
-            font-family: 'Noto Sans KR', sans-serif;
-            /* color: #fff; */
-            /* background-color: #3A464B; */
-            background-color: #fbfbfb;
-            font-size: 13px;
-        }
-
-        /* Scrollbar */
-        /* width */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        /* Track
-        ::-webkit-scrollbar-track {
-            background: #2a363b;
-        }
+        /*
+        position: relative;
+        height: auto;
+        min-height: 100% !important;
         */
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #b9ceeb;
-        }
+        /* background-color: #2a363b; */
+    }
 
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #87a8d0;
-        }
+    .flex-col {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: auto;
 
-        #live-qna-chat-content {
-            position: relative;
-            height: calc(100% - 90px);
-        }
+        /* padding: 15px; */
+    }
 
-        .lesson-note-content {
-            /* color: #fff; */
-            margin: 10px 15px 10px 15px;
-        }
+    .flex-row {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
 
-        .ql-container.ql-snow {
-            border: none;
-        }
+    .gutter.gutter-horizontal, .gutter.gutter-vertical {
+        background-color: #fff;
+    }
 
-        #live-qna-chat-box {
-            height: auto;
-            min-height: 100%;
-            max-height: 100%;
-            overflow-y: scroll;
-            overflow-x: hidden;
-        }
-    </style>
+    .gutter.gutter-horizontal {
+        cursor: ew-resize;
+        border-right: 1px solid #eaeaea; 
+        border-left: 1px solid #eaeaea;
+        background: url("{% static 'assets/images/img-grippie-vertical.png' %}") no-repeat 0.625rem 50%;
+        background-size: 0.875rem 2.25rem;
+        background-color: #fff;
+    }
 
-    <!-- Dragula style -->
-    <style type="text/css">
-        .gu-mirror {
-            position: fixed !important;
-            margin: 0 !important;
-            z-index: 9999 !important;
-            opacity: 0.8;
-            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-            filter: alpha(opacity=80);
-        }
+    p.event_desc {
+            font: bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 14px;
+            margin: 0px;
+            display: table-cell;
+            vertical-align: middle;
+            padding: 10px;
+    }
 
-        .gu-hide {
-            display: none !important;
-        }
+    #ppt-viewer-wrap img {
+        width: 100%;
+    }
 
-        .gu-unselectable {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-        }
+    .gutter.gutter-vertical {
+        cursor: ns-resize;
+        border-top: 1px solid #eaeaea; 
+        border-bottom: 1px solid #eaeaea;
+        background-image: url("{% static 'assets/images/img-grippie-horizon.png' %}");
+        background-size: 2.25rem 0.875rem;
+        background-position-y: bottom;
+        background-repeat: no-repeat;
+        background-position: 50%;
+    }
 
-        .gu-transit {
-            opacity: 0.2;
-            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-            filter: alpha(opacity=20);
-        }
+    #left-side-panel, #mid-side-panel, #right-side-panel, #ppt-viewer-wrap, #live-qna-chat-wrap, #user-notepad-wrap, #user-notepad-preview-wrap {
+        overflow: auto;
+        background-color: #fff;
+    }
 
-        .row {
-            /* display:flex; */
-            display: flex;
-            flex-direction: column;
-            padding-top:.5em;
-            margin:1px;
-        }
+    .lesson-content {
+        height: calc(100vh - 75px);
+    }
 
-        .root .dragula-container {
-            padding:0.3rem;
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: 0px 4px 25px 0px
-            rgba(0, 0, 0, 0.1);
-            transition: all .3s ease-in-out;
-        }
+    .content-header {
+        border-bottom: 1px solid #dadada;
+        padding: 15px;
+        font-family: 'Noto Sans KR', sans-serif;
+        /* color: #fff; */
+        /* background-color: #3A464B; */
+        background-color: #fbfbfb;
+        font-size: 13px;
+    }
 
-        .col {
-            flex: 1;
-            margin:1px;
-            min-height:1em;
-        }
+    /* Scrollbar */
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
 
-        .el {
-            background:#e5e5e5;
-            margin:1px;
-            min-height:2em;
-        }
-    </style>
+    /* Track
+    ::-webkit-scrollbar-track {
+        background: #2a363b;
+    }
+    */
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #b9ceeb;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #87a8d0;
+    }
+
+    #live-qna-chat-content {
+        position: relative;
+        height: calc(100% - 90px);
+    }
+
+    .lesson-note-content {
+        /* color: #fff; */
+        margin: 10px 15px 10px 15px;
+    }
+
+    .ql-container.ql-snow {
+        border: none;
+    }
+
+    #live-qna-chat-box {
+        height: auto;
+        min-height: 100%;
+        max-height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+<!-- Dragula style -->
+<style type="text/css">
+    .gu-mirror {
+        position: fixed !important;
+        margin: 0 !important;
+        z-index: 9999 !important;
+        opacity: 0.8;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+        filter: alpha(opacity=80);
+    }
+
+    .gu-hide {
+        display: none !important;
+    }
+
+    .gu-unselectable {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+    .gu-transit {
+        opacity: 0.2;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+        filter: alpha(opacity=20);
+    }
+
+    .row {
+        /* display:flex; */
+        display: flex;
+        flex-direction: column;
+        padding-top:.5em;
+        margin:1px;
+    }
+
+    .root .dragula-container {
+        padding:0.3rem;
+        border: none;
+        border-radius: 0.5rem;
+        box-shadow: 0px 4px 25px 0px
+        rgba(0, 0, 0, 0.1);
+        transition: all .3s ease-in-out;
+    }
+
+    .col {
+        flex: 1;
+        margin:1px;
+        min-height:1em;
+    }
+
+    .el {
+        background:#e5e5e5;
+        margin:1px;
+        min-height:2em;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -568,7 +568,8 @@ function compile_socket_connect() {
 compile_socket_connect();
 
 function quiz_form_submit() {
-    document.getElementById("quiz_form").submit();
+    var d = new FormData(document.querySelector('#quiz_form'));
+    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
 }
 
 let chatSocket;

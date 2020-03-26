@@ -254,7 +254,8 @@ const lecture_id = {{ room_name_json }};
 const user_name = '{{ request.user.username }}';
 
 function quiz_form_submit() {
-    document.getElementById("quiz_form").submit();
+    var d = new FormData(document.querySelector('#quiz_form'));
+    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
 }
 
 // WebSocket
