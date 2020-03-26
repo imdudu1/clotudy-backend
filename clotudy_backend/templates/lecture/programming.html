@@ -567,11 +567,6 @@ function compile_socket_connect() {
 }
 compile_socket_connect();
 
-function quiz_form_submit() {
-    var d = new FormData(document.querySelector('#quiz_form'));
-    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
-}
-
 let chatSocket;
 function chat_socket_connect() {
     chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
@@ -607,6 +602,18 @@ function chat_socket_connect() {
     };
 }
 chat_socket_connect();
+
+function quiz_form_submit() {
+    var d = new FormData(document.querySelector('#quiz_form'));
+    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
+
+    chatSocket.send(JSON.stringify({
+        "action": "quiz-complete-signal",
+        "data": {
+            "page": "1"
+        }
+    }));;
+}
 
 function requestCompile(dom_id) {
     let src = editorDict[dom_id].getValue();

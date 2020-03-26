@@ -253,11 +253,6 @@ let qna_messages = {{ messages|safe }};
 const lecture_id = {{ room_name_json }};
 const user_name = '{{ request.user.username }}';
 
-function quiz_form_submit() {
-    var d = new FormData(document.querySelector('#quiz_form'));
-    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
-}
-
 // WebSocket
 let current_ppt_page = 1;
 let ppt_sync_flag = true;
@@ -414,6 +409,18 @@ function addLikeCount(id) {
         'data': {
             'messageId': id, // QnAMessage.pk
             'lecture': lecture_id,
+        }
+    }));
+}
+
+function quiz_form_submit() {
+    var d = new FormData(document.querySelector('#quiz_form'));
+    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
+
+    chatSocket.send(JSON.stringify({
+        "action": "quiz-complete-signal",
+        "data": {
+            "page": "1"
         }
     }));
 }
