@@ -19,19 +19,19 @@ function setModalQuizHTML(data) {
     for (let quiz_obj of data.quiz_content) {
         $("#modal-nav-wrap").append(
             $("<li>").addClass("nav-item").append(
-                $("<a>").addClass("nav-link " + (prob_count === 1) ? "active" : "")
+                $("<a>").addClass("nav-link " + ((prob_count === 1) ? "active" : ""))
                         .attr("id", "baseVerticalLeft-tab" + prob_count)
                         .attr("data-toggle", "tab")
                         .attr("aria-controls", "tabVerticalLeft" + prob_count)
                         .attr("href", "#tabVerticalLeft" + prob_count)
                         .attr("role", "tab")
                         .attr("aria-selected", (prob_count === 1) ? "true" : "false")
-                        .text("문제" + prob_count + "번")
+                        .text("문제" + prob_count)
             )
         );
 
         $("#modal-nav-content-wrap").append(
-            $("<div>").addClass("tab-pane" + (prob_count === 1) ? "active" : "")
+            $("<div>").addClass("tab-pane " + ((prob_count === 1) ? "active" : ""))
                         .attr("id", "tabVerticalLeft" + prob_count)
                         .attr("role", "tabpanel")
                         .attr("aria-labelledby", "baseVerticalLeft-tab" + prob_count)
