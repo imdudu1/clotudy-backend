@@ -7,416 +7,444 @@
 {% endblock %}
 
 {% block admin-content %}
-    <div class="row">
-    <div class="col-sm-5">
-        <div class="card overflow-hidden">
-            <div class="card-header">
-                <h4 class="card-title">PPT 관리</h4>
-                <i data-toggle="tooltip" data-placement="left" title="새 창으로 PPT viewer 띄워 다양한 디스플레이에 표시할 수 있습니다." onclick="javascript:clonePPT();" class="fa fa-clone"></i>
-            </div>
-            <div class="card-content">
-                <div class="card-body text-center">
-                    <iframe id="ppt-frame" style="border: none; min-height: 500px; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
-                    <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
-                        <button onclick="remotePPTPageSync(-1)" type="button" class="btn btn-secondary">Left</button>
-                        <button type="button" class="btn btn-secondary">Middle</button>
-                        <button onclick="remotePPTPageSync(1)" type="button" class="btn btn-secondary">Right</button>
-                    </div>
+<div class="row">
+<div class="col-sm-5">
+    <div class="card overflow-hidden">
+        <div class="card-header">
+            <h4 class="card-title">PPT 관리</h4>
+            <i data-toggle="tooltip" data-placement="left" title="새 창으로 PPT viewer 띄워 다양한 디스플레이에 표시할 수 있습니다." onclick="javascript:clonePPT();" class="fa fa-clone"></i>
+        </div>
+        <div class="card-content">
+            <div class="card-body text-center">
+                <iframe id="ppt-frame" style="border: none; min-height: 500px; height: 100%; width: 100%;" allowfullscreen webkitallowfullscreen src="/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}"></iframe>
+                <div class="btn-group btn-group-lg mt-1" role="group" aria-label="Basic example">
+                    <button onclick="remotePPTPageSync(-1)" type="button" class="btn btn-secondary">Left</button>
+                    <button type="button" class="btn btn-secondary">Middle</button>
+                    <button onclick="remotePPTPageSync(1)" type="button" class="btn btn-secondary">Right</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-7">
-        <div class="card overflow-hidden">
-            <div class="card-header">
-                <h4 class="card-title">수업 관리 <small class="font-size-small text-muted">수업에 유용한 기능들을 이용해보세요.</small></h4>
-            </div>
-            <div class="card-content">
-                <div class="card-body">
-                    <ul class="nav nav-tabs justify-content-center" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#home-center" aria-controls="home-center" role="tab" aria-selected="true">수업</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#service-center" aria-controls="service-center" role="tab" aria-selected="false">질문</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
-                        </li>
-                    </ul>
+</div>
+<div class="col-sm-7">
+    <div class="card overflow-hidden">
+        <div class="card-header">
+            <h4 class="card-title">수업 관리 <small class="font-size-small text-muted">수업에 유용한 기능들을 이용해보세요.</small></h4>
+        </div>
+        <div class="card-content">
+            <div class="card-body">
+                <ul class="nav nav-tabs justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#home-center" aria-controls="home-center" role="tab" aria-selected="true">수업</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#service-center" aria-controls="service-center" role="tab" aria-selected="false">질문</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="account-tab-center" data-toggle="tab" href="#account-center" aria-controls="account-center" role="tab" aria-selected="false">퀴즈</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
+                    </li>
+                </ul>
 
-                    <div class="tab-content">
-                        <!-- Tab -->
-                        <div class="tab-pane active" id="home-center" aria-labelledby="home-tab-center" role="tabpanel">
-                            <h5 class="mt-2">일정</h5><hr />
-                            <h5 class="mt-2">진도</h5><hr />
-                            <div class="col-sm-6">
-                                <div class="progress progress-bar-info progress-lg">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
-                                </div>
+                <div class="tab-content">
+                    <!-- Tab -->
+                    <div class="tab-pane active" id="home-center" aria-labelledby="home-tab-center" role="tabpanel">
+                        <h5 class="mt-2">일정</h5><hr />
+                        <h5 class="mt-2">진도</h5><hr />
+                        <div class="col-sm-6">
+                            <div class="progress progress-bar-info progress-lg">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="80" aria-valuemax="100" style="width:80%">80%</div>
                             </div>
-                            <div class="col-sm-6">
-
-                            </div>
-                            <h5 class="mt-2">PPT 정보</h5><hr />
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="ppt-waiting-chart"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <!-- Line Area Chart -->
-                                    <div id="line-area-chart"></div>
-                                </div>
-                            </div>
-                            <h5 class="mt-2">년도별 비교</h5><hr />
                         </div>
+                        <div class="col-sm-6">
 
-                        <!-- Tab -->
-                        <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
-                            <div class="email-application">
-                                <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
-                                    <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
-                                        <div class="email-user-list list-group" style="height: 100%;">
-                                            <ul class="users-list-wrapper media-list">
-                                                {% for obj in questions %}
-                                                <li class="media">
-                                                    <div class="media-left pr-50">
-                                                        <div class="avatar">
-                                                            <img src="{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}" alt="avtar img holder">
+                        </div>
+                        <h5 class="mt-2">PPT 정보</h5><hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="ppt-waiting-chart"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- Line Area Chart -->
+                                <div id="line-area-chart"></div>
+                            </div>
+                        </div>
+                        <h5 class="mt-2">년도별 비교</h5><hr />
+                    </div>
+
+                    <!-- Tab -->
+                    <div class="tab-pane" id="service-center" aria-labelledby="service-tab-center" role="tabpanel">
+                        <div class="email-application">
+                            <div class="app-content" style="margin: 0; overflow-y: auto; max-height: 500px;">
+                                <div class="content-area-wrapper" style="margin: 0; display: block; border: none;">
+                                    <div class="email-user-list list-group" style="height: 100%;">
+                                        <ul class="users-list-wrapper media-list">
+                                            {% for obj in questions %}
+                                            <li class="media">
+                                                <div class="media-left pr-50">
+                                                    <div class="avatar">
+                                                        <img src="{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}" alt="avtar img holder">
+                                                    </div>
+                                                    <div class="user-action">
+                                                        <span class="favorite"><i class="feather icon-star"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="user-details">
+                                                        <div class="mail-items">
+                                                            <h5 class="list-group-item-heading text-bold-600 mb-25">{{ request.user.username }}</h5>
+                                                            <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
                                                         </div>
-                                                        <div class="user-action">
-                                                            <span class="favorite"><i class="feather icon-star"></i></span>
+                                                        <div class="mail-meta-item">
+                                                                <span class="float-right">
+                                                                    <span class="mr-1 bullet bullet-success bullet-sm"></span><span class="mail-date">4:14 AM</span>
+                                                                </span>
                                                         </div>
                                                     </div>
-                                                    <div class="media-body">
-                                                        <div class="user-details">
-                                                            <div class="mail-items">
-                                                                <h5 class="list-group-item-heading text-bold-600 mb-25">{{ request.user.username }}</h5>
-                                                                <span class="list-group-item-text text-truncate">컴퓨터공학부 게임모바일컨텐츠학과</span>
-                                                            </div>
-                                                            <div class="mail-meta-item">
-                                                                    <span class="float-right">
-                                                                        <span class="mr-1 bullet bullet-success bullet-sm"></span><span class="mail-date">4:14 AM</span>
-                                                                    </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mail-message">
-                                                            <p class="list-group-item-text truncate mb-0">{{ obj.body }}</p>
-                                                        </div>
+                                                    <div class="mail-message">
+                                                        <p class="list-group-item-text truncate mb-0">{{ obj.body }}</p>
                                                     </div>
-                                                </li>
-                                                {% endfor %}
-                                            </ul>
-                                            <div class="no-results">
-                                                <h5>No Items Found</h5>
-                                            </div>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="no-results">
+                                            <h5>No Items Found</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Tab -->
-                        <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
-                            <div id="accordion">
-                                {% for quiz in quiz_data %}
-                                    <div class="card mb-0">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
-                                                {{ quiz.category_title }}
-                                            </button>
-                                        </h5>
-                                    </div>
+                    <!-- Tab -->
+                    <div class="tab-pane" id="account-center" aria-labelledby="account-tab-center" role="tabpanel">
+                        <div id="accordion">
+                            {% for quiz in quiz_data %}
+                                <div class="card mb-0">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
+                                            {{ quiz.category_title }}
+                                        </button>
+                                    </h5>
+                                </div>
 
-                                    <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="nav-vertical">
-                                                        <ul class="nav nav-tabs nav-left flex-column" role="tablist">
-                                                            {% for prob in quiz.quiz_content %}
-                                                                <li class="nav-item">
-                                                                    {% if forloop.counter == 1 %}
-                                                                        <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
-                                                                    {% else %}
-                                                                        <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
-                                                                    {% endif %}
-                                                                </li>
-                                                            {% endfor %}
-                                                        </ul>
-
-                                                        <div class="tab-content">
-                                                            {% for prob in quiz.quiz_content %}
+                                <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="nav-vertical">
+                                                    <ul class="nav nav-tabs nav-left flex-column" role="tablist">
+                                                        {% for prob in quiz.quiz_content %}
+                                                            <li class="nav-item">
                                                                 {% if forloop.counter == 1 %}
-                                                                    <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                    <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
                                                                 {% else %}
-                                                                    <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                                    <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
                                                                 {% endif %}
-                                                                <p class="mb-1">{{ prob.problem }}</p><hr />
-                                                            {% for answer_item in prob.answer %}
-                                                                <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
-                                                                <div class="progress progress-bar-info progress-lg mb-1">
-                                                                  <div class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
-                                                                </div>
-                                                            {% endfor %}
-                                                            </div>
-                                                            {% endfor %}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
 
-                                                    <div class="col-md-4">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="card">
-                                                                    <div class="card-header">문항별 정답률</div>
-                                                                    <div class="card-body"><div id="q2Chart"></div></div>
-                                                                </div>
+                                                    <div class="tab-content">
+                                                        {% for prob in quiz.quiz_content %}
+                                                            {% if forloop.counter == 1 %}
+                                                                <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                            {% else %}
+                                                                <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                            {% endif %}
+                                                            <p class="mb-1">{{ prob.problem }}</p><hr />
+                                                        {% for answer_item in prob.answer %}
+                                                            <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
+                                                            <div class="progress progress-bar-info progress-lg mb-1">
+                                                                <div id="answer-elem-{{ answer_item.id }}" class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
                                                             </div>
-                                                            <div class="col-md-12">
-                                                                <div class="card">
-                                                                    <div class="card-header">점수 분포</div>
-                                                                    <div class="card-body"><div id="q1Chart"></div></div>
-                                                                </div>
+                                                        {% endfor %}
+                                                        </div>
+                                                        {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="card">
+                                                                <div class="card-header">문항별 정답률</div>
+                                                                <div class="card-body"><div id="q2Chart"></div></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="card">
+                                                                <div class="card-header">점수 분포</div>
+                                                                <div class="card-body"><div id="q1Chart"></div></div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <button onclick="showQuizModal({{ quiz.category_id }})" class="btn btn-primary">시작하기</button>
-                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button onclick="showQuizModal({{ quiz.category_id }})" class="btn btn-primary">시작하기</button>
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
                                 </div>
+                            {% endfor %}
                             </div>
-                        <!-- Tab -->
-                        <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
-                            {{ lecture_data.lecture_note|safe }}
                         </div>
-                        </div>
+                    <!-- Tab -->
+                    <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
+                        {{ lecture_data.lecture_note|safe }}
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block extra-script %}
-    <script>
-        function getCurrentTime() {
-          return (new Date()).getTime();
+<script>
+function getCurrentTime() {
+    return (new Date()).getTime();
+}
+
+let delta_time;
+let last_time = getCurrentTime();
+let currentPage = 1;
+let sync_lock = true;
+let lecture_id = {{ room_name_json }};
+
+// Charts
+var options = {
+    series: [{
+        name: '2019-1',
+        data: [31, 40, 28, 51, 42, 109, 100]
+    }, {
+        name: '2020-1',
+        data: [11, 32, 45, 32, 34, 52, 41]
+    }],
+    chart: {
+        height: 250,
+        width: '100%',
+        type: 'area'
+    },
+    dataLabels: {
+        enabled: false
+    },
+    stroke: {
+        curve: 'smooth'
+    },
+    xaxis: {
+        type: 'datetime',
+        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    },
+    tooltip: {
+        x: {
+            format: 'dd/MM/yy HH:mm'
+        },
+    },
+};
+
+var chart = new ApexCharts(document.querySelector("#line-area-chart"), options);
+chart.render();
+
+
+function createZeroArray(size) {
+    return Array(size).fill(0);
+}
+
+var options = {
+    series: [{
+        data: {{ ppt_time }}
+    }],
+    chart: {
+        type: 'line',
+        height: 250,
+        width: '100%'
+    },
+    stroke: {
+        width: 3,
+        curve: 'smooth',
+    },
+    dataLabels: {
+        enabled: false
+    },
+    markers: {
+        hover: {
+            sizeOffset: 2
         }
+    }
+};
 
-        let delta_time;
-        let last_time = getCurrentTime();
-        let currentPage = 1;
-        let sync_lock = true;
-        let lecture_id = {{ room_name_json }};
+var ppt_chart = new ApexCharts(document.querySelector("#ppt-waiting-chart"), options);
+ppt_chart.render();
 
-        // Charts
-        var options = {
-            series: [{
-                name: '2019-1',
-                data: [31, 40, 28, 51, 42, 109, 100]
-            }, {
-                name: '2020-1',
-                data: [11, 32, 45, 32, 34, 52, 41]
-            }],
+
+var options = {
+    series: [44, 55, 41, 17, 15],
+    chart: {
+        type: 'donut',
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
             chart: {
-                height: 250,
-                width: '100%',
-                type: 'area'
+                width: 200
             },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            xaxis: {
-                type: 'datetime',
-                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-            },
-            tooltip: {
-                x: {
-                    format: 'dd/MM/yy HH:mm'
-                },
-            },
-        };
-
-        var chart = new ApexCharts(document.querySelector("#line-area-chart"), options);
-        chart.render();
-
-
-        function createZeroArray(size) {
-          return Array(size).fill(0);
-        }
-
-        var options = {
-            series: [{
-                data: {{ ppt_time }}
-            }],
-            chart: {
-                type: 'line',
-                height: 250,
-                width: '100%'
-            },
-            stroke: {
-                width: 3,
-                curve: 'smooth',
-            },
-            dataLabels: {
-                enabled: false
-            },
-            markers: {
-                hover: {
-                    sizeOffset: 2
-                }
-            }
-        };
-
-        var ppt_chart = new ApexCharts(document.querySelector("#ppt-waiting-chart"), options);
-        ppt_chart.render();
-
-
-        var options = {
-            series: [44, 55, 41, 17, 15],
-            chart: {
-                type: 'donut',
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
-        };
-
-        var chart = new ApexCharts(document.querySelector("#q1Chart"), options);
-        chart.render();
-        var chart = new ApexCharts(document.querySelector("#q2Chart"), options);
-        chart.render();
-
-        function clonePPT() {
-            let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
-        }
-
-        function remotePPTPageSync(v) {
-            if (sync_lock) {
-                sync_lock = false;
-                let currentPage = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page;
-                let tmpPage = currentPage + v;
-                let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
-                if((tmpPage > numPages) || (tmpPage < 1)) {
-                    sync_lock = true;
-                    return;
-                }
-                addPptTime(currentPage, numPages);
-                currentPage = tmpPage;
-                document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = currentPage;
-                global_socket.send(JSON.stringify({
-                    'action': 'sync-ppt-page',
-                    'data': {
-                        'page': currentPage
-                    }
-                }));
-                sync_lock = true;
+            legend: {
+                position: 'bottom'
             }
         }
+    }]
+};
 
-        let global_socket;
-        function global_socket_init() {
-            global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+var chart = new ApexCharts(document.querySelector("#q1Chart"), options);
+chart.render();
+var chart = new ApexCharts(document.querySelector("#q2Chart"), options);
+chart.render();
 
-            global_socket.onmessage = (message) => {
-                let message_data = JSON.parse(message.data);
-                switch (message_data.action) {
-                    case 'sync-ppt-page':
-                        break;
-                    case 'live-qna-chat':
-                        break;
-                    case 'add-like-count':
-                        break;
-                    case 'quiz-complete-signal':
-                        break;
-                    default:
-                        break;
-                }
-            };
+function clonePPT() {
+    let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+}
 
-            global_socket.onclose = (e) => {
-                setTimeout(() => {
-                    global_socket_init();
-                }, 1000);
-            };
+function remotePPTPageSync(v) {
+    if (sync_lock) {
+        sync_lock = false;
+        let currentPage = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page;
+        let tmpPage = currentPage + v;
+        let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+        if((tmpPage > numPages) || (tmpPage < 1)) {
+            sync_lock = true;
+            return;
+        }
+        addPptTime(currentPage, numPages);
+        currentPage = tmpPage;
+        document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = currentPage;
+        global_socket.send(JSON.stringify({
+            'action': 'sync-ppt-page',
+            'data': {
+                'page': currentPage
+            }
+        }));
+        sync_lock = true;
+    }
+}
 
-            global_socket.onerror = (err) => {
-                global_socket.close();
+let global_socket;
+function global_socket_init() {
+    global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+
+    global_socket.onmessage = (message) => {
+        let message_data = JSON.parse(message.data);
+        switch (message_data.action) {
+            case 'sync-ppt-page':
+                break;
+            case 'live-qna-chat':
+                break;
+            case 'add-like-count':
+                break;
+            case 'quiz-complete-signal':
+                updateQuizInfo(message_data);
+                break;
+            default:
+                break;
+        }
+    };
+
+    global_socket.onclose = (e) => {
+        setTimeout(() => {
+            global_socket_init();
+        }, 1000);
+    };
+
+    global_socket.onerror = (err) => {
+        global_socket.close();
+    }
+}
+global_socket_init();
+
+function updateQuizInfo(data) {
+    axios.get(`/api/quiz/1/1`).then(res => {
+        updateQuizHtml(res);
+    });
+}
+
+function updateQuizHtml(data) {
+    for (let i = 0; i < data.data[0].quiz_content.length; i++) {
+        let quiz_obj = data.data[0].quiz_content[i];
+        for (let j = 0; quiz_obj.answer.length; j++) {
+            var answer_obj = quiz_obj.answer[j];
+
+            try {
+                var aid = answer_obj.id;
+                var acount = answer_obj.choice_count;
+                var apercent = answer_obj.choice_count_percent;
+                $(`#answer-elem-${aid}`).html(acount);
+                $(`#answer-elem-${aid}`).attr('aria-valuenow', acount);
+                $(`#answer-elem-${aid}`).attr('style', `width:${apercent}%`);
+            }
+            catch(err) {
+                return;
             }
         }
-        global_socket_init();
+    }
+}
 
-        function showQuizModal(quizBoxId) {
-            global_socket.send(JSON.stringify({
-                'action': 'show-quiz-modal',
-                'data': {
-                    'quizBoxId': quizBoxId,
-                    'classID': {{ class_id }}
-                }
-            }));
+function showQuizModal(quizBoxId) {
+    global_socket.send(JSON.stringify({
+        'action': 'show-quiz-modal',
+        'data': {
+            'quizBoxId': quizBoxId,
+            'classID': {{ class_id }}
         }
+    }));
+}
 
-        function addPptTime(page, max_pages) {
-          let cur_time = getCurrentTime();
-          let delta_time = (cur_time - last_time) / 1000;
-          last_time = cur_time;
+function addPptTime(page, max_pages) {
+    let cur_time = getCurrentTime();
+    let delta_time = (cur_time - last_time) / 1000;
+    last_time = cur_time;
 
-          let times = ppt_chart.w.globals.series.slice()[0];
-          if (times.length < max_pages) {
-            times = Array(max_pages).fill(0)
-          }
-          if (!times.hasOwnProperty(page) && 1 <= page && page <= max_pages) {
-            times[page-1] = delta_time;
-          } else {
-            times[page-1] += delta_time;
-          }
-          ppt_chart.updateSeries([{data: times}]);
-        }
+    let times = ppt_chart.w.globals.series.slice()[0];
+    if (times.length < max_pages) {
+    times = Array(max_pages).fill(0)
+    }
+    if (!times.hasOwnProperty(page) && 1 <= page && page <= max_pages) {
+    times[page-1] = delta_time;
+    } else {
+    times[page-1] += delta_time;
+    }
+    ppt_chart.updateSeries([{data: times}]);
+}
 
-        function savePPTTime() {
-            let times = ppt_chart.w.globals.series.slice()[0];
-            let history_str = "";
-            for (let i = 0; i < times.length; i++) {
-                history_str += parseInt(times[i]) + ";";
+function savePPTTime() {
+    let times = ppt_chart.w.globals.series.slice()[0];
+    let history_str = "";
+    for (let i = 0; i < times.length; i++) {
+        history_str += parseInt(times[i]) + ";";
+    }
+
+    axios({
+            method: 'post',
+            url: `/api/ppthistory/${lecture_id}`,
+            data: {
+                'history': history_str.slice(0, -1),
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            headers: {
+                "content-type": "application/json"
             }
-
-            axios({
-                    method: 'post',
-                    url: `/api/ppthistory/${lecture_id}`,
-                    data: {
-                        'history': history_str.slice(0, -1),
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                    },
-                    headers: {
-                        "content-type": "application/json"
-                    }
-                    }).then(function (response) {
-                        console.log(response)
-                    }).catch(function (error) {
-                        console.log(error)
-                    });
-        }
-        setInterval(savePPTTime, 60000);
-    </script>
+            }).then(function (response) {
+                console.log(response)
+            }).catch(function (error) {
+                console.log(error)
+            });
+}
+setInterval(savePPTTime, 60000);
+</script>
 {% endblock %}

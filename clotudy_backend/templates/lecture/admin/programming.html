@@ -163,7 +163,7 @@
                                                     {% for answer_item in prob.answer %}
                                                         <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
                                                         <div class="progress progress-bar-info progress-lg mb-1">
-                                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
+                                                            <div id="answer-elem-{{ answer_item.id }}" class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
                                                         </div>
                                                     {% endfor %}
                                                     </div>
@@ -439,6 +439,7 @@ function global_socket_init() {
                 updateLikeCount(message_data);
                 break;
             case 'quiz-complete-signal':
+                updateQuizInfo(message_data);
                 break;                
             default:
                 break;
@@ -456,6 +457,33 @@ function global_socket_init() {
     }
 }
 global_socket_init();
+
+function updateQuizInfo(data) {
+    axios.get(`/api/quiz/1/1`).then(res => {
+        updateQuizHtml(res);
+    });
+}
+
+function updateQuizHtml(data) {
+    for (let i = 0; i < data.data[0].quiz_content.length; i++) {
+        let quiz_obj = data.data[0].quiz_content[i];
+        for (let j = 0; quiz_obj.answer.length; j++) {
+            var answer_obj = quiz_obj.answer[j];
+
+            try {
+                var aid = answer_obj.id;
+                var acount = answer_obj.choice_count;
+                var apercent = answer_obj.choice_count_percent;
+                $(`#answer-elem-${aid}`).html(acount);
+                $(`#answer-elem-${aid}`).attr('aria-valuenow', acount);
+                $(`#answer-elem-${aid}`).attr('style', `width:${apercent}%`);
+            }
+            catch(err) {
+                return;
+            }
+        }
+    }
+}
 
 function showQuizModal(quizBoxId) {
     global_socket.send(JSON.stringify({
