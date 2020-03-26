@@ -52,6 +52,8 @@ class QuizBoxDetail(APIView):
                                     "answer": [{
                                         "id": answer.pk, 
                                         "content": answer.answer_content, 
+                                        "choice_count_percent": (answer.answer_choice_count / quiz.quiz_solve_count) * 100 if quiz.quiz_solve_count != 0 else 0, 
+                                        "choice_count": answer.answer_choice_count,
                                         "is_correct": answer.answer_is_correct
                                     } for answer in answer_list]
                                 })
