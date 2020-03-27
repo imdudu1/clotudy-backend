@@ -349,7 +349,8 @@ function global_socket_init() {
             case 'add-like-count':
                 break;
             case 'quiz-complete-signal':
-                updateQuizInfo(message_data);
+                console.log("Get quiz-complete-signal !!")
+                setTimeout(() => {updateQuizInfo(message_data)}, 1000);
                 break;
             default:
                 break;
@@ -377,7 +378,7 @@ function updateQuizInfo(data) {
 function updateQuizHtml(data) {
     for (let i = 0; i < data.data[0].quiz_content.length; i++) {
         let quiz_obj = data.data[0].quiz_content[i];
-        for (let j = 0; quiz_obj.answer.length; j++) {
+        for (let j = 0; j < quiz_obj.answer.length; j++) {
             var answer_obj = quiz_obj.answer[j];
 
             try {
