@@ -1,0 +1,104 @@
+{% extends 'lecture/class/base.html' %}
+{% load static %}
+
+{% block content %}
+<!--
+<form enctype='application/json' id="class_form" action="/lecture/create/class" method="POST">
+    {% csrf_token %}
+    <input type="text" id="title" name="title" />
+    <input type="text" id="description" name="description" />
+    <input type="text" id="instructor_name" name="instructor_name" />
+    <input type="button" onclick="submitClassForm()" />
+</form>
+
+<form enctype='application/json' id="lecture_form" action="/lecture/create/lecture" method="POST">
+    {% csrf_token %}
+    <input type="text" id="class_id" name="class_id" />
+    <input type="text" id="title" name="title" />
+    <input type="text" id="description" name="description" />
+    <input type="text" id="type" name="type" />
+    <input type="text" id="pdf" name="pdf" />
+    <input type="textarea" id="note" name="note" />
+
+    <input type="text" id="quizboxs" name="quizboxs[0]" value="1" />
+    <input type="text" id="quizboxs" name="quizboxs[1]" value="2" />
+    <input type="text" id="quizboxs" name="quizboxs[2]" value="3" />
+    <input type="text" id="quizboxs" name="quizboxs[3]" value="4" />
+    <input type="button" onclick="submitLectureForm()" />
+</form>
+-->
+<div id="menu-button-wrap">
+    <button onclick="addNewQuiz()">Add new quiz</button>
+</div>
+
+<div>
+    <form enctype='application/json' id="quiz_form" method="POST">
+        <input type="text" name="title" />
+        <div id="quiz-form-wrap">
+
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'assets/js/jquery.serialize-object.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
+<script>
+    /// Class form
+    function submitClassForm() {
+        axios.post('/lecture/create/class', JSON.stringify($("form#class_form").serializeObject()), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+    }
+
+    /// Lecture form
+    function submitLectureForm() {
+        axios.post('/lecture/create/lecture', JSON.stringify($("form#lecture_form").serializeObject()), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+    }
+
+    /// Quiz form
+    let quiz_seq_num = 0;
+    let answer_seq_arr = {};
+    function submitQuizForm() {
+        let json_data = $("form#quiz_form").serializeObject();
+        for (let i = 0; i < json_data['quizs'].length; i++) {
+            for (let j = 0; j < json_data['quizs'][i]['answers'].length; j++) {
+                if (!json_data['quizs'][i]['answers'][j].hasOwnProperty("is_correct")) {
+                    json_data['quizs'][i]['answers'][j]['is_correct'] = false;
+                }
+            }
+        }
+        axios.post('/lecture/create/quiz', JSON.stringify(json_data), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+    }
+
+    function addNewQuiz() {
+        $("#quiz-form-wrap").append(
+            $("<div>").attr("id", "quiz-wrap-" + quiz_seq_num).append(
+                $("<div>").attr("id", "quiz-content").append(
+                    $("<input>").attr("type", "text").attr("name", `quizs[${quiz_seq_num}][content]`) // quiz content
+                ),
+                $("<div>").attr("id", "quiz-answer-wrap"),
+                $("<button>").attr("onclick", `addNewAnswer(${quiz_seq_num})`).attr("type", "button").text("Add new answer")
+            )
+        );
+        answer_seq_arr[quiz_seq_num++] = 0;
+    }
+
+    function addNewAnswer(q) {
+        $(`#quiz-wrap-${q}`).append(
+            $("<input>").attr("type", "text").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][content]`),
+            $("<input>").attr("type", "checkbox").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][is_correct]`),
+        );
+        answer_seq_arr[q]++;
+    }
+</script>
+{% endblock %}
