@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
-from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import *
 import json
 
@@ -181,25 +182,30 @@ JSON example
 {
     'title': '',
     'description': '',
+    'instructor_name': '',
 }
 '''
+@csrf_exempt
 def class_create(request):
     # login required!!
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/accounts/login/")
 
     if request.method == "POST":
-        req_data = json.loads(request.body.decode('utf-8'))
+        req_data = json.loads(request.body)
         title = req_data['title']
         description = req_data['description']
+        instructor_name = req_data['instructor_name']
         username = request.user.username
         new_class = ClassInformation.objects.create(
             class_title=title,
             class_description=description,
             class_instructor_id=username,
+            class_instructor=instructor_name,
         )
+        return HttpResponse("*^^*")
     elif request.method == "GET":
-        return render(request, "lecture/class_create.html", {})
+        return render(request, "lecture/class/create.html", {})
 
 
 '''
@@ -232,13 +238,14 @@ JSON example
     ]
 }
 '''
+@csrf_exempt
 def quiz_create(request):
     # login required!!
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/accounts/login/")
 
     if request.method == "POST":
-        req_data = json.loads(request.body.decode('utf-8'))
+        req_data = json.loads(request.body)
         title=req_data['title']
         new_quiz_box = QuizBox.objects.create(
             quiz_box_title=title,
@@ -250,21 +257,24 @@ def quiz_create(request):
             new_quiz = Quiz.objects.create(
                 quiz_box_info=new_quiz_box,
                 quiz_prob=quiz['content'],
-                quiz_item_num=len(answers),
+                quiz_item_num=len(quiz['answers']),
             )
             answers = quiz['answers']
             for answer in answers:
                 Answer.objects.create(
                     quiz_info=new_quiz,
-                    answer_content=answer['content'],
                     answer_is_correct=answer['is_correct'],
+                    answer_content=answer['content'],
                 )
+        return HttpResponse("*^^*")
+    elif request.method == "GET":
+        return render(request, "lecture/class/create.html", {})
 
 
 '''
 JSON example
 {
-    'class': 1,
+    'class_id': 1,
     'title': 'C언어 프로그래밍',
     'description': '',
     'type': 0,
@@ -273,14 +283,15 @@ JSON example
     'quizboxs': [1, 2, ...]
 }
 '''
+@csrf_exempt
 def lecture_create(request):
     # login required!!
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/accounts/login/")
 
     if request.method == "POST":
-        req_data = json.loads(request.body.decode('utf-8'))
-        class_info = ClassInformation.objects.get(pk=req_data['class'])
+        req_data = json.loads(request.body)
+        class_info = ClassInformation.objects.get(pk=req_data['class_id'])
         new_lecture = LectureInformation.objects.create(
             class_info=class_info,
             lecture_title=req_data['title'],
@@ -291,8 +302,14 @@ def lecture_create(request):
         )
         quizboxs = req_data['quizboxs']
         for quizbox in quizboxs:
-            qb = QuizBox.objects.get(pk=quizbox)
-            QuizBoxLink.objects.create(
-                lecture_info=new_lecture,
-                quiz_box=qb,
-            )
+            try:
+                qb = QuizBox.objects.get(pk=quizbox)
+                QuizBoxLink.objects.create(
+                    lecture_info=new_lecture,
+                    quiz_box=qb,
+                )
+            except QuizBox.DoesNotExist:
+                continue
+        return HttpResponse("*^^*")
+    elif request.method == "GET":
+        return render(request, "lecture/class/create.html", {})
