@@ -1,45 +1,97 @@
-{% extends 'lecture/class/base.html' %}
+{% extends 'lecture/base/lecture_admin.html' %}
 {% load static %}
 
-{% block content %}
-<!--
-<form enctype='application/json' id="class_form" action="/lecture/create/class" method="POST">
-    {% csrf_token %}
-    <input type="text" id="title" name="title" />
-    <input type="text" id="description" name="description" />
-    <input type="text" id="instructor_name" name="instructor_name" />
-    <input type="button" onclick="submitClassForm()" />
-</form>
+{% block admin-content %}
+<div class="row">
+    <div class="col-sm-7">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">내 강의 목록</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table data-thumb-view">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>표지</th>
+                                    <th>강의명</th>
+                                    <th>개설일</th>
+                                    <th>초대코드</th>
+                                    <th>추가</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for class_obj in class_list %}
+                                <tr>
+                                    <td></td>
 
-<form enctype='application/json' id="lecture_form" action="/lecture/create/lecture" method="POST">
-    {% csrf_token %}
-    <input type="text" id="class_id" name="class_id" />
-    <input type="text" id="title" name="title" />
-    <input type="text" id="description" name="description" />
-    <input type="text" id="type" name="type" />
-    <input type="text" id="pdf" name="pdf" />
-    <input type="textarea" id="note" name="note" />
+                                    <td style="max-width: 100px;" class="product-img"><img style="width: 100%;" src="{% static 'storage/thumbnail/' %}{{ class_obj.thumbnail }}" alt="Img placeholder">
+                                    </td>
 
-    <input type="text" id="quizboxs" name="quizboxs[0]" value="1" />
-    <input type="text" id="quizboxs" name="quizboxs[1]" value="2" />
-    <input type="text" id="quizboxs" name="quizboxs[2]" value="3" />
-    <input type="text" id="quizboxs" name="quizboxs[3]" value="4" />
-    <input type="button" onclick="submitLectureForm()" />
-</form>
--->
-<div id="menu-button-wrap">
-    <button onclick="addNewQuiz()">Add new quiz</button>
-</div>
+                                    <td class="product-name">{{ class_obj.title }}</td>
 
-<div>
-    <form enctype='application/json' id="quiz_form" method="POST">
-        <input type="text" name="title" />
-        <div id="quiz-form-wrap">
+                                    <td class="product-category">{{ class_obj.date }}</td>
 
+                                    <td>
+                                        <div class="progress progress-bar-success">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="40" aria-valuemax="100" style="width:97%"></div>
+                                        </div>
+                                    </td>
+
+                                    <td class="product-action">
+                                        <span class="action-edit"><i class="feather icon-edit"></i></span>
+                                        <span class="action-delete"><i class="feather icon-trash"></i></span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
+    <div class="col-sm-5">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">강의 생성</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <form enctype='application/json' id="class_form" action="/lecture/create/class" method="POST">
+                        {% csrf_token %}
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="title">강의 제목</label>
+                                <input class="form-control" type="text" id="title" name="title" />
+                            </div>
+                            <div class="form-group">
+                                <label for="description">강의 설명</label>
+                                <textarea class="form-control" type="text" id="description" name="description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="instructor_name">강의자</label>
+                                <input class="form-control" type="text" id="instructor_name" name="instructor_name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail_path">강의 표지</label>
+                                <input class="form-control" type="text" id="thumbnail_path" name="thumbnail_path" />
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <input class="btn btn-primary waves-effect waves-light" type="button" onclick="submitClassForm()" value="새 강의 생성" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
 
+{% block extra-script %}
 <script src="{% static 'assets/js/jquery.serialize-object.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
 <script>
@@ -50,55 +102,6 @@
                 'Content-Type': 'application/json',
             }
         }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
-    }
-
-    /// Lecture form
-    function submitLectureForm() {
-        axios.post('/lecture/create/lecture', JSON.stringify($("form#lecture_form").serializeObject()), {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
-    }
-
-    /// Quiz form
-    let quiz_seq_num = 0;
-    let answer_seq_arr = {};
-    function submitQuizForm() {
-        let json_data = $("form#quiz_form").serializeObject();
-        for (let i = 0; i < json_data['quizs'].length; i++) {
-            for (let j = 0; j < json_data['quizs'][i]['answers'].length; j++) {
-                if (!json_data['quizs'][i]['answers'][j].hasOwnProperty("is_correct")) {
-                    json_data['quizs'][i]['answers'][j]['is_correct'] = false;
-                }
-            }
-        }
-        axios.post('/lecture/create/quiz', JSON.stringify(json_data), {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
-    }
-
-    function addNewQuiz() {
-        $("#quiz-form-wrap").append(
-            $("<div>").attr("id", "quiz-wrap-" + quiz_seq_num).append(
-                $("<div>").attr("id", "quiz-content").append(
-                    $("<input>").attr("type", "text").attr("name", `quizs[${quiz_seq_num}][content]`) // quiz content
-                ),
-                $("<div>").attr("id", "quiz-answer-wrap"),
-                $("<button>").attr("onclick", `addNewAnswer(${quiz_seq_num})`).attr("type", "button").text("Add new answer")
-            )
-        );
-        answer_seq_arr[quiz_seq_num++] = 0;
-    }
-
-    function addNewAnswer(q) {
-        $(`#quiz-wrap-${q}`).append(
-            $("<input>").attr("type", "text").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][content]`),
-            $("<input>").attr("type", "checkbox").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][is_correct]`),
-        );
-        answer_seq_arr[q]++;
     }
 </script>
 {% endblock %}

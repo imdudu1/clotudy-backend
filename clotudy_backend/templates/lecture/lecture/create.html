@@ -1,0 +1,213 @@
+{% extends 'lecture/base/lecture_admin.html' %}
+{% load static %}
+
+{% block admin-content %}
+<div class="row">
+    <div class="col-sm-7">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">수업 추가</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <form enctype='application/json' id="lecture_form" action="/lecture/create/lecture" method="POST">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <input hidden class="form-control" type="text" id="class_id" name="class_id" value="{{ cid }}" />
+                            <div class="form-group">
+                                <label for="title">수업 제목</label>
+                                <input class="form-control" type="text" id="title" name="title" />
+                            </div>
+                            <div class="form-group">
+                                <label for="description">수업 설명</label>
+                                <textarea class="form-control" type="text" id="description" name="description"></textarea>
+                            </div>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="type">수업 방식 선택</label>
+                                    <select class="form-control" id="type" name="type">
+                                        <option value="0">일반 강의</option>
+                                        <option value="1">참여형 수업</option>
+                                        <option value="2">프로그래밍 수업</option>
+                                    </select>
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <label for="pdf">시각자료(PDF, PPT) 등록</label>
+                                <input class="form-control" type="text" id="pdf" name="pdf" />
+                            </div>
+                            <div class="form-group">
+                                <label for="note">학습노트</label>
+                                <!-- <input type="textarea" id="note" name="note" /> -->
+                                <div id="note"></div>
+                            </div>
+
+                            <div class="form-gruop">
+                                <label for="quizbox-wrap">등록된 퀴즈 목록</label>
+                                <div id="quizbox-wrap" class="mt-1">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <input class="btn btn-primary waves-effect waves-light" type="button" onclick="submitLectureForm()" value="새 수업 추가" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <h4 class="card-title">내 퀴즈 목록</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table data-thumb-view">
+                                    <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>퀴즈 그룹</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for quizbox_obj in quizbox_list %}
+                                        <tr>
+                                            <td>{{ quizbox_obj.id }}</td>
+        
+                                            <td class="product-name">{{ quizbox_obj.title }}</td>
+        
+                                            <td class="product-action">
+                                                <span class="action-edit"><i class="feather icon-edit" onclick="appendQuizToLecture({{ quizbox_obj.id }}, '{{ quizbox_obj.title }}')"></i></span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <h4 class="card-title">새 퀴즈 만들기</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div>
+                                <form enctype='application/json' id="quiz_form" method="POST">
+                                    <div class="form-group">
+                                        <label for="title">퀴즈 그룹 이름</label>
+                                        <input class="form-control" type="text" name="title" id="title" />
+                                    </div>
+                                    <label for="quiz-form-wrap">문제 목록</label>
+                                    <div id="quiz-form-wrap">
+                        
+                                    </div>
+                                </form>
+                            </div> 
+                            <div class="text-center">
+                                <input class="btn btn-primary waves-effect waves-light" type="button" onclick="addNewQuiz()" value="문제 추가" />
+                                <input class="btn btn-success waves-effect waves-light" type="button" onclick="submitQuizForm()" value="만들기" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra-script %}
+<script src="{% static 'assets/js/jquery.serialize-object.js' %}"></script>
+<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
+<script>
+    /// HTML editor
+    let ckeitor = CKEDITOR.replace( 'note' );
+
+    /// Lecture form
+    function submitLectureForm() {
+        let post_data = $("form#lecture_form").serializeObject();
+        post_data['note'] = ckeitor.getData();
+        axios.post('/lecture/create/lecture/{{ cid }}', JSON.stringify(post_data), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+    }
+
+    /// Quiz form
+    let quiz_seq_num = 0;
+    let answer_seq_arr = {};
+    function submitQuizForm() {
+        let json_data = $("form#quiz_form").serializeObject();
+        for (let i = 0; i < json_data['quizs'].length; i++) {
+            for (let j = 0; j < json_data['quizs'][i]['answers'].length; j++) {
+                if (!json_data['quizs'][i]['answers'][j].hasOwnProperty("is_correct")) {
+                    json_data['quizs'][i]['answers'][j]['is_correct'] = false;
+                }
+            }
+        }
+        axios.post('/lecture/create/quiz', JSON.stringify(json_data), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+    }
+
+    function addNewQuiz() {
+        $("#quiz-form-wrap").append(
+            $("<div>").attr("id", "quiz-wrap-" + quiz_seq_num).attr("class", "mt-2 mb-1").append(
+                $("<div>").attr("id", "quiz-content").append(
+                    $("<div>").attr("class", "form-group").append(
+                        $("<label>").attr("for", `quiz_prob_title_${quiz_seq_num}`).text("문제 내용"),
+                        $("<input>").attr("type", "text").attr("id", `quiz_prob_title_${quiz_seq_num}`).attr("name", `quizs[${quiz_seq_num}][content]`).attr("class", "form-control") // quiz content
+                    )
+                ),
+                $("<div>").attr("id", "quiz-answer-wrap"),
+                $("<div>").attr("class", "text-right").append(
+                    $("<button>").attr("class", "btn btn-primary waves-effect waves-light").attr("onclick", `addNewAnswer(${quiz_seq_num})`).attr("type", "button").text("Add new answer")
+                )
+            )
+        );
+        answer_seq_arr[quiz_seq_num++] = 0;
+    }
+
+    function addNewAnswer(q) {
+        $(`#quiz-wrap-${q} > #quiz-answer-wrap`).append(
+            $("<filedset>").append(
+                $("<div>").attr("class", "input-group mt-1 mb-1").append(
+                    $("<div>").attr("class", "input-group-prepend").append(
+                        $("<div>").attr("class", "input-group-text").append(
+                            $("<div>").attr("class", "vs-checkbox-con").append(
+                                $("<input>").attr("type", "checkbox").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][is_correct]`),
+                                $("<span>").attr("class", "vs-checkbox vs-checkbox-sm").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][content]`).append(
+                                    $("<span>").attr("class", "vs-checkbox--check").append(
+                                        $("<i>").attr("class", "vs-icon feather icon-check")
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    $("<input>").attr("type", "text").attr("class", "form-control").attr("name", `quizs[${q}][answers][${answer_seq_arr[q]}][content]`)
+                )
+            )
+        );
+        answer_seq_arr[q]++;
+    }
+
+    let quizbox_seq_num_in_lecture = 0;
+    function appendQuizToLecture(qb, title) {
+        $("#quizbox-wrap").append(
+            $("<div>").attr("class", "badge badge-primary badge-lg mr-1 mb-1").text(title),
+            $("<input>").attr("hidden", true).attr("id", "quizboxs").attr("name", `quizboxs[${quizbox_seq_num_in_lecture++}]`).attr("value", qb)
+        )
+    }
+</script>
+{% endblock %}
