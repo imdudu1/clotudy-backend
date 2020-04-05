@@ -183,6 +183,7 @@ JSON example
     'title': '',
     'description': '',
     'instructor_name': '',
+    'thumbnail_path': ''
 }
 '''
 @csrf_exempt
@@ -196,16 +197,31 @@ def class_create(request):
         title = req_data['title']
         description = req_data['description']
         instructor_name = req_data['instructor_name']
+        thumbnail_path = req_data['thumbnail_path']
         username = request.user.username
         new_class = ClassInformation.objects.create(
             class_title=title,
             class_description=description,
             class_instructor_id=username,
             class_instructor=instructor_name,
+            class_thumbnail_path=thumbnail_path
         )
         return HttpResponse("*^^*")
     elif request.method == "GET":
-        return render(request, "lecture/class/create.html", {})
+        username = request.user.username
+        class_list = ClassInformation.objects.filter(class_instructor_id=username)
+        class_res_data = []
+        for class_obj in class_list:
+            class_res_data.append({
+                'id': class_obj.pk,
+                'title': class_obj.class_title,
+                'description': class_obj.class_description,
+                'thumbnail': class_obj.class_thumbnail_path,
+                'date': class_obj.class_created_time,
+            })
+        return render(request, "lecture/class/create.html", {
+            'class_list': class_res_data
+        })
 
 
 '''
@@ -268,7 +284,7 @@ def quiz_create(request):
                 )
         return HttpResponse("*^^*")
     elif request.method == "GET":
-        return render(request, "lecture/class/create.html", {})
+        return render(request, "lecture/quiz/create.html", {})
 
 
 '''
@@ -284,14 +300,17 @@ JSON example
 }
 '''
 @csrf_exempt
-def lecture_create(request):
+def lecture_create(request, cid):
     # login required!!
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/accounts/login/")
 
+    class_info = ClassInformation.objects.get(pk=cid)
+    if class_info.class_instructor_id != request.user.username:
+        return HttpResponseRedirect("/")
+
     if request.method == "POST":
         req_data = json.loads(request.body)
-        class_info = ClassInformation.objects.get(pk=req_data['class_id'])
         new_lecture = LectureInformation.objects.create(
             class_info=class_info,
             lecture_title=req_data['title'],
@@ -312,4 +331,15 @@ def lecture_create(request):
                 continue
         return HttpResponse("*^^*")
     elif request.method == "GET":
-        return render(request, "lecture/class/create.html", {})
+        username = request.user.username
+        quizbox_list = QuizBox.objects.filter(quiz_box_owner=username)
+        quizbox_res_data = []
+        for quizbox_obj in quizbox_list:
+            quizbox_res_data.append({
+                'id': quizbox_obj.pk,
+                'title': quizbox_obj.quiz_box_title,
+            })
+        return render(request, "lecture/lecture/create.html", {
+            'cid': class_info.pk,
+            'quizbox_list': quizbox_res_data
+        })

@@ -10,6 +10,6 @@ urlpatterns = [
     path("list", view=class_list, name="lectureList"),
 
     path("create/class", view=class_create, name="lectureCreate"),
-    path("create/lecture", view=lecture_create, name="lectureCreate"),
+    path("create/lecture/<int:cid>", view=lecture_create, name="lectureCreate"),
     path("create/quiz", view=quiz_create, name="lectureCreate"),
 ]
