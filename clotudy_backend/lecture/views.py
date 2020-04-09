@@ -38,7 +38,8 @@ def lecture(request, class_id, lecture_id):
             'messages': _get_user_questions_from_db(lecture_id),
             'lecture_data': lecture_data,
             'class_id': class_id,
-            'ppt_time': time_list
+            'ppt_time': time_list,
+            'wsid': lecture_info.lecture_unique_ws_id
         })
 
 
@@ -48,7 +49,8 @@ def lecture_admin(request, class_id, lecture_id):
         "title": lecture_info.lecture_title,
         "pdf_path": lecture_info.lecture_pdf_path,
         "lecture_type": lecture_info.lecture_type,
-        "lecture_note": lecture_info.lecture_note
+        "lecture_note": lecture_info.lecture_note,
+        "wsid": lecture_info.lecture_unique_ws_id
     }
 
     # Quiz serializer
@@ -311,6 +313,8 @@ def lecture_create(request, cid):
 
     if request.method == "POST":
         req_data = json.loads(request.body)
+        ws_id = str(uuid.uuid4()).split('-')
+        ws_id = '{}{}{}{}'.format(ws_id[0], ws_id[1], ws_id[2], ws_id[3])
         new_lecture = LectureInformation.objects.create(
             class_info=class_info,
             lecture_title=req_data['title'],
@@ -318,6 +322,7 @@ def lecture_create(request, cid):
             lecture_type=req_data['type'],
             lecture_pdf_path=req_data['pdf'],
             lecture_note=req_data['note'],
+            lecture_unique_ws_id=ws_id,
         )
         quizboxs = req_data['quizboxs']
         for quizbox in quizboxs:

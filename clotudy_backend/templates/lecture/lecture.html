@@ -332,7 +332,7 @@ function showQuizModal(data) {
 
 let chatSocket;
 function ws_connect() {
-    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/{{ wsid }}/');
     chatSocket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);
         switch (message_data.action) {

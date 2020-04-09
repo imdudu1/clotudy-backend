@@ -537,7 +537,7 @@ group_socket_connect();
 
 let chatSocket;
 function chat_socket_connect() {
-    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+    chatSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/{{ wsid }}/');
 
     chatSocket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);

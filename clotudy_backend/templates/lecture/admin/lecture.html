@@ -337,7 +337,7 @@ function remotePPTPageSync(v) {
 
 let global_socket;
 function global_socket_init() {
-    global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/sampleroomid/');
+    global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/{{ wsid }}/');
 
     global_socket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);

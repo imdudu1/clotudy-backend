@@ -20,6 +20,7 @@ class LectureInformation(models.Model):
     lecture_pdf_path = models.CharField(max_length=100, default="")
     lecture_note = models.TextField(default="")
     lecture_ppt_times = models.TextField(default="0")
+    lecture_unique_ws_id = models.CharField(max_length=30, default="sampleroomid", editable=False)
 
 
 class QuizBox(models.Model):
