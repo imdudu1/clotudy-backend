@@ -74,7 +74,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="my-quizbox-list">
                                         {% for quizbox_obj in quizbox_list %}
                                         <tr>
                                             <td>{{ quizbox_obj.id }}</td>
@@ -158,7 +158,7 @@
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+        }).then(res => {console.log(res); updateMyQuizBoxList();}).catch(err => {console.log(err)}).then(() => {});
     }
 
     function addNewQuiz() {
@@ -202,12 +202,54 @@
         answer_seq_arr[q]++;
     }
 
-    let quizbox_seq_num_in_lecture = 0;
+    let quiz_dict = {};
+    function renderQuizListInLecture() {
+        $("#quizbox-wrap").empty();
+
+        let idx = 0;
+        for (let key in quiz_dict) {
+            $("#quizbox-wrap").append(
+                $("<div>").attr("id", `quizboxs-badge-${key}`).attr("class", "badge badge-primary badge-lg mr-1 mb-1").attr("onclick", `removeQuizFromLecture(${key})`).text(quiz_dict[key]),
+                $("<input>").attr("hidden", true).attr("id", `quizboxs-${key}`).attr("name", `quizboxs[${idx++}]`).attr("value", key)
+            )
+        }
+    }
+
     function appendQuizToLecture(qb, title) {
-        $("#quizbox-wrap").append(
-            $("<div>").attr("class", "badge badge-primary badge-lg mr-1 mb-1").text(title),
-            $("<input>").attr("hidden", true).attr("id", "quizboxs").attr("name", `quizboxs[${quizbox_seq_num_in_lecture++}]`).attr("value", qb)
-        )
+        if (!(qb in quiz_dict)) {
+            quiz_dict[qb] = title;
+        }
+        renderQuizListInLecture();
+    }
+
+    function removeQuizFromLecture(key) {
+        delete quiz_dict[key];
+        $(`#quizboxs-badge-${key}`).remove();
+        $(`#quizboxs-${key}`).remove();
+        renderQuizListInLecture();
+    }
+
+    function updateMyQuizBoxList() {
+        axios.get('/api/quiz').then(res => {
+            $("#my-quizbox-list").empty();
+            let quiz_list = [];
+            for (let idx = 0; idx < res.data.length; idx++) {
+                quiz_list.push(
+                    $("<tr>").append(
+                        $("<td>").html(res.data[idx].id),
+                        $("<td>").addClass("product-name").html(res.data[idx].title),
+                        $("<td>").append(
+                            $("<span>").addClass("action-edit").append(
+                                $("<i>").addClass("feather icon-edit").attr("onclick", `appendQuizToLecture(${res.data[idx].id}, '${res.data[idx].title}')`)
+                            )
+                        )
+                    )
+                );
+            };
+            $("#my-quizbox-list").append(quiz_list);
+        }).catch(err => {
+            console.log(err)
+        });
     }
 </script>
 {% endblock %}
