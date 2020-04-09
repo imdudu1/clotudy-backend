@@ -14,11 +14,19 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
         return  # To not perform the csrf check previously happening
 
 
-class LectureDetail(APIView):
+class QuizBoxList(APIView):
 
-    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
-
-    def get(self, request, class_pk, lecture_pk, format=None):
+    def get(self, request, format=None):
+        if request.user.is_authenticated:
+            username = request.user.username
+            quizbox_list = QuizBox.objects.filter(quiz_box_owner=username)
+            quizbox_res_data = []
+            for quizbox_obj in quizbox_list:
+                quizbox_res_data.append({
+                    'id': quizbox_obj.pk,
+                    'title': quizbox_obj.quiz_box_title,
+                })
+            return Response(quizbox_res_data)
         return Response([])
 
 
