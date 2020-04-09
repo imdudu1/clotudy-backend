@@ -101,7 +101,11 @@
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(res => {console.log(res);}).catch(err => {console.log(err)}).then(() => {});
+        }).then(res => {
+            window.location.reload();
+        }).catch(err => {
+            console.log(err)
+        });
     }
 </script>
 {% endblock %}
