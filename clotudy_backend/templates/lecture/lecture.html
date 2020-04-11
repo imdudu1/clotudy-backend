@@ -147,6 +147,9 @@
                     자료실
                 </div>
                 <div id="user-notepad-preview-content">
+                {% for quiz_pk in open_quiz_list %}
+                    <button onclick="showQuizModal({ 'data': {'classID': {{ class_id }} , 'quizBoxId': {{quiz_pk}} })"></butto>
+                {% endfor %}
                 </div>
             </div>
         </div>
@@ -317,17 +320,6 @@ function updateLikeCount(data) {
             break;
         }
     }
-}
-
-function showQuizModal(data) {
-    axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
-        .then(res => {
-            setModalQuizHTML(res.data[0]);
-            $("#exampleModalCenter").modal("show");
-        })
-        .catch(err => {
-            console.log(err);
-        });
 }
 
 let chatSocket;

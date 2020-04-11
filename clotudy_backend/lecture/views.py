@@ -16,6 +16,7 @@ def lecture(request, class_id, lecture_id):
         if class_info.class_instructor_id == request.user.username:
             return lecture_admin(request, class_info, lecture_id)
 
+        # 퀴즈 정보에 대한 DB 불러오기
         lecture_info = LectureInformation.objects.get(class_info=class_info, pk=lecture_id)
         lecture_data = {
             "title": lecture_info.lecture_title,
@@ -24,11 +25,19 @@ def lecture(request, class_id, lecture_id):
             "lecture_note": lecture_info.lecture_note
         }
 
+        # 페이지별 설명한 시간을 표시하기 위한 타임라인
         times = lecture_info.lecture_ppt_times.split(';')
         time_list = []
         if len(times) > 0:
             for time in times:
                 time_list.append(int(time))
+
+        # 진행된 퀴즈 DB 불러오기
+        quizboxs = QuizBoxLink.objects.filter(lecture_info=lecture_info)
+        open_quiz_list = []
+        for quizbox in quizboxs:
+            if quizbox.quiz_box.quiz_is_open:
+                open_quiz_list.append(quizbox.quiz_box.pk)
 
     except LectureInformation.DoesNotExist or ClassInformation.DoesNotExist:
         return HttpResponseRedirect("/lecture/list")
@@ -39,7 +48,8 @@ def lecture(request, class_id, lecture_id):
             'lecture_data': lecture_data,
             'class_id': class_id,
             'ppt_time': time_list,
-            'wsid': lecture_info.lecture_unique_ws_id
+            'wsid': lecture_info.lecture_unique_ws_id,
+            'open_quiz_list': open_quiz_list,
         })
 
 
