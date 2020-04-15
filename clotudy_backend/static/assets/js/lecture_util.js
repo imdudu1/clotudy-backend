@@ -66,7 +66,9 @@ function setModalQuizHTML(data) {
     }
 } 
 
+let cur_quiz_link_id = 0;
 function showQuizModal(data) {
+    cur_quiz_link_id = data.data.quizBoxId;
     axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
         .then(res => {
             setModalQuizHTML((res.data)[0]);
