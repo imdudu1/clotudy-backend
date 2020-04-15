@@ -148,7 +148,7 @@
                 </div>
                 <div id="user-notepad-preview-content">
                 {% for quiz_pk in open_quiz_list %}
-                    <button onclick="showQuizModal({ 'data': {'classID': {{ class_id }} , 'quizBoxId': {{quiz_pk}} })"></butto>
+                    <button onclick="showQuizModal({ 'data': { 'classID': {{ class_id }}, 'quizBoxId': {{quiz_pk}} } })"></butto>
                 {% endfor %}
                 </div>
             </div>
@@ -157,8 +157,12 @@
     <div id="right-side-panel">
         <div class="content-header">
             실시간 질문 게시판
+            <div class="text-right">
+                <button onclick="showAddQnAModal()" class="btn btn-primary">질문하기</button>
+            </div>
         </div>
         <div id="live-qna-chat-content">
+            <div id="live-qna-chat-box">
             <!-- TEST -->
             {% for message in messages %}
                 <div class="card" style="">
@@ -215,6 +219,7 @@
                     </div>
                 </div>
             {% endfor %}
+            </div>
             <!-- END TEST -->
         </div>
     </div>
@@ -246,6 +251,22 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="addQnAModalCenter" tabindex="-1" role="dialog" aria-labelledby="addQnAModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+                <p>질문하기</p>
+            </div>
+            <div class="modal-body">
+                <textarea id="addqnatextarea" class="form-control" rows="1"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="addQnAButton" class="btn btn-primary" data-dismiss="modal">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block footer %}{% endblock %}
@@ -259,7 +280,7 @@ const user_name = '{{ request.user.username }}';
 // WebSocket
 let current_ppt_page = 1;
 let ppt_sync_flag = true;
-let is_exist_new_qna = true;
+let is_exist_new_qna = false;
 
 function remoteSyncPPTPage(data) {
     if (!ppt_sync_flag) {
@@ -290,7 +311,7 @@ function liveQnAMessage(request) {
     qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
     is_exist_new_qna = true;
 
-    let live_qna_chat_box = $('#live-qna-chat-content');
+    let live_qna_chat_box = $('#live-qna-chat-box');
     live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
     live_qna_chat_box.scrollTop(live_qna_chat_box[0].scrollHeight);
 }
@@ -358,8 +379,7 @@ function ws_connect() {
 ws_connect();
 
 function questionMsgHtmlGenerator(msg, like_count) {
-    return 
-        $("<div>").addClass("card").append(
+    return $("<div>").addClass("card").append(
             $("<div>").addClass("card-body").append(
                 $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                     $("<div>").addClass("avatar mr-1").append(
@@ -383,7 +403,10 @@ function questionMsgHtmlGenerator(msg, like_count) {
         ); 
 }
 
-function sendQuestionMessagePacket(message) {
+// Packet senders.
+document.querySelector('#addQnAButton').onclick = (error) => {
+    let messageInputDom = document.querySelector('#addqnatextarea');
+    let message = messageInputDom.value;
     chatSocket.send(JSON.stringify({
         'action': 'live-qna-chat',
         'data': {
@@ -393,7 +416,9 @@ function sendQuestionMessagePacket(message) {
             'lecture': lecture_id,
         }
     }));
-}
+
+    messageInputDom.value = '';
+};
 
 function addLikeCount(id) {
     chatSocket.send(JSON.stringify({
@@ -407,14 +432,21 @@ function addLikeCount(id) {
 
 function quiz_form_submit() {
     var d = new FormData(document.querySelector('#quiz_form'));
-    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
+    axios.post(`/api/quiz/{{ class_id }}/${cur_quiz_link_id}`, d).then(res => {console.log(res);});
 
     chatSocket.send(JSON.stringify({
         "action": "quiz-complete-signal",
         "data": {
-            "page": "1"
+            "page": cur_quiz_link_id
         }
-    }));
+    }));;
 }
+
+function showAddQnAModal() {$("#addQnAModalCenter").modal("show");}
+document.querySelector('#addqnatextarea').onkeyup = function(e) {
+    if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#message-submit').click();
+    }
+};
 </script>
 {% endblock %}
