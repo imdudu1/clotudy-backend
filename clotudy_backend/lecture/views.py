@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import *
-import json
+import json, uuid
 
 
 def lecture(request, class_id, lecture_id):
@@ -33,16 +33,17 @@ def lecture(request, class_id, lecture_id):
                 time_list.append(int(time))
 
         # 진행된 퀴즈 DB 불러오기
-        quizboxs = QuizBoxLink.objects.filter(lecture_info=lecture_info)
+        quizboxlinks = QuizBoxLink.objects.filter(lecture_info=lecture_info)
         open_quiz_list = []
-        for quizbox in quizboxs:
-            if quizbox.quiz_box.quiz_is_open:
-                open_quiz_list.append(quizbox.quiz_box.pk)
+        for quizboxlink in quizboxlinks:
+            if quizboxlink.quiz_is_open:
+                open_quiz_list.append(quizboxlink.pk)
 
     except LectureInformation.DoesNotExist or ClassInformation.DoesNotExist:
         return HttpResponseRedirect("/lecture/list")
     else:
         return render(request, "lecture/{}".format(_get_template_html_name(lecture_info.lecture_type)), {
+            'page_name': '수업(학생)',
             'room_name_json': mark_safe(json.dumps(lecture_id)),
             'messages': _get_user_questions_from_db(lecture_id),
             'lecture_data': lecture_data,
@@ -72,7 +73,7 @@ def lecture_admin(request, class_id, lecture_id):
         quiz_box = qb_link.quiz_box
         quiz_set = {
             "category_id": quiz_box.pk, 
-            "is_open": quiz_box.quiz_is_open,
+            "is_open": qb_link.quiz_is_open,
             "category_title": quiz_box.quiz_box_title, 
             "quiz_content": []
         }
@@ -103,12 +104,14 @@ def lecture_admin(request, class_id, lecture_id):
             time_list.append(int(time))
 
     return render(request, 'lecture/admin/{}'.format(_get_template_html_name(lecture_info.lecture_type)), {
+        'page_name': '수업 관리',
         'room_name_json': mark_safe(json.dumps(lecture_id)),
         'quiz_data': recv_quiz_data,
         'questions': _get_user_questions_from_db(lecture_id),
         'lecture_data': lecture_data,
         'class_id': class_id.pk,
         'ppt_time': time_list,
+        'wsid': lecture_info.lecture_unique_ws_id,
     })
 
 
@@ -139,6 +142,7 @@ def class_detail(request, class_id):
             })
 
         return render(request, 'lecture/class_detail.html', {
+            'page_name': '수업 내용',
             "class_data": class_data,
             "list_lecture": list_lecture,
         })
@@ -161,6 +165,7 @@ def class_list(request):
         })
 
     return render(request, 'lecture/class_list.html', {
+        'page_name': '강의 목록',
         "list_class": list_class
     })
 
@@ -232,6 +237,7 @@ def class_create(request):
                 'date': class_obj.class_created_time,
             })
         return render(request, "lecture/class/create.html", {
+            'page_name': '강의 생성',
             'class_list': class_res_data
         })
 
@@ -355,6 +361,7 @@ def lecture_create(request, cid):
                 'title': quizbox_obj.quiz_box_title,
             })
         return render(request, "lecture/lecture/create.html", {
+            'page_name': '수업 생성',
             'cid': class_info.pk,
             'quizbox_list': quizbox_res_data
         })
