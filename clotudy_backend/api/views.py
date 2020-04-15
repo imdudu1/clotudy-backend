@@ -37,53 +37,54 @@ class QuizBoxDetail(APIView):
     def check_login(self, request):
         return request.user.is_authenticated
 
-    def get(self, request, class_pk, lecture_pk, format=None):
+    def get(self, request, class_pk, qlink_pk, format=None):
         if self.check_login(request):
-            qb_links = QuizBoxLink.objects.filter(lecture_info=lecture_pk)
-            class_info = get_object_or_404(ClassInformation, pk=class_pk)
-            for link in qb_links:
-                if link.quiz_box.quiz_is_open:
-                    quiz_set = {
-                        "category_id": link.quiz_box.pk, 
-                        "is_open": link.quiz_box.quiz_is_open,
-                        "category_title": link.quiz_box.quiz_box_title, 
-                        "quiz_content": []
-                    }
+            link = QuizBoxLink.objects.get(pk=qlink_pk)
+            if link.quiz_is_open:
+                class_info = get_object_or_404(ClassInformation, pk=class_pk)
 
-                    quiz_list = Quiz.objects.filter(quiz_box_info=link.quiz_box)
-                    if class_info.class_instructor_id == request.user.username:
-                        for quiz in quiz_list:
-                            answer_list = Answer.objects.filter(quiz_info=quiz)
-                            quiz_set["quiz_content"].append({
-                                    "id": quiz.pk, 
-                                    "problem": quiz.quiz_prob, 
-                                    "answer": [{
-                                        "id": answer.pk, 
-                                        "content": answer.answer_content, 
-                                        "choice_count_percent": (answer.answer_choice_count / quiz.quiz_solve_count) * 100 if quiz.quiz_solve_count != 0 else 0, 
-                                        "choice_count": answer.answer_choice_count,
-                                        "is_correct": answer.answer_is_correct
-                                    } for answer in answer_list]
-                                })
-                    else:
-                        for quiz in quiz_list:
-                            answer_list = Answer.objects.filter(quiz_info=quiz)
-                            quiz_set["quiz_content"].append({
-                                    "id": quiz.pk, 
-                                    "problem": quiz.quiz_prob, 
-                                    "answer": [{
-                                        "id": answer.pk, 
-                                        "content": answer.answer_content, 
-                                    } for answer in answer_list]
-                                })
-                    return Response([quiz_set])
+                quiz_set = {
+                    "category_id": link.quiz_box.pk, 
+                    "is_open": link.quiz_is_open,
+                    "category_title": link.quiz_box.quiz_box_title, 
+                    "quiz_content": []
+                }
+
+                quiz_list = Quiz.objects.filter(quiz_box_info=link.quiz_box)
+                if class_info.class_instructor_id == request.user.username:
+                    for quiz in quiz_list:
+                        answer_list = Answer.objects.filter(quiz_info=quiz)
+                        quiz_set["quiz_content"].append({
+                                "id": quiz.pk, 
+                                "problem": quiz.quiz_prob, 
+                                "answer": [{
+                                    "id": answer.pk, 
+                                    "content": answer.answer_content, 
+                                    "choice_count_percent": (answer.answer_choice_count / quiz.quiz_solve_count) * 100 if quiz.quiz_solve_count != 0 else 0, 
+                                    "choice_count": answer.answer_choice_count,
+                                    "is_correct": answer.answer_is_correct
+                                } for answer in answer_list]
+                            })
+                else:
+                    for quiz in quiz_list:
+                        answer_list = Answer.objects.filter(quiz_info=quiz)
+                        quiz_set["quiz_content"].append({
+                                "id": quiz.pk, 
+                                "problem": quiz.quiz_prob, 
+                                "answer": [{
+                                    "id": answer.pk, 
+                                    "content": answer.answer_content, 
+                                } for answer in answer_list]
+                            })
+                return Response([quiz_set])
         return Response([])
 
-    def post(self, request, class_pk, lecture_pk, format=None):
+    def post(self, request, class_pk, qlink_pk, format=None):
         if self.check_login(request):
-            quiz_box = get_object_or_404(QuizBox, pk=lecture_pk)
+            quiz_box_link = get_object_or_404(QuizBoxLink, pk=qlink_pk)
+            quiz_box = quiz_box_link.quiz_box
             lecture_info = QuizBoxLink.objects.get(quiz_box=quiz_box).lecture_info
-            if quiz_box.quiz_is_open:
+            if quiz_box_link.quiz_is_open:
                 try:
                     record = QuizScoreRecord.objects.get(quiz_box_info=quiz_box, user_id=request.user.username)
                     return Response(['You have already been taken.'])
