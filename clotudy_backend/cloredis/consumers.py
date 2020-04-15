@@ -1,7 +1,7 @@
 # chat/consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from clotudy_backend.lecture.models import QuestionMessage, ClassInformation, LectureInformation, QuizBox
+from clotudy_backend.lecture.models import * 
 import json
 
 
@@ -106,7 +106,7 @@ class Consumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def set_quiz_box(self, data):
-        box = QuizBox.objects.get(pk=data['quizBoxId'])
+        box = QuizBoxLink.objects.get(pk=data['quizBoxId'])
         if box.quiz_is_open == False:
             box.quiz_is_open = True
         else:

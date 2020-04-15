@@ -25,13 +25,13 @@ class LectureInformation(models.Model):
 
 class QuizBox(models.Model):
     quiz_box_title = models.CharField(max_length=30)
-    quiz_is_open = models.BooleanField(default=False)
     quiz_box_owner = models.CharField(default="root", max_length=50, blank=False)
 
 
 class QuizBoxLink(models.Model):
     lecture_info = models.ForeignKey(LectureInformation, on_delete=models.CASCADE)
     quiz_box = models.ForeignKey(QuizBox, on_delete=models.CASCADE)
+    quiz_is_open = models.BooleanField(default=False)
 
 
 class Quiz(models.Model):
