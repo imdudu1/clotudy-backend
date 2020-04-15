@@ -436,7 +436,7 @@ function liveQnAMessage(request) {
                                   .attr("width", "45")
                     ),
                     $("<div>").addClass("user-page-info").append(
-                        $("<p>").addClass("mb-0").text(user_name),
+                        $("<p>").addClass("mb-0").text(qna_userID),
                         $("<span>").addClass("font-small-2").text("Date 9999-99-99")
                     )
                 ),
@@ -475,7 +475,7 @@ function redrawSortingQnAChat() {
                                       .attr("width", "45")
                         ),
                         $("<div>").addClass("user-page-info").append(
-                            $("<p>").addClass("mb-0").text(user_name),
+                            $("<p>").addClass("mb-0").text(message['userID']),
                             $("<span>").addClass("font-small-2").text("Date 9999-99-99")
                         )
                     ),
@@ -605,12 +605,12 @@ chat_socket_connect();
 
 function quiz_form_submit() {
     var d = new FormData(document.querySelector('#quiz_form'));
-    axios.post('/api/quiz/1/1', d).then(res => {console.log(res);});
+    axios.post(`/api/quiz/{{ class_id }}/${cur_quiz_link_id}`, d).then(res => {console.log(res);});
 
     chatSocket.send(JSON.stringify({
         "action": "quiz-complete-signal",
         "data": {
-            "page": "1"
+            "page": cur_quiz_link_id
         }
     }));;
 }
