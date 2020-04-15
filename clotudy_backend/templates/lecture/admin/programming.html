@@ -129,44 +129,45 @@
                             <div class="card mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="true" aria-controls="collapse-{{ quiz.category_id }}">
-                                        {{ quiz.category_title | safe }}
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse-{{ quiz.category_id }}" aria-expanded="false" aria-controls="collapse-{{ quiz.category_id }}">
+                                        {{ quiz.category_title }}
                                     </button>
                                 </h5>
                             </div>
 
-                            <div id="collapse-{{ quiz.category_id }}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div id="collapse-{{ quiz.category_id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="nav-vertical">
                                                 <ul class="nav nav-tabs nav-left flex-column" role="tablist">
                                                     {% for prob in quiz.quiz_content %}
-                                                    <li class="nav-item">
-                                                        {% if forloop.counter == 1 %}
-                                                        <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
-                                                        {% else %}
-                                                        <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ forloop.counter }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
-                                                        {% endif %}
-                                                    </li>
+                                                        <li class="nav-item">
+                                                            {% if forloop.counter == 1 %}
+                                                                <a class="nav-link active" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ prob.id }}" role="tab" aria-selected="true">문제 {{ forloop.counter }}</a>
+                                                            {% else %}
+                                                                <a class="nav-link" id="baseVerticalLeft-tab{{ forloop.counter }}" data-toggle="tab" aria-controls="tabVerticalLeft{{ forloop.counter }}" href="#tabVerticalLeft{{ prob.id }}" role="tab" aria-selected="false">문제 {{ forloop.counter }}</a>
+                                                            {% endif %}
+                                                        </li>
                                                     {% endfor %}
                                                 </ul>
 
                                                 <div class="tab-content">
                                                     {% for prob in quiz.quiz_content %}
                                                         {% if forloop.counter == 1 %}
-                                                            <div class="tab-pane active" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                        <div class="tab-pane active" id="tabVerticalLeft{{ prob.id }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
                                                         {% else %}
-                                                            <div class="tab-pane" id="tabVerticalLeft{{ forloop.counter }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
+                                                        <div class="tab-pane" id="tabVerticalLeft{{ prob.id }}" role="tabpanel" aria-labelledby="baseVerticalLeft-tab{{ forloop.counter }}">
                                                         {% endif %}
+
                                                         <p class="mb-1">{{ prob.problem }}</p><hr />
-                                                    {% for answer_item in prob.answer %}
-                                                        <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
-                                                        <div class="progress progress-bar-info progress-lg mb-1">
-                                                            <div id="answer-elem-{{ answer_item.id }}" class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
+                                                        {% for answer_item in prob.answer %}
+                                                            <p>{{ forloop.counter }}. {{ answer_item.content }}</p>
+                                                            <div class="progress progress-bar-info progress-lg mb-1">
+                                                                <div id="answer-elem-{{ answer_item.id }}" class="progress-bar" role="progressbar" aria-valuenow="{{ answer_item.choice_count }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ answer_item.choice_count_percent }}%">{{ answer_item.choice_count }}</div>
+                                                            </div>
+                                                        {% endfor %}
                                                         </div>
-                                                    {% endfor %}
-                                                    </div>
                                                     {% endfor %}
                                                     </div>
                                                 </div>
@@ -326,36 +327,6 @@ function clonePPT() {
 }
 
 let is_exist_new_qna = true;
-function questionMsgHtmlGenerator(userID, msg, like_count) {
-    return $("<li>").addClass("media").append(
-                $("<div>").addClass("media-left pr-50").append(
-                    $("<div>").addClass("avatar").append(
-                        $("<img>").attr("src", "{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}")
-                    ),
-                    $("<div>").addClass("user-action").append(
-                        $("<span>").addClass("favorite").text(like_count)
-                    )
-                ),
-                $("<div>").addClass("media-body").append(
-                    $("<div>").addClass("user-details").append(
-                        $("<div>").addClass("mail-items").append(
-                            $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").text(userID),
-                            $("<span>").addClass("list-group-item-text text-truncate")
-                        ),
-                        $("<div>").addClass("mail-meta-item").append(
-                            $("<span>").addClass("float-right").append(
-                                $("<span>").addClass("mr-1 bullet bullet-success bullet-sm").append(
-                                    $("<span>").addClass("mail-date")
-                                )
-                            )
-                        )
-                    ),
-                    $("<div>").addClass("mail-message").append(
-                        $("<p>").addClass("list-group-item-text truncate mb-0").text(msg)
-                    )
-                )
-            );
-}
 
 function redrawSortingQnAChat() {
     if (!is_exist_new_qna) {
@@ -369,7 +340,30 @@ function redrawSortingQnAChat() {
         return rhs['likeCount'] - lhs['likeCount'];
     });
     qna_messages.forEach((message) => {
-        $('#questions-tab-list').append(questionMsgHtmlGenerator(message['userID'], message['body'], message['likeCount']));
+        $('#live-qna-chat-box').append(
+            $("<div>").addClass("card").append(
+                $("<div>").addClass("card-body").append(
+                    $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                        $("<div>").addClass("avatar mr-1").append(
+                            $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
+                                      .attr("alt", "avatar img holder")
+                                      .attr("height", "45")
+                                      .attr("width", "45")
+                        ),
+                        $("<div>").addClass("user-page-info").append(
+                            $("<p>").addClass("mb-0").text(user_name),
+                            $("<span>").addClass("font-small-2").text("Date 9999-99-99")
+                        )
+                    ),
+                    $("<p>").text(message['body']),
+                    $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                        $("<p>").addClass("ml-auto d-flex align-items-center").append(
+                            $("<i>").addClass("feather icon-message-square font-medium-2 mr-50")
+                        ).append(message['likeCount'])
+                    )
+                )
+            ) 
+        );
     });
 }
 setInterval(redrawSortingQnAChat, 5000);
@@ -425,6 +419,31 @@ function liveQnAMessage(request) {
     live_qna_chat_box.append(questionMsgHtmlGenerator(qna_body, qna_like_count));
 }
 
+function questionMsgHtmlGenerator(msg, like_count) {
+    return $("<div>").addClass("card").append(
+            $("<div>").addClass("card-body").append(
+                $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                    $("<div>").addClass("avatar mr-1").append(
+                        $("<img>").attr("src", "{% static 'app-assets/images/profile/user-uploads/user-01.jpg' %}")
+                                  .attr("alt", "avatar img holder")
+                                  .attr("height", "45")
+                                  .attr("width", "45")
+                    ),
+                    $("<div>").addClass("user-page-info").append(
+                        $("<p>").addClass("mb-0").text(user_name),
+                        $("<span>").addClass("font-small-2").text("Date 9999-99-99")
+                    )
+                ),
+                $("<p>").text(msg),
+                $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                    $("<p>").addClass("ml-auto d-flex align-items-center").append(
+                        $("<i>").addClass("feather icon-message-square font-medium-2 mr-50")
+                    ).append(like_count)
+                )
+            )
+        ); 
+}
+
 let global_socket;
 function global_socket_init() {
     global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/{{ wsid }}/');
@@ -459,9 +478,8 @@ function global_socket_init() {
 }
 global_socket_init();
 
-// TODO: 아주 그냥...
 function updateQuizInfo(data) {
-    axios.get(`/api/quiz/1/1`).then(res => {
+    axios.get(`/api/quiz/{{ class_id }}/${data.data.page}`).then(res => {
         updateQuizHtml(res);
     });
 }
