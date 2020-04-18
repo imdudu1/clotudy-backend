@@ -38,10 +38,11 @@ class Consumer(AsyncWebsocketConsumer):
         action = text_data_json['action']
         data = text_data_json['data']
 
-        if action == 'live-qna-chat':
+        if action == 'live-qna-message':
             msg_pk = await self.save_qna_message(data)
-            data['messageId'] = msg_pk
-            data['userID'] = self.scope['user'].username
+            data['message_id'] = msg_pk
+            data['username'] = self.scope['user'].username
+            data['like_count'] = 0
         elif action == 'add-like-count':
             await self.add_like_count(data)
         elif action == 'show-quiz-modal':
@@ -81,7 +82,7 @@ class Consumer(AsyncWebsocketConsumer):
             return -1
         else:
             return QuestionMessage.objects.create(
-                question_content=data['qna']['body'],
+                question_content=data['content'],
                 user_id=self.scope['user'].username,
                 lecture_info=lecture,
             ).pk;
@@ -90,7 +91,7 @@ class Consumer(AsyncWebsocketConsumer):
     def add_like_count(self, data):
         try:
             lecture = ClassInformation.objects.get(pk=data['lecture'])
-            message = QuestionMessage.objects.get(lecture=lecture, pk=data['messageId'])
+            message = QuestionMessage.objects.get(lecture=lecture, pk=data['message_id'])
         except ClassInformation.DoesNotExist or QuestionMessage.DoesNotExist:
             return
         else:
@@ -106,7 +107,7 @@ class Consumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def set_quiz_box(self, data):
-        box = QuizBoxLink.objects.get(pk=data['quizBoxId'])
+        box = QuizBoxLink.objects.get(pk=data['qid'])
         if box.quiz_is_open == False:
             box.quiz_is_open = True
         else:
