@@ -83,7 +83,7 @@ class QuizBoxDetail(APIView):
         if self.check_login(request):
             quiz_box_link = get_object_or_404(QuizBoxLink, pk=qlink_pk)
             quiz_box = quiz_box_link.quiz_box
-            lecture_info = QuizBoxLink.objects.get(quiz_box=quiz_box).lecture_info
+            lecture_info = quiz_box_link.lecture_info
             if quiz_box_link.quiz_is_open:
                 try:
                     record = QuizScoreRecord.objects.get(quiz_box_info=quiz_box, user_id=request.user.username)
