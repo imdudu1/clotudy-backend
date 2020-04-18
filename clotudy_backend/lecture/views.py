@@ -174,10 +174,10 @@ def _get_user_questions_from_db(room_id):
     qna_messages = QuestionMessage.objects.filter(lecture_info=room_id)
     if qna_messages.exists():
         list_qna_message = [{
-            'body': message.question_content, 
-            'likeCount': message.like_count, 
-            'messageId': message.pk, 
-            'userID': message.user_id
+            'content': message.question_content, 
+            'like_count': message.like_count, 
+            'message_id': message.pk, 
+            'username': message.user_id
         } for message in qna_messages]
     else:
         list_qna_message = []
