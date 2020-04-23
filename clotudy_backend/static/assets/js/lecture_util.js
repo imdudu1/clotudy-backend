@@ -1,6 +1,7 @@
 const unique_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 function setModalQuizHTML(data) {
+    console.log(data);
     $("#modal-body").empty();
     $("#exampleModalCenterTitle").empty();
 
@@ -66,15 +67,48 @@ function setModalQuizHTML(data) {
     }
 } 
 
-let cur_quiz_link_id = 0;
-function showQuizModal(data) {
-    cur_quiz_link_id = data.data.quizBoxId;
-    axios.get(`/api/quiz/${data.data.classID}/${data.data.quizBoxId}`)
-        .then(res => {
-            setModalQuizHTML((res.data)[0]);
-            $("#exampleModalCenter").modal("show");
-        })
-        .catch(err => {
-            console.log(err);
-        });
+function get_question_message_html(content, username, like_count, message_id) {
+    return $("<div>").addClass("card").append(
+        $("<div>").addClass("card-body").append(
+            $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                $("<div>").addClass("avatar mr-1").append(
+                    $("<img>").attr("src", "/static/app-assets/images/portrait/small/avatar-s-11.jpg")
+                              .attr("alt", "avatar img holder")
+                              .attr("height", "45")
+                              .attr("width", "45")
+                ),
+                $("<div>").addClass("user-page-info").append(
+                    $("<p>").addClass("mb-0").text(username),
+                    $("<span>").addClass("font-small-2").text("Date 9999-99-99")
+                )
+            ),
+            $("<p>").text(content),
+            $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
+                $("<p>").addClass("ml-auto d-flex align-items-center").append(
+                    $("<i>").addClass("feather icon-message-square font-medium-2 mr-50")
+                ).append(like_count)
+            )
+        )
+    )
+}
+
+// Utility functions.
+function querySelectorAllArray(selector){
+    return Array.prototype.slice.call(
+        document.querySelectorAll(selector), 0
+    );
+}
+
+function contains(a, b){
+    return a.contains ?
+        a !== b && a.contains(b) :
+        !!(a.compareDocumentPosition(b) & 16);
+}
+
+function getCurrentTime() {
+    return (new Date()).getTime();
+}
+
+function createZeroArray(size) {
+    return Array(size).fill(0);
 }

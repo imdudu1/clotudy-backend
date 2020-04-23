@@ -142,10 +142,45 @@
 <script src="{% static 'app-assets/js/scripts/pages/app-todo.js' %}"></script>
 <script src="{% static 'assets/js/lecture_init.js' %}"></script>
 <script src="{% static 'assets/js/lecture_util.js' %}"></script>
+<script src="{% static 'assets/js/lecture.js' %}"></script>
 <!-- END: Page JS-->
 
 {% compress js %}
 {% block extra-script %}{% endblock %}
+<script>
+    const clotudy = new Clotudy(
+            '{{ wsid }}', 
+            {{ class_id }}, 
+            {{ room_name_json }}, 
+            document.getElementById('ppt-frame'), 
+            document.getElementById('live-qna-chat-box')
+        );
+    clotudy.set_question_message({{ messages|safe }});
+    clotudy.push_live_question_message_callback((self, data) => {
+        let {content, message_id, username, like_count} = data;
+
+        $('#live-qna-chat-box').append(
+            get_question_message_html(content, username, like_count, message_id)
+        );
+    })
+    clotudy.get_question_message().forEach((message) => {
+        let {content, message_id, username, like_count} = message;
+
+        $('#live-qna-chat-box').append(
+            get_question_message_html(content, username, like_count, message_id)
+        ); 
+    })
+
+    function showAddQnAModal() {
+        $("#addQnAModalCenter").modal("show");
+    }
+    document.querySelector('#addQnAButton').onclick = (error) => {
+        let messageInputDom = document.querySelector('#addqnatextarea');
+        let message = messageInputDom.value;
+        clotudy.send_qna_message(message);
+        messageInputDom.value = '';
+    };
+</script>
 {% endcompress %}
 </body>
 </html>
