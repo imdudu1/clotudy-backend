@@ -294,6 +294,32 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div id="modal-content-header" class="modal-header">
+
+            </div>
+            <form id="quiz_form" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="nav-vertical">
+                        <ul id="modal-nav-wrap" class="nav nav-tabs nav-left flex-column" role="tablist">
+
+                        </ul>
+                        <div id="modal-nav-content-wrap" class="tab-content">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="quiz_form_submit()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <!-- END: Modal -->
 {% endblock %}
 
@@ -443,5 +469,6 @@ function sendMoveIdeaPacket(src, des) {
         }
     }));
 }
+
 </script>
 {% endblock %}

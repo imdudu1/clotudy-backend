@@ -261,7 +261,7 @@
             <div id="modal-content-header" class="modal-header">
 
             </div>
-            <form id="quiz_form" action="/api/quiz/1/1" method="post">
+            <form id="quiz_form" method="post">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="nav-vertical">
@@ -375,18 +375,6 @@ function compile_socket_connect() {
     };
 }
 compile_socket_connect();
-
-function quiz_form_submit() {
-    var d = new FormData(document.querySelector('#quiz_form'));
-    axios.post(`/api/quiz/{{ class_id }}/${cur_quiz_link_id}`, d).then(res => {console.log(res);});
-
-    chatSocket.send(JSON.stringify({
-        "action": "quiz-complete-signal",
-        "data": {
-            "page": cur_quiz_link_id
-        }
-    }));;
-}
 
 function requestCompile(dom_id) {
     let src = editorDict[dom_id].getValue();

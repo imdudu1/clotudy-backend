@@ -104,13 +104,12 @@
             switch (message_data.action) {
                 case 'sync-ppt-page':
                     break;
-                case 'live-qna-chat':
+                case 'live-qna-message':
                     liveQnAMessage(message_data);
                     break;
                 case 'add-like-count':
                     break;
                 case 'quiz-complete-signal':
-                    console.log("Get quiz-complete-signal !!")
                     setTimeout(() => {updateQuizInfo(message_data)}, 1000);
                     break;
                 default:

@@ -180,6 +180,12 @@
         clotudy.send_qna_message(message);
         messageInputDom.value = '';
     };
+
+    function quiz_form_submit() {
+        var d = new FormData(document.querySelector('#quiz_form'));
+        axios.post(`/api/quiz/{{ class_id }}/${cur_quiz_link_id}`, d).then(res => {console.log(res);});
+        clotudy.send_quiz_complete_signal(cur_quiz_link_id);
+    }    
 </script>
 {% endcompress %}
 </body>

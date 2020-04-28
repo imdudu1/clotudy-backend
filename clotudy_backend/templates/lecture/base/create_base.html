@@ -1,0 +1,333 @@
+{% load static %}<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="PIXINVENT">
+    <title>CLOTUDY :: {% block title %}{% endblock %} - 관리자</title>
+    <link rel="apple-touch-icon" href="{% static 'app-assets/images/ico/apple-icon-120.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'app-assets/images/ico/favicon.ico' %}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/vendors.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/charts/apexcharts.css' %}">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap-extended.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/colors.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/components.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/dark-layout.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/semi-dark-layout.css' %}">
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/menu/menu-types/vertical-menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/core/colors/palette-gradient.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/app-email.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ace.js" integrity="sha256-C7DTYRJLG+B/VEzHGeoPMw699nsTQYPAXHKXZb+q04E=" crossorigin="anonymous"></script>
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <!-- END: Custom CSS-->
+
+    {% block extra-style %}{% endblock %}
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static   menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+
+{% include 'lecture/menubar/header.html' %}
+
+{% include 'lecture/menubar/side.html' %}
+
+<!-- BEGIN: Content-->
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-left mb-0">{{ page_name }}</h2>
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">홈</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/lecture/list">강의 목록</a>
+                                </li>
+                                <li class="breadcrumb-item active">{{ lecture_data.title }}</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+                <div class="form-group breadcrum-right">
+                    <div class="dropdown">
+                        <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-settings"></i></button>
+                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Chat</a><a class="dropdown-item" href="#">Email</a><a class="dropdown-item" href="#">Calendar</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Nav Centered And Nav End Starts -->
+            <section id="nav-tabs-centered">
+                {% block create-pannel %}
+                {% endblock %}
+            </section>
+            <!-- Nav Centered And Nav End Ends -->
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+<!-- BEGIN: Footer-->
+<footer class="footer footer-static footer-light">
+    <p class="clearfix blue-grey lighten-2 mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2019<a class="text-bold-800 grey darken-2" href="https://1.envato.market/pixinvent_portfolio" target="_blank">Pixinvent,</a>All rights Reserved</span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i class="feather icon-heart pink"></i></span>
+        <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="feather icon-arrow-up"></i></button>
+    </p>
+</footer>
+<!-- END: Footer-->
+
+<!-- BEGIN: Vendor JS-->
+<script src="{% static 'app-assets/vendors/js/vendors.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/charts/apexcharts.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<!-- BEGIN Vendor JS-->
+
+<!-- BEGIN: Page Vendor JS-->
+<!-- END: Page Vendor JS-->
+
+<!-- BEGIN: Theme JS-->
+<script src="{% static 'app-assets/js/core/app-menu.js' %}"></script>
+<script src="{% static 'app-assets/js/core/app.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/components.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- END: Theme JS-->
+
+<!-- BEGIN: Page JS-->
+<script src="{% static 'app-assets/js/scripts/navs/navs.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/pages/app-email.js' %}"></script>
+<script src="{% static 'assets/js/lecture_util.js' %}"></script>
+<!-- END: Page JS-->
+
+{% block extra-script %}{% endblock %}
+<script>
+    let delta_time;
+    let last_time = getCurrentTime();
+    let currentPage = 1;
+    let sync_lock = true;
+    let lecture_id = {{ room_name_json }};
+    let qna_messages;
+    let is_exist_new_qna = true;
+
+    $(document).ready(function(){
+        qna_messages = {{ questions|safe }};
+    });
+
+    function clonePPT() {
+        let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+    }
+
+    function remotePPTPageSync(v) {
+        if (sync_lock) {
+            sync_lock = false;
+            let currentPage = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page;
+            let tmpPage = currentPage + v;
+            let numPages = document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.pagesCount;
+            if((tmpPage > numPages) || (tmpPage < 1)) {
+                sync_lock = true;
+                return;
+            }
+            addPptTime(currentPage, numPages);
+            currentPage = tmpPage;
+            document.getElementById("ppt-frame").contentWindow.PDFViewerApplication.page = currentPage;
+            global_socket.send(JSON.stringify({
+                'action': 'sync-ppt-page',
+                'data': {
+                    'page': currentPage
+                }
+            }));
+            sync_lock = true;
+        }
+    }
+    
+    function liveQnAMessage(request) {
+        let qna = request['data']['qna'];
+    
+        if (qna === '') {
+            return
+        }
+    
+        let qna_body = qna['body'];
+        let qna_like_count = 0; // request['data']['likeCount'];
+        let qna_message_id = request['data']['messageId'];
+        let qna_username = request['data']['userID'];
+        qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
+        is_exist_new_qna = true;
+    
+        let live_qna_chat_box = $('#questions-tab-list');
+        live_qna_chat_box.append(
+            get_question_message_html(qna_body, qna_username, qna_like_count, qna_message_id)
+        );
+    }
+
+    function updateQuizInfo(data) {
+        axios.get(`/api/quiz/{{ class_id }}/${data.data.quiz_id}`).then(res => {
+            updateQuizHtml(res);
+        });
+    }
+    
+    function updateQuizHtml(data) {
+        for (let i = 0; i < data.data[0].quiz_content.length; i++) {
+            let quiz_obj = data.data[0].quiz_content[i];
+            for (let j = 0; j < quiz_obj.answer.length; j++) {
+                var answer_obj = quiz_obj.answer[j];
+    
+                try {
+                    var aid = answer_obj.id;
+                    var acount = answer_obj.choice_count;
+                    var apercent = answer_obj.choice_count_percent;
+                    $(`#answer-elem-${aid}`).html(acount);
+                    $(`#answer-elem-${aid}`).attr('aria-valuenow', acount);
+                    $(`#answer-elem-${aid}`).attr('style', `width:${apercent}%`);
+                }
+                catch(err) {
+                    return;
+                }
+            }
+        }
+    }
+    
+    function showQuizModal(quizBoxId) {
+        global_socket.send(JSON.stringify({
+            'action': 'show-quiz-modal',
+            'data': {
+                'qid': quizBoxId,
+            }
+        }));
+    }
+
+    function addPptTime(page, max_pages) {
+        let cur_time = getCurrentTime();
+        let delta_time = (cur_time - last_time) / 1000;
+        last_time = cur_time;
+    
+        let times = ppt_chart.w.globals.series.slice()[0];
+        if (times.length < max_pages) {
+        times = Array(max_pages).fill(0)
+        }
+        if (!times.hasOwnProperty(page) && 1 <= page && page <= max_pages) {
+        times[page-1] = delta_time;
+        } else {
+        times[page-1] += delta_time;
+        }
+        ppt_chart.updateSeries([{data: times}]);
+    }
+
+    function savePPTTime() {
+        let times = ppt_chart.w.globals.series.slice()[0];
+        let history_str = "";
+        for (let i = 0; i < times.length; i++) {
+            history_str += parseInt(times[i]) + ";";
+        }
+    
+        axios({
+                method: 'post',
+                url: `/api/ppthistory/${lecture_id}`,
+                data: {
+                    'history': history_str.slice(0, -1),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                headers: {
+                    "content-type": "application/json"
+                }
+                }).then(function (response) {
+                    console.log(response)
+                }).catch(function (error) {
+                    console.log(error)
+                });
+    }
+    setInterval(savePPTTime, 60000);
+
+    function get_question_message_html_for_admin(content, username, like_count, message_id) {
+        return $("<li>").addClass("media").append(
+            $("<div>").addClass("media-left pr-50").append(
+                $("<div>").addClass("avatar").append(
+                    $("<img>").attr("src", "{% static 'app-assets/images/portrait/small/avatar-s-20.jpg' %}").attr("alt", "avatar img holder")
+                ),
+                $("<div>").addClass("user-action").append(
+                    $("<span>").addClass("favorite").append(
+                        $("<i>").addClass("feather icon-star"),
+                        $("<span>").html(like_count)
+                    )
+                )
+            ),
+            $("<div>").addClass("media-body").append(
+                $("<div>").addClass("user-details").append(
+                    $("<div>").addClass("mail-iterms").append(
+                        $("<h5>").addClass("list-group-item-heading text-bold-600 mb-25").html(username),
+                    ),
+                    $("<div>").addClass("mail-meta-item").append(
+                        $("<span>").addClass("float-right").append(
+                            $("<span>").addClass("mr-1 bullet bullet-success bullet-sm"),
+                            $("<span>").addClass("mail-date").html("7:77 AM")
+                        )
+                    )
+                ),
+                $("<div>").addClass("mail-message").append(
+                    $("<p>").addClass("list-group-item-text truncate mb-0").html(content)
+                )
+            )
+        )
+    }
+
+    function redrawSortingQnAChat() {
+        if (!is_exist_new_qna) {
+            return;
+        } else {
+            is_exist_new_qna = false;
+        }
+    
+        $('#questions-tab-list').empty();
+        qna_messages.sort((lhs, rhs) => {
+            return rhs['like_count'] - lhs['like_count'];
+        });
+        qna_messages.forEach((message) => {
+            let {content, username, like_count, message_id} = message;
+            $('#questions-tab-list').append(
+                get_question_message_html_for_admin(content, username, like_count, message_id)
+            );
+        });
+    }
+    setInterval(redrawSortingQnAChat, 5000);
+
+    function updateLikeCount(data) {
+        let message_id = data['data']['message_id'];
+        for (let i = 0; i < qna_messages.length; i++) {
+            if (qna_messages[i]['message_id'] === message_id) {
+                qna_messages[i]['like_count'] += 1;
+                break;
+            }
+        }
+    }
+</script>
+</body>
+<!-- END: Body-->
+
+</html>

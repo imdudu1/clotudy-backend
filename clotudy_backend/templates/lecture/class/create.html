@@ -1,7 +1,7 @@
-{% extends 'lecture/base/lecture_admin.html' %}
+{% extends 'lecture/base/create_base.html' %}
 {% load static %}
 
-{% block admin-content %}
+{% block create-pannel %}
 <div class="row">
     <div class="col-sm-7">
         <div class="card overflow-hidden">
@@ -41,7 +41,7 @@
                                     </td>
 
                                     <td class="product-action">
-                                        <span class="action-edit"><i class="feather icon-edit"></i></span>
+                                        <span class="action-edit"><a href="/lecture/create/lecture/{{ class_obj.id }}"><i class="feather icon-edit"></i></a></span>
                                         <span class="action-delete"><i class="feather icon-trash"></i></span>
                                     </td>
                                 </tr>

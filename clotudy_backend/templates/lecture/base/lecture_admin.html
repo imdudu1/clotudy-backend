@@ -323,7 +323,6 @@
 <script src="{% static 'assets/js/lecture_util.js' %}"></script>
 <!-- END: Page JS-->
 
-{% block extra-script %}{% endblock %}
 <script>
     let delta_time;
     let last_time = getCurrentTime();
@@ -365,22 +364,16 @@
     }
     
     function liveQnAMessage(request) {
-        let qna = request['data']['qna'];
-    
-        if (qna === '') {
+        let {content, message_id, username, like_count} = request.data;
+        if (content === '') {
             return
         }
-    
-        let qna_body = qna['body'];
-        let qna_like_count = 0; // request['data']['likeCount'];
-        let qna_message_id = request['data']['messageId'];
-        let qna_username = request['data']['userID'];
-        qna_messages.push({'body': qna_body, 'likeCount': qna_like_count, 'messageId': qna_message_id, 'userID': qna_username});
+        qna_messages.push({content, username, like_count, message_id});
         is_exist_new_qna = true;
     
         let live_qna_chat_box = $('#questions-tab-list');
         live_qna_chat_box.append(
-            get_question_message_html(qna_body, qna_username, qna_like_count, qna_message_id)
+            get_question_message_html(content, username, like_count, message_id)
         );
     }
 
@@ -391,6 +384,7 @@
     }
     
     function updateQuizHtml(data) {
+        console.log(data);
         for (let i = 0; i < data.data[0].quiz_content.length; i++) {
             let quiz_obj = data.data[0].quiz_content[i];
             for (let j = 0; j < quiz_obj.answer.length; j++) {
@@ -524,7 +518,7 @@
         }
     }
 </script>
+{% block extra-script %}{% endblock %}
 </body>
 <!-- END: Body-->
-
 </html>

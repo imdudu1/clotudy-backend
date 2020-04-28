@@ -105,14 +105,13 @@ function global_socket_init() {
     global_socket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);
         switch (message_data.action) {
-            case 'live-qna-chat':
+            case 'live-qna-message':
                 liveQnAMessage(message_data);
                 break;
             case 'add-like-count':
                 updateLikeCount(message_data);
                 break;
             case 'quiz-complete-signal':
-                console.log("Get quiz-complete-signal !!")
                 setTimeout(() => {updateQuizInfo(message_data)}, 1000);
                 break;                
             default:
