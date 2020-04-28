@@ -232,5 +232,4 @@ function showQuizModal(self, cid, qid) {
         .catch(err => {
             console.log(err);
         });
-    self.send_quiz_complete_signal(qid);
 }
