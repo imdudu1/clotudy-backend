@@ -72,7 +72,8 @@ def lecture_admin(request, class_id, lecture_id):
         #for quiz_box in quiz_box_list:
         quiz_box = qb_link.quiz_box
         quiz_set = {
-            "category_id": quiz_box.pk, 
+            #"category_id": quiz_box.pk, 
+            "category_id": qb_link.pk, 
             "is_open": qb_link.quiz_is_open,
             "category_title": quiz_box.quiz_box_title, 
             "quiz_content": []

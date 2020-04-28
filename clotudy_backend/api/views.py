@@ -44,7 +44,8 @@ class QuizBoxDetail(APIView):
                 class_info = get_object_or_404(ClassInformation, pk=class_pk)
 
                 quiz_set = {
-                    "category_id": link.quiz_box.pk, 
+                    #"category_id": link.quiz_box.pk, 
+                    "category_id": link.pk, 
                     "is_open": link.quiz_is_open,
                     "category_title": link.quiz_box.quiz_box_title, 
                     "quiz_content": []
