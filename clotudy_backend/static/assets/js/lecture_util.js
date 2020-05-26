@@ -85,7 +85,7 @@ function get_question_message_html(content, username, like_count, message_id) {
             $("<p>").text(content),
             $("<div>").addClass("d-flex justify-content-start align-items-center mb-1").append(
                 $("<p>").addClass("ml-auto d-flex align-items-center").append(
-                    $("<i>").addClass("feather icon-message-square font-medium-2 mr-50")
+                    $("<i>").addClass("feather icon-heart font-medium-2 mr-50").attr("onclick", `add_like_count(${message_id})`)
                 ).append(like_count)
             )
         )

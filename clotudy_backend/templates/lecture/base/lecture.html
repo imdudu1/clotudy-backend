@@ -185,7 +185,11 @@
         var d = new FormData(document.querySelector('#quiz_form'));
         axios.post(`/api/quiz/{{ class_id }}/${cur_quiz_link_id}`, d).then(res => {console.log(res);});
         clotudy.send_quiz_complete_signal(cur_quiz_link_id);
-    }    
+    }
+
+    function add_like_count(data) {
+        clotudy.add_like_count(clotudy, data);
+    }
 </script>
 {% endcompress %}
 </body>
