@@ -181,6 +181,7 @@ class Clotudy extends ClotudyWS {
         for (let i = 0; i < self.question_message_store.length; i++) {
             if (self.question_message_store[i].message_id === message_id) {
                 self.question_message_store[i].like_count += 1;
+                self.send_like_count(message_id);
                 break;
             }
         }
