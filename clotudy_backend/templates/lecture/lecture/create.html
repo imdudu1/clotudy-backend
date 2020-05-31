@@ -10,7 +10,7 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <form enctype='application/json' id="lecture_form" action="/lecture/create/lecture" method="POST">
+                    <form enctype="multipart/form-data" id="lecture_form" action="/lecture/create/lecture" method="POST">
                         <div class="col-sm-12">
                             {% csrf_token %}
                             <input hidden class="form-control" type="text" id="class_id" name="class_id" value="{{ cid }}" />
@@ -34,14 +34,13 @@
                             </fieldset>
                             <div class="form-group">
                                 <label for="pdf">시각자료(PDF, PPT) 등록</label>
-                                <input class="form-control" type="text" id="pdf" name="pdf" />
+                                <input class="form-control" type="file" id="pdf" name="pdffile" />
                             </div>
                             <div class="form-group">
                                 <label for="note">학습노트</label>
                                 <!-- <input type="textarea" id="note" name="note" /> -->
-                                <div id="note"></div>
+                                <textarea id="note"></textarea>
                             </div>
-
                             <div class="form-gruop">
                                 <label for="quizbox-wrap">등록된 퀴즈 목록</label>
                                 <div id="quizbox-wrap" class="mt-1">
@@ -129,7 +128,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
 <script>
     /// HTML editor
-    let ckeitor = CKEDITOR.replace( 'note' );
+    let ckeitor = CKEDITOR.replace('note');
 
     /// Lecture form
     function submitLectureForm() {
