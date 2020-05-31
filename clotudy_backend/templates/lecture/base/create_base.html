@@ -141,7 +141,7 @@
     });
 
     function clonePPT() {
-        let handle = window.open("/lecture/pdf/?file=/static/pdfs/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+        let handle = window.open("/lecture/pdf/?file=/media/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
     }
 
     function remotePPTPageSync(v) {

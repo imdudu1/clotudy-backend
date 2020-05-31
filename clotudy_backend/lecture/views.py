@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.files.storage import FileSystemStorage
 from .models import *
 import json, uuid
 
@@ -329,19 +330,22 @@ def lecture_create(request, cid):
         return HttpResponseRedirect("/")
 
     if request.method == "POST":
-        req_data = json.loads(request.body)
         ws_id = str(uuid.uuid4()).split('-')
         ws_id = '{}{}{}{}'.format(ws_id[0], ws_id[1], ws_id[2], ws_id[3])
+        fs = FileSystemStorage()
+        uploaded_file = request.FILES['pdffile']
+        uploaded_file_name = fs.save(uploaded_file.name, uploaded_file)
+        print(uploaded_file_name)
         new_lecture = LectureInformation.objects.create(
             class_info=class_info,
-            lecture_title=req_data['title'],
-            lecture_description=req_data['description'],
-            lecture_type=req_data['type'],
-            lecture_pdf_path=req_data['pdf'],
-            lecture_note=req_data['note'],
+            lecture_title=request.POST['title'],
+            lecture_description=request.POST['description'],
+            lecture_type=request.POST['type'],
+            lecture_pdf_path=uploaded_file_name,
+            lecture_note=request.POST['note'],
             lecture_unique_ws_id=ws_id,
         )
-        quizboxs = req_data['quizboxs']
+        quizboxs = request.POST['quizboxs'].split(',')
         for quizbox in quizboxs:
             try:
                 qb = QuizBox.objects.get(pk=quizbox)
