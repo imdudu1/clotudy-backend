@@ -133,11 +133,7 @@
     /// Lecture form
     function submitLectureForm() {
         let post_data = $("form#lecture_form").serializeObject();
-
         let pdffile = document.querySelector('#pdffile');
-        post_data['note'] = ckeitor.getData();
-        post_data['pdffile'] = pdffile.files[0];
-
         let payload = new FormData();
         payload.append("pdffile", pdffile.files[0]);
         payload.append("class_id", post_data["class_id"]);
@@ -145,7 +141,7 @@
         payload.append("description", post_data["description"]);
         payload.append("type", post_data["type"]);
         payload.append("quizboxs", post_data["quizboxs"]);
-        payload.append("note", post_data["note"]);
+        payload.append("note", ckeitor.getData());
         axios.post('/lecture/create/lecture/{{ cid }}', payload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
