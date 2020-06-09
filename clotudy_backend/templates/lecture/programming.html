@@ -347,7 +347,7 @@ function editorInit() {
         editor.setOptions({
             maxLines: Infinity
         });
-        editor.setReadOnly(true);
+        editor.setReadOnly(false);
 
         editorDict[editors[i].id] = editor;
     }
@@ -361,7 +361,7 @@ function compile_socket_connect() {
 
     compileSocket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);
-        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + "\r\n\r\n---------COMPILE OUTPUT---------\r\n" + message_data.compile_stderr);
+        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout);
     };
 
     compileSocket.onclose = (e) => {
@@ -380,7 +380,8 @@ function requestCompile(dom_id) {
     let src = editorDict[dom_id].getValue();
     compileSocket.send(JSON.stringify({
         "type": 0,
-        "src": src
+        "src": src,
+        "input": "Hello, World!!"
     }));
     runCodeDom = dom_id;
 }
