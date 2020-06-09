@@ -372,7 +372,7 @@ function compile_socket_connect() {
             }
             return "";
         };
-        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + result_prefix);
+        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + result_prefix());
     };
 
     compileSocket.onclose = (e) => {
@@ -399,7 +399,7 @@ function requestCompile(dom_id) {
     compileSocket.send(JSON.stringify({
         "type": 0,
         "src": src,
-        "input": `${input_content}\n`
+        "input": `${input_content()}\n`
     }));
     runCodeDom = dom_id;
 }
