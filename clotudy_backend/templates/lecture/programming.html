@@ -361,7 +361,18 @@ function compile_socket_connect() {
 
     compileSocket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);
-        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout);
+        let output_content = $(`#${runCodeDom}-result`).attr("out");
+        let result_prefix = () => {
+            if (output_content != undefined) {
+                if (output_content == message_data.exec_stdout.trim().replace(/(\r\n|\n|\r)/gm, "")) {
+                    return "...맞았습니다!\n";
+                } else {
+                    return "...틀렸습니다!\n";
+                }
+            }
+            return "";
+        };
+        $("#" + runCodeDom + "-console").text("---------EXECUTE OUTPUT---------\r\n" + message_data.exec_stdout + result_prefix);
     };
 
     compileSocket.onclose = (e) => {
@@ -378,10 +389,17 @@ compile_socket_connect();
 
 function requestCompile(dom_id) {
     let src = editorDict[dom_id].getValue();
+    let input_content = () => {
+        let e = $(`#${dom_id}-result`).attr("in");
+        if (e == undefined) {
+            return "";
+        }
+        return e;
+    };
     compileSocket.send(JSON.stringify({
         "type": 0,
         "src": src,
-        "input": "Hello, World!!"
+        "input": `${input_content}\n`
     }));
     runCodeDom = dom_id;
 }
