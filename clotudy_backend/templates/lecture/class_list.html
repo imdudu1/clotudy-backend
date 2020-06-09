@@ -46,7 +46,7 @@
                                 {% for obj in list_class %}
                                 <div class="card">
                                     <div class="card-content">
-                                        <img class="card-img-top img-fluid" src="{% static 'storage/thumbnail/' %}{{ obj.thumbnail }}" alt="Card image cap" />
+                                        <img class="card-img-top img-fluid" src="/media/{{ obj.thumbnail }}" alt="Card image cap" />
                                         <div class="card-body">
                                             <a href="/lecture/{{ obj.id }}"><h4 class="card-title">{{ obj.title }}</h4></a>
                                             <p class="card-text">{{ obj.description }}</p>
