@@ -34,6 +34,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+    <link href="{% static 'css/timeline.min.css' %}" rel="stylesheet" />
     <style>
     </style>
 </head>
@@ -229,10 +230,43 @@
     <section class="section">
         <div class="container">
             <h2 class="mb-5">
-                <span>최근 개설된 수업들</span>
+                <span>업데이트 기록</span>
             </h2>
             <!-- Custom controls -->
             <div class="row">
+                <div class="col-lg-12 col-md-6">
+                    <div class="timeline">
+                        <div class="timeline__wrap">
+                            <div class="timeline__items">
+                                <div class="timeline__item">
+                                    <div class="timeline__content">
+                                        <p>일반 강의를 위한 수업 생성과 시각 자료 동기화 및 질문 기능 추가</p>
+                                    </div>
+                                </div>
+                                <div class="timeline__item">
+                                    <div class="timeline__content">
+                                        <p>참여형 수업에서 학생들간의 쉬운 브레인스토밍을 위한 아이디어 대쉬보드 추가</p>
+                                    </div>
+                                </div>
+                                <div class="timeline__item">
+                                    <div class="timeline__content">
+                                        <p>프로그래밍 수업을 위한 수업 생성과 웹컴파일 추가</p>
+                                    </div>
+                                </div>
+                                <div class="timeline__item">
+                                    <div class="timeline__content">
+                                        <p>프로그래밍 수업을 위한 퀴즈 템플릿 추가</p>
+                                    </div>
+                                </div>
+                                <div class="timeline__item">
+                                    <div class="timeline__content">
+                                        <p>모바일 환경을 위한 안드로이드 앱 작성</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -329,10 +363,16 @@
 <script src="{% static 'assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
 <!-- Argon JS -->
 <script src="{% static 'assets/js/argon.js' %}"></script>
+<script src="{% static 'js/timeline.min.js' %}></script>
 
 <script src="https://unpkg.com/swiper/js/swiper.js"></script>
 <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 <script type="text/javascript">
+timeline(document.querySelectorAll('.timeline'), {
+    mode: 'horizontal',
+    visibleItems: 4,
+    forceVerticalMode: 800
+});
 </script>
 </body>
 
