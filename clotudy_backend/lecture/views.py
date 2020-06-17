@@ -121,6 +121,26 @@ def pdf_render(request):
     return render(request, 'viewer.html', {})
 
 
+def delete_class(request, class_id):
+    class_info = ClassInformation.objects.get(pk=class_id)
+    class_info.delete()
+    return HttpResponseRedirect("/lecture/list")
+
+
+def delete_lecture(request, lecture_id):
+    lecture_info = LectureInformation.objects.get(pk=lecture_id)
+    lecture_info.delete()
+    return HttpResponseRedirect("/lecture/list")
+
+
+def edit_class(request, class_id):
+    class_info = ClassInformation.objects.get(pk=class_id)
+
+
+def edit_lecture(request, lecture_id):
+    lecture_info = LectureInformation.objects.get(pk=lecture_id)
+
+
 def class_detail(request, class_id):
     try:
         class_info = ClassInformation.objects.get(pk=class_id)

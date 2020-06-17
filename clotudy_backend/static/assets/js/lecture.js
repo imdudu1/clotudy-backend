@@ -79,6 +79,15 @@ class ClotudyWS {
         }));
     }
 
+    send_new_channel(channel_id) {
+        this.ws.send(JSON.stringify({
+            action: 'new-channel',
+            data: {
+                channel_id
+            }
+        }));
+    }
+
     send_new_idea(content) {
         this.ws.send(JSON.stringify({
             'action': 'add-idea-message',

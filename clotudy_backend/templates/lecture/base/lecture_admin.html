@@ -37,6 +37,9 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
     <!-- END: Custom CSS-->
+    
+    <!-- Dragula JS //-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.js'></script>
 
     {% block extra-style %}{% endblock %}
 </head>
@@ -122,6 +125,9 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="note-tab-center" data-toggle="tab" href="#note-center" aria-controls="note-center" role="tab" aria-selected="false">학습 자료</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="dashboard-tab-center" data-toggle="tab" href="#dashboard-center" aria-controls="dashboard-center" role="tab" aria-selected="false">대시보드</a>
                                         </li>
                                     </ul>
                     
@@ -276,6 +282,11 @@
                                         <!-- Tab -->
                                         <div class="tab-pane" id="note-center" aria-labelledby="note-tab-center" role="tabpanel">
                                             {{ lecture_data.lecture_note|safe }}
+                                        </div>
+                                        <!-- Tab -->
+                                        <div class="tab-pane" id="dashboard-center" aria-labelledby="dashboard-tab-center" role="tabpanel">
+                                            <div id="dashboard-viewer" class="row root">
+                                            </div>
                                         </div>
                                         </div>
                                     </div>

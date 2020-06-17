@@ -2,38 +2,303 @@
 
 {% block extra-style %}
 <style>
-    body, div {
-        margin: 0;
-        padding: 0;
-        outline: 0;
-    }
-    </style>
+body, div {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
+
+.gu-hide {
+    display: none !important;
+}
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
+
+.c-row {
+    /* display:flex; */
+    display: flex;
+    flex-direction: column;
+    padding-top:.5em;
+    margin:1px;
+}
+
+.root .dragula-container {
+    padding:0.3rem;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 25px 0px
+    rgba(0, 0, 0, 0.1);
+    transition: all .3s ease-in-out;
+}
+
+.col {
+    flex: 1;
+    margin:1px;
+    min-height:1em;
+}
+
+.el {
+    background:#e5e5e5;
+    margin:1px;
+    min-height:2em;
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<ul class="nav nav-justified">
-    <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#qwe">QWE</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#asd">ASD</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#zxc">ZXC</a>
-    </li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane fade show active" id="qwe">
-
-    </div>
-    <div class="tab-pane fade" id="asd">
-
-    </div>
-    <div class="tab-pane fade" id="zxc">
-
-    </div>
-</div>
 {% endblock %}
 
 {% block extra-script %}
+<script>
+    // Charts
+    var options = {
+        series: [{
+            name: '2019-1',
+            data: [31, 40, 28, 51, 42, 109, 100]
+        }, {
+            name: '2020-1',
+            data: [11, 32, 45, 32, 34, 52, 41]
+        }],
+        chart: {
+            height: 250,
+            width: '100%',
+            type: 'area'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            type: 'datetime',
+            categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+        },
+        tooltip: {
+            x: {
+                format: 'dd/MM/yy HH:mm'
+            },
+        },
+    };
+    
+    var chart = new ApexCharts(document.querySelector("#line-area-chart"), options);
+    chart.render();
+    
+    var options = {
+        series: [{
+            data: {{ ppt_time }}
+        }],
+        chart: {
+            type: 'line',
+            height: 250,
+            width: '100%'
+        },
+        stroke: {
+            width: 3,
+            curve: 'smooth',
+        },
+        dataLabels: {
+            enabled: false
+        },
+        markers: {
+            hover: {
+                sizeOffset: 2
+            }
+        }
+    };
+    
+    var ppt_chart = new ApexCharts(document.querySelector("#ppt-waiting-chart"), options);
+    ppt_chart.render();
+    
+    var options = {
+        series: [44, 55, 41, 17, 15],
+        chart: {
+            type: 'donut',
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+    
+    var chart = new ApexCharts(document.querySelector("#q1Chart"), options);
+    chart.render();
+    var chart = new ApexCharts(document.querySelector("#q2Chart"), options);
+    chart.render();
+    
+    function clonePPT() {
+        let handle = window.open("/lecture/pdf/?file=/media/{{ lecture_data.pdf_path }}", "", "width=370, height=360, resizable=no, scrollbars=no, status=no;");
+    }
+
+    // WebSocket
+    let increase_box_id_ch = {};
+
+    function addIdeaMessage(request) {
+        let body = request['data']['body'];
+        const sender_id = request['data']['sender-id'];
+        const ch = request['data']['ch'];
+        const box_id = sender_id + '-box-' + increase_box_id_ch[ch] + ch;
+        $(`#idea-dashboard-${request['data']['ch']}`).append(
+            $("<p>").attr("style", "line-height: 14px; margin: 0;display: table-cell;vertical-align: middle;padding: 10px; border-radius: 5px;background: #f6f7f8;border: 2px solid #5a5d60;")
+                    .attr("id", box_id)
+                    .addClass("el")
+                    .text(body)
+        );
+        increase_box_id_ch[ch] += 1;
+    }
+
+    function addGroupMessage(request) {
+        const title = request['data']['group-title'];
+        const ch = request['data']['ch'];
+        const sender_id = request['data']['sender-id'];
+        const group_id = sender_id + '-group-' + increase_box_id_ch[ch] + ch;
+        const container_id = sender_id + '-container-' + increase_box_id_ch[ch] + ch;
+        $(`#idea-dashboard-${request['data']['ch']}`).append(
+            $("<div>").attr("id", group_id).attr("style", "border: 2px solid #5a5d60;border-radius: 5px;padding: 3px;background: #f5cf8e;margin: 3px;").addClass("c-row").append(
+                $("<div>").attr("style", "color: #565758;font-size: 14px;margin: 3px; font-weight: bold;").text(title),
+                $("<div>").attr("id", container_id).attr("style", "min-height: 20px;border: 2px solid #5a5d60;border-radius: 5px;background: #b2d6ff;").addClass("dragula-container")
+            )
+        );
+        drakes[ch].containers.push(document.getElementById(container_id));
+        increase_box_id_ch[ch] += 1;
+    }
+
+    function moveIdeaMessage(request) {
+        if (unique_id === request['data']['sender-id']) {
+            return;
+        }
+        let d = request['data'];
+        let src = '#' + d['src'] + request['data']['ch'];
+        let des = '#' + d['des'] + request['data']['ch'];
+        $(src).appendTo(des);
+    }
+
+    function lockIdeaMessage(request) {
+
+    }
+
+    function removeIdeaMessage(request) {
+
+    }
+
+    function newChannel(data) {
+        let channel_id = data['data']['channel_id'];
+        if (!channels.hasOwnProperty(channel_id)) {
+            $("#dashboard-viewer").append(
+                $("<div>").addClass("c-row root").append(
+                    $("<div>").attr('id', `idea-dashboard-${channel_id}`).addClass("col dragula-container")
+                )
+            );
+
+            // drakes[channel_id] = dragula(querySelectorAllArray('.dragula-container'),{
+            drakes[channel_id] = dragula($(`#idea-dashboard-${channel_id}`),{
+                accepts: function (el, target, source, sibling) {
+                    return !contains(el, target);
+                }
+            }).on('drag', function (el) {
+                el.className = el.className.replace('ex-moved', '');
+            }).on('drop', function (el) {
+                el.className += ' ex-moved';
+                current_drop_el_id = el.id;
+                sendMoveIdeaPacket(current_drop_el_id, last_over_el_id);
+            }).on('over', function (el, container) {
+                container.className += ' ex-over';
+                last_over_el_id = container.id;
+            }).on('out', function (el, container) {
+                container.className = container.className.replace('ex-over', '');
+            });
+
+            channels[channel_id] = new WebSocket(`ws://${window.location.host}/ws/cloredis/${channel_id}/`);
+            increase_box_id_ch[channel_id] = 0;
+            channels[channel_id].onmessage = (message) => {
+                let message_data = JSON.parse(message.data);
+                switch (message_data.action) {
+                    case 'add-idea-message':
+                        addIdeaMessage(message_data);
+                        break;
+                    case 'move-idea-message':
+                        moveIdeaMessage(message_data);
+                        break;
+                    case 'lock-idea-message':
+                        lockIdeaMessage(message_data);
+                        break;
+                    case 'remove-idea-message':
+                        removeIdeaMessage(message_data);
+                        break;
+                    case 'add-group-message':
+                        addGroupMessage(message_data);
+                        break;
+                    default:
+                        break;
+                }
+            };
+        }
+    }
+    
+    let global_socket;
+    let channels = {};
+    let drakes = {};
+    function global_socket_init() {
+        global_socket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/{{ wsid }}/');
+    
+        global_socket.onmessage = (message) => {
+            let message_data = JSON.parse(message.data);
+            switch (message_data.action) {
+                case 'sync-ppt-page':
+                    break;
+                case 'live-qna-message':
+                    liveQnAMessage(message_data);
+                    break;
+                case 'add-like-count':
+                    break;
+                case 'quiz-complete-signal':
+                    setTimeout(() => {updateQuizInfo(message_data)}, 1000);
+                    break;
+                case 'new-channel':
+                    newChannel(message_data);
+                    break;
+                default:
+                    break;
+            }
+        };
+    
+        global_socket.onclose = (e) => {
+            setTimeout(() => {
+                global_socket_init();
+            }, 1000);
+        };
+    
+        global_socket.onerror = (err) => {
+            global_socket.close();
+        }
+    }
+    global_socket_init();
+</script>
 {% endblock %}

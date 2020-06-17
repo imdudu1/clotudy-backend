@@ -227,12 +227,14 @@
         <div class="content-header">
             아이디어 대시보드
             <div class="text-right">
+                <input type="text" class="form-control" id="channel-input-txt" style="display: inline; width:120px" value="sampleroomid"></input>
+                <button onclick="joinChannel()" class="btn btn-primary">Join</button>
+                 | 
                 <button onclick="showAddGroupModal()" class="btn btn-primary">Group</button>
                 <button onclick="showAddIdeaModal()" class="btn btn-success">Node</button>
             </div>
         </div>
         <div class="lesson-note-content">
-
             <!--BEGIN: TEST-->
             <div class="row root">
                 <div id='idea-dashboard' class="col dragula-container">
@@ -240,7 +242,6 @@
                 </div>
             </div>
             <!--END: TEST-->
-
         </div>
     </div>
 </div>
@@ -397,9 +398,9 @@ function removeIdeaMessage(request) {
 }
 
 let groupSocket;
+let groupID;
 function group_socket_connect() {
-    groupSocket = new WebSocket('ws://' + window.location.host + '/ws/cloredis/samplegroupid/');
-
+    groupSocket = new WebSocket(`ws://${window.location.host}/ws/cloredis/${groupID}/`);
     groupSocket.onmessage = (message) => {
         let message_data = JSON.parse(message.data);
         switch (message_data.action) {
@@ -433,7 +434,15 @@ function group_socket_connect() {
         groupSocket.close();
     };
 }
-group_socket_connect();
+
+function joinChannel() {
+    let channel_id = $("#channel-input-txt").val();
+    $("#idea-dashboard").empty();
+    groupID = channel_id;
+    increase_box_id = 0;
+    clotudy.send_new_channel(channel_id);
+    group_socket_connect();
+}
 
 function showAddIdeaModal() {$("#addIdeaModalCenter").modal("show");}
 function sendAddIdeaPacket() {
@@ -443,6 +452,7 @@ function sendAddIdeaPacket() {
         'data': {
             'body': body,
             'sender-id': unique_id,
+            'ch': groupID,
         }
     }));
 }
@@ -455,6 +465,7 @@ function sendAddGroupPacket() {
         'data': {
             'group-title': title,
             'sender-id': unique_id,
+            'ch': groupID,
         }
     }));
 }
@@ -466,6 +477,7 @@ function sendMoveIdeaPacket(src, des) {
             'src': src,
             'des': des,
             'sender-id': unique_id,
+            'ch': groupID,
         }
     }));
 }
