@@ -232,18 +232,22 @@ def class_create(request):
         return HttpResponseRedirect("/accounts/login/")
 
     if request.method == "POST":
-        req_data = json.loads(request.body)
-        title = req_data['title']
-        description = req_data['description']
-        instructor_name = req_data['instructor_name']
-        thumbnail_path = req_data['thumbnail_path']
+        #req_data = json.loads(request.body)
+        title = request.POST['title']
+        description = request.POST['description']
+        instructor_name = request.POST['instructor_name']
+        #thumbnail_path = req_data['thumbnail_path']
+        fs = FileSystemStorage()
+        uploaded_file = request.FILES['thumbnail_file']
+        uploaded_file_name = fs.save(uploaded_file.name, uploaded_file)
+        print(uploaded_file_name)
         username = request.user.username
         new_class = ClassInformation.objects.create(
             class_title=title,
             class_description=description,
             class_instructor_id=username,
             class_instructor=instructor_name,
-            class_thumbnail_path=thumbnail_path
+            class_thumbnail_path=uploaded_file_name
         )
         return HttpResponse("*^^*")
     elif request.method == "GET":

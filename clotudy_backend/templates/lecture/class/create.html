@@ -60,7 +60,7 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <form enctype='application/json' id="class_form" action="/lecture/create/class" method="POST">
+                    <form enctype='multipart/form-data' id="class_form" action="/lecture/create/class" method="POST">
                         {% csrf_token %}
                         <div class="col-sm-12">
                             <div class="form-group">
