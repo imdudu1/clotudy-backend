@@ -8,11 +8,19 @@
 
 ## 사용 기술 스택
 
+### Back-end
+
 - Django
 - Redis
 - Docker
 - PostgreSQL
+
+### Front-end
+
+> 웹 디자인의 경우 캡스톤디자인 지원금을 이용해 웹 템플릿을 수정 및 추가하여 사용하였습니다.
+
 - Websocket
+- Javascript
 
 ## 사용된 협업 관리 도구
 
